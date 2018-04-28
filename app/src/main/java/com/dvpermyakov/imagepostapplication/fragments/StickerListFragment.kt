@@ -38,6 +38,8 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
             presenter.onEmptyClick()
         }
 
+        mainContainerView.setOnClickListener { }  // to prevent clicking on empty container
+
         recyclerView.layoutManager = GridLayoutManager(context, STICKERS_LIST_SPAN_COUNT)
         recyclerView.adapter = adapter
 
