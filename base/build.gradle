@@ -35,4 +35,5 @@ dependencies {
     implementation libraries.supportRecyclerView
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
+    implementation libraries.lightsaber
 }

@@ -6,13 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.dvpermyakov.base.activities.BaseActivity
+import com.dvpermyakov.base.ioc.IEnrichableItem
+import com.dvpermyakov.base.ioc.IInjectorHolder
+import io.michaelrocks.lightsaber.Injector
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-abstract class BaseFragment : Fragment() {
-    protected val baseActivity: BaseActivity
+abstract class BaseFragment : Fragment(), IEnrichableItem {
+    protected var injector: Injector? = null
+        private set
+
+    protected val baseActivity
         get() = activity as BaseActivity
 
     protected abstract val contentResId: Int
@@ -21,4 +27,11 @@ abstract class BaseFragment : Fragment() {
         return inflater.inflate(contentResId, container, false)
     }
 
+    override fun bindInjector(holder: IInjectorHolder) {
+        injector = holder.getInjector()
+    }
+
+    override fun unbindInjector() {
+        injector = null
+    }
 }

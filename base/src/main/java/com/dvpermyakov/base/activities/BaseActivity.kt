@@ -5,12 +5,18 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import com.dvpermyakov.base.R
+import com.dvpermyakov.base.ioc.IEnrichableItem
+import com.dvpermyakov.base.ioc.IInjectorHolder
+import io.michaelrocks.lightsaber.Injector
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
+    protected var injector: Injector? = null
+        private set
+
     protected open val layoutId = R.layout.activity_base
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,6 +25,14 @@ abstract class BaseActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             replaceFragment(createFragment(), false)
         }
+    }
+
+    override fun bindInjector(holder: IInjectorHolder) {
+        injector = holder.getInjector()
+    }
+
+    override fun unbindInjector() {
+        injector = null
     }
 
     fun replaceFragment(fragment: Fragment, withBackStack: Boolean) {

@@ -8,12 +8,18 @@ ext.versions = [
         gradle          : '3.0.0',
         support         : '27.0.2',
 
-        constraintLayout: '1.0.2'
+        lightsaber      : '0.8.3-beta',
+
+        constraintLayout: '1.0.2',
+
+        rxKotlin        : '2.0.2',
+        rxAndroid       : '2.0.1'
 ]
 
 ext.gradlePlugins = [
-        android: "com.android.tools.build:gradle:$versions.gradle",
-        kotlin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        android   : "com.android.tools.build:gradle:$versions.gradle",
+        kotlin    : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
+        lightsaber: "io.michaelrocks:lightsaber-gradle-plugin:$versions.lightsaber"
 ]
 
 ext.libraries = [
@@ -28,5 +34,10 @@ ext.libraries = [
         supportRecyclerView: "com.android.support:recyclerview-v7:$versions.support",
         supportCardView    : "com.android.support:cardview-v7:$versions.support",
 
-        constraintLayout   : "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+        constraintLayout   : "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
+
+        lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
+
+        rxKotlin           : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
+        rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
 ]
