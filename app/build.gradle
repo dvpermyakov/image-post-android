@@ -1,6 +1,16 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'io.michaelrocks.lightsaber.android'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath gradlePlugins.lightsaber
+    }
+}
 
 android {
     compileSdkVersion versions.compileSdk
@@ -32,4 +42,8 @@ dependencies {
     implementation libraries.supportRecyclerView
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
+    implementation libraries.lightsaber
+
+    implementation libraries.rxKotlin
+    implementation libraries.rxAndroid
 }
