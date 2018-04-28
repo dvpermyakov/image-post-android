@@ -1,0 +1,32 @@
+ext.versions = [
+        buildTools      : '27.0.2',
+        compileSdk      : 27,
+        minSdk          : 19,
+        targetSdk       : 27,
+
+        kotlin          : '1.2.31',
+        gradle          : '3.0.0',
+        support         : '27.0.2',
+
+        constraintLayout: '1.0.2'
+]
+
+ext.gradlePlugins = [
+        android: "com.android.tools.build:gradle:$versions.gradle",
+        kotlin : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+]
+
+ext.libraries = [
+        kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
+
+        supportAnnotations : "com.android.support:support-annotations:$versions.support",
+        supportAppCompat   : "com.android.support:support-compat:$versions.support",
+        supportDesign      : "com.android.support:design:$versions.support",
+        supportV4          : "com.android.support:support-v4:$versions.support",
+        supportV13         : "com.android.support:support-v13:$versions.support",
+        supportAppCompatV7 : "com.android.support:appcompat-v7:$versions.support",
+        supportRecyclerView: "com.android.support:recyclerview-v7:$versions.support",
+        supportCardView    : "com.android.support:cardview-v7:$versions.support",
+
+        constraintLayout   : "com.android.support.constraint:constraint-layout:$versions.constraintLayout"
+]

@@ -1,0 +1,39 @@
+apply from: 'dependencies.gradle'
+
+buildscript {
+    apply from: 'dependencies.gradle'
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath gradlePlugins.android
+        classpath gradlePlugins.kotlin
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+ext {
+    versionMajor = 1
+    versionMinor = 0
+    versionPatch = 0
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+def genVersionCode() {
+    return rootProject.ext.versionMajor * 100000 + rootProject.ext.versionMinor * 1000 + rootProject.ext.versionPatch
+}
+
+def genVersionName() {
+    return "${rootProject.ext.versionMajor}.${rootProject.ext.versionMinor}.${rootProject.ext.versionPatch}"
+}
