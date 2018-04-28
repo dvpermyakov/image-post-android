@@ -46,4 +46,5 @@ dependencies {
 
     implementation libraries.rxKotlin
     implementation libraries.rxAndroid
+    implementation libraries.picasso
 }

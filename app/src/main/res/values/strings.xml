@@ -2,4 +2,6 @@
     <string name="app_application_title">Image Post Application</string>
     <string name="app_image_post_header">New Post</string>
     <string name="app_image_post_text_hint">What is new?</string>
+    <string name="app_sticker_list_title">Stickers</string>
+    <string name="app_sticker_list_error">Error</string>
 </resources>

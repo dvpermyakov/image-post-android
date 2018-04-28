@@ -21,6 +21,7 @@
         android:layout_height="0dp"
         android:gravity="center"
         android:text="@string/app_image_post_header"
+        android:textSize="@dimen/textsize_small"
         android:textColor="@color/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/fontButtonView"

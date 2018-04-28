@@ -13,7 +13,9 @@ ext.versions = [
         constraintLayout: '1.0.2',
 
         rxKotlin        : '2.0.2',
-        rxAndroid       : '2.0.1'
+        rxAndroid       : '2.0.1',
+
+        picasso         : '2.5.2'
 ]
 
 ext.gradlePlugins = [
@@ -39,5 +41,7 @@ ext.libraries = [
         lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
 
         rxKotlin           : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
-        rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
+        rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
+
+        picasso            : "com.squareup.picasso:picasso:$versions.picasso",
 ]
