@@ -47,4 +47,6 @@ dependencies {
     implementation libraries.rxKotlin
     implementation libraries.rxAndroid
     implementation libraries.picasso
+
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
 }

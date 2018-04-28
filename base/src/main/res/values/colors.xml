@@ -2,4 +2,5 @@
 <resources>
     <color name="textColorPrimary">#000000</color>
     <color name="textColorSecondary">#800d1826</color>
+    <color name="textColorWhite">#ffffff</color>
 </resources>

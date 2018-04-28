@@ -20,7 +20,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="@string/app_image_post_header"
+        android:text="@string/app_image_post_header_title"
         android:textSize="@dimen/textsize_small"
         android:textColor="@color/textColorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"

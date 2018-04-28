@@ -12,4 +12,11 @@
         <item name="android:indeterminate">true</item>
     </style>
 
+    <style name="MainTheme.ColoredButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/selector_button</item>
+        <item name="android:minHeight">@dimen/size_medium</item>
+        <item name="android:textSize">@dimen/textsize_small</item>
+        <item name="android:textColor">@color/textColorWhite</item>
+    </style>
+
 </resources>
