@@ -12,10 +12,35 @@ import kotlinx.android.synthetic.main.layout_cover.view.*
  */
 
 class CoverAdapter : BaseRecyclerViewAdapter<CoverModel>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = BaseViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.layout_cover, parent, false))
+
+    override fun getItemCount() = super.getItemCount() + FOOTER_SIZE
+
+    override fun getItemViewType(position: Int) = if (position in items.indices) {
+        TYPE_ITEM
+    } else {
+        TYPE_FOOTER
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = if (viewType == TYPE_ITEM) {
+        BaseViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_cover, parent, false))
+    } else {
+        BaseViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.layout_cover_footer, parent, false))
+    }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        holder.itemView.coverView.coverModel = items[position]
+        if (getItemViewType(position) == TYPE_ITEM) {
+            with(holder.itemView) {
+                frameLayoutView.setOnClickListener {  }
+                coverView.coverModel = items[position]
+            }
+        } else {
+
+        }
+    }
+
+    companion object {
+        private const val TYPE_ITEM = 0
+        private const val TYPE_FOOTER = 1
+        private const val FOOTER_SIZE = 1
     }
 }

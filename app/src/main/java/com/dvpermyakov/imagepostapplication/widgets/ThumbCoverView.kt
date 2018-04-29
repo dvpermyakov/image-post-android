@@ -4,15 +4,17 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
 import com.dvpermyakov.imagepostapplication.models.CoverModel
-
+import com.dvpermyakov.imagepostapplication.models.ImageCoverModel
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
  */
 
 class ThumbCoverView : View {
+    private val radius by lazy { resources.getDimension(R.dimen.size_xsmall) }
     private var paint: Paint? = null
     private var rect: RectF? = null
 
@@ -38,8 +40,13 @@ class ThumbCoverView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         paint?.let { paint ->
-            canvas.drawRoundRect(rect, RADIUS, RADIUS, paint)
+            canvas.drawRoundRect(rect, radius, radius, paint)
         }
+    }
+
+    override fun onDetachedFromWindow() {
+        coverModel = null
+        super.onDetachedFromWindow()
     }
 
     private fun invalidatePaint() {
@@ -51,12 +58,14 @@ class ThumbCoverView : View {
                             shader = LinearGradient(0f, 0f, rect.right, rect.bottom, cover.colorStart, cover.colorEnd, Shader.TileMode.MIRROR)
                         }
                     }
+                    is ImageCoverModel -> {
+                        paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                            val bitmap = BitmapFactory.decodeResource(resources, cover.image)
+                            shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+                        }
+                    }
                 }
             }
         }
-    }
-
-    companion object {
-        private const val RADIUS = 20f
     }
 }

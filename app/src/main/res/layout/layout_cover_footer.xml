@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/frameLayoutView"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackgroundBorderless">
 
-    <com.dvpermyakov.imagepostapplication.widgets.ThumbCoverView
-        android:id="@+id/coverView"
+    <ImageView
+        android:id="@+id/addView"
         android:layout_width="@dimen/size_xlarge"
         android:layout_height="@dimen/size_xlarge"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/size_small" />
+        android:background="@drawable/shape_rounded_rect"
+        android:layout_margin="@dimen/size_small"
+        android:src="@drawable/ic_toolbar_new" />
 
 </FrameLayout>
