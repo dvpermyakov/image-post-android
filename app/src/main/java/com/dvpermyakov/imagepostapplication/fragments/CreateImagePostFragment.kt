@@ -28,7 +28,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     override val baseView = this
     override val contentResId = R.layout.fragment_image_post
 
-    override fun createPresenter(): CreateImagePostPresenter = injector!!.getInstance()
+    override fun createPresenter(): CreateImagePostPresenter = getApplicationInjector().getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -14,8 +14,7 @@ import io.michaelrocks.lightsaber.Injector
  */
 
 abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
-    protected var injector: Injector? = null
-        private set
+    private var injector: Injector? = null
 
     protected open val layoutId = R.layout.activity_base
 
@@ -55,6 +54,12 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
                 .setTransition(transit)
                 .addToBackStack(geFragmentBackStackName(fragment))
                 .commit()
+    }
+
+    fun getApplicationInjector(): Injector {
+        injector?.let { injector ->
+            return injector
+        } ?: throw IllegalArgumentException("cannot get injector before its binding or after its unbinding")
     }
 
     private fun geFragmentBackStackName(fragment: Fragment) = fragment.javaClass.canonicalName

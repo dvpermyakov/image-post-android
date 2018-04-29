@@ -30,7 +30,7 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
 
     private val bottomSheetBehavior by lazy { BottomSheetBehavior.from<View>(mainContainerView) }
 
-    override fun createPresenter(): StickerListPresenter = injector?.getInstance()!!
+    override fun createPresenter(): StickerListPresenter = getApplicationInjector().getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

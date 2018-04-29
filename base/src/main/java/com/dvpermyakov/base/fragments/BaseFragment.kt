@@ -15,8 +15,7 @@ import io.michaelrocks.lightsaber.Injector
  */
 
 abstract class BaseFragment : Fragment(), IEnrichableItem {
-    protected var injector: Injector? = null
-        private set
+    private var injector: Injector? = null
 
     protected val baseActivity
         get() = activity as BaseActivity
@@ -33,5 +32,11 @@ abstract class BaseFragment : Fragment(), IEnrichableItem {
 
     override fun unbindInjector() {
         injector = null
+    }
+
+    fun getApplicationInjector(): Injector {
+        injector?.let { injector ->
+            return injector
+        } ?: throw IllegalArgumentException("cannot get injector before its binding or after its unbinding")
     }
 }
