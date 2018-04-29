@@ -12,16 +12,16 @@
 
     <EditText
         android:id="@+id/editTextView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_post_height"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@android:color/transparent"
+        android:background="@color/colorTransparent"
         android:gravity="center"
         android:hint="@string/app_image_post_text_hint"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textMultiLine"
-        android:paddingLeft="@dimen/size_xxlarge"
-        android:paddingRight="@dimen/size_xxlarge"
+        android:layout_marginLeft="@dimen/size_xxlarge"
+        android:layout_marginRight="@dimen/size_xxlarge"
         android:textAlignment="center"
         android:textSize="@dimen/textsize_xlarge" />
 

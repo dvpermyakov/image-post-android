@@ -8,7 +8,7 @@
         android:id="@+id/emptyContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorTransparentBackground" />
+        android:background="@color/colorSemiTransparentBackground" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/mainContainerView"

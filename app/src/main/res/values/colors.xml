@@ -7,6 +7,7 @@
 
     <color name="colorBlack">#000000</color>
     <color name="colorGrey">#bcbcbc</color>
+    <color name="colorTransparent">#00000000</color>
 
     <color name="colorPickerEmpty">#ebebeb</color>
     <color name="colorPickerBlueStart">#30f2d2</color>
@@ -21,5 +22,5 @@
     <color name="colorPickerPurpleEnd">#6c6cd9</color>
 
     <color name="colorBackground">#ffffff</color>
-    <color name="colorTransparentBackground">#80000000</color>
+    <color name="colorSemiTransparentBackground">#80000000</color>
 </resources>

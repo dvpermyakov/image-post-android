@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.base.extensions.hideKeyboard
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
 import com.dvpermyakov.imagepostapplication.models.CoverModel
 import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
+import com.dvpermyakov.imagepostapplication.models.TextAppearanceModel
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -41,6 +43,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         stickerButtonView.setOnClickListener {
             presenter.onStickerButtonClick()
         }
+        fontButtonView.setOnClickListener {
+            presenter.onFontClick()
+        }
 
         compositeDisposable.add(RxTextView.textChanges(editTextView).subscribe { text ->
             saveButtonView.isEnabled = text.isNotEmpty()
@@ -71,7 +76,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         baseActivity.addFragment(StickerListFragment.newInstance())
     }
 
-    override fun setCovers(items: List<SelectableCoverModel>) {
+    override fun setCoverList(items: List<SelectableCoverModel>) {
         adapter.items = items
     }
 
@@ -79,8 +84,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         adapter.notifyItemChanged(position)
     }
 
-    override fun setPostCover(cover: CoverModel) {
+    override fun updatePostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
         coverView.cover = cover
+        editTextView.setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
+        editTextView.setBackgroundColor(baseActivity.getCompatColor(textAppearance.getBackgroundColor()))
     }
 
     companion object {
