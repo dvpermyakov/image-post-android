@@ -2,6 +2,7 @@ package com.dvpermyakov.imagepostapplication.models
 
 import android.content.Context
 import android.support.annotation.ColorInt
+import android.support.annotation.DrawableRes
 import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.imagepostapplication.R
 
@@ -17,7 +18,9 @@ abstract class CoverModel {
                 ColorCoverModel.getModelGreen(ctx),
                 ColorCoverModel.getModelOrange(ctx),
                 ColorCoverModel.getModelRed(ctx),
-                ColorCoverModel.getModelPurple(ctx))
+                ColorCoverModel.getModelPurple(ctx),
+                ImageCoverModel.getModelBeach(),
+                ImageCoverModel.getModelStars())
     }
 }
 
@@ -46,5 +49,12 @@ data class ColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd
         fun getModelPurple(ctx: Context) = ColorCoverModel(
                 ctx.getCompatColor(R.color.colorPickerPurpleStart),
                 ctx.getCompatColor(R.color.colorPickerPurpleEnd))
+    }
+}
+
+data class ImageCoverModel(@DrawableRes val image: Int) : CoverModel() {
+    companion object {
+        fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach)
+        fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars)
     }
 }
