@@ -15,7 +15,7 @@ import com.dvpermyakov.imagepostapplication.R
 abstract class CoverModel : Parcelable {
     companion object {
         fun getDefaults(ctx: Context) = listOf(
-                ColorCoverModel.getModelEmpty(ctx),
+                EmptyColorCoverModel.getModelEmpty(ctx),
                 ColorCoverModel.getModelBlue(ctx),
                 ColorCoverModel.getModelGreen(ctx),
                 ColorCoverModel.getModelOrange(ctx),
@@ -23,6 +23,30 @@ abstract class CoverModel : Parcelable {
                 ColorCoverModel.getModelPurple(ctx),
                 ImageCoverModel.getModelBeach(),
                 ImageCoverModel.getModelStars())
+    }
+}
+
+data class EmptyColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd: Int) : CoverModel() {
+
+    constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readInt())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(colorStart)
+        parcel.writeInt(colorEnd)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<EmptyColorCoverModel> {
+            override fun createFromParcel(parcel: Parcel) = EmptyColorCoverModel(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<EmptyColorCoverModel?>(size)
+        }
+
+        fun getModelEmpty(ctx: Context) = EmptyColorCoverModel(
+                ctx.getCompatColor(R.color.colorPickerEmpty),
+                ctx.getCompatColor(R.color.colorPickerEmpty))
     }
 }
 
@@ -42,10 +66,6 @@ data class ColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd
             override fun createFromParcel(parcel: Parcel) = ColorCoverModel(parcel)
             override fun newArray(size: Int) = arrayOfNulls<ColorCoverModel?>(size)
         }
-
-        fun getModelEmpty(ctx: Context) = ColorCoverModel(
-                ctx.getCompatColor(R.color.colorPickerEmpty),
-                ctx.getCompatColor(R.color.colorPickerEmpty))
 
         fun getModelBlue(ctx: Context) = ColorCoverModel(
                 ctx.getCompatColor(R.color.colorPickerBlueStart),

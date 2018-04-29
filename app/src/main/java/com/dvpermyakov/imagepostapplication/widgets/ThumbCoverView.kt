@@ -1,14 +1,18 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
+import com.dvpermyakov.imagepostapplication.models.EmptyColorCoverModel
 import com.dvpermyakov.imagepostapplication.models.ImageCoverModel
 import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
+import com.dvpermyakov.imagepostapplication.utils.PaintUtils
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -16,15 +20,7 @@ import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 
 class ThumbCoverView : View {
     private val radius by lazy { resources.getDimension(R.dimen.size_xsmall) }
-    private val strokePaint by lazy {
-        Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = context.getCompatColor(R.color.colorPrimary)
-            style = Paint.Style.STROKE
-            strokeJoin = Paint.Join.ROUND
-            strokeCap = Paint.Cap.ROUND
-            strokeWidth = STROKE_WIDTH
-        }
-    }
+    private val strokePaint by lazy { PaintUtils.getStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH) }
     private var paint: Paint? = null
     private var rect: RectF? = null
 
@@ -49,8 +45,8 @@ class ThumbCoverView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        selectableCover?.let { selectableCover ->
-            rect?.let { rect ->
+        rect?.let { rect ->
+            selectableCover?.let { selectableCover ->
                 paint?.let { paint ->
                     if (selectableCover.selected) {
                         canvas.scale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY())
@@ -68,18 +64,11 @@ class ThumbCoverView : View {
     private fun invalidatePaint() {
         rect?.let { rect ->
             selectableCover?.cover?.let { cover ->
-                when (cover) {
-                    is ColorCoverModel -> {
-                        paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                            shader = LinearGradient(0f, 0f, rect.right, rect.bottom, cover.colorStart, cover.colorEnd, Shader.TileMode.MIRROR)
-                        }
-                    }
-                    is ImageCoverModel -> {
-                        paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                            val bitmap = BitmapFactory.decodeResource(resources, cover.image)
-                            shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-                        }
-                    }
+                paint = when (cover) {
+                    is EmptyColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
+                    is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
+                    is ImageCoverModel -> PaintUtils.getImagePaint(resources, cover.image)
+                    else -> PaintUtils.getEmptyPaint()
                 }
             }
         }

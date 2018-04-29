@@ -15,7 +15,9 @@ import javax.inject.Inject
 class CreateImagePostPresenter @Inject constructor(
         contextHolder: IApplicationContextHolder) : BaseFragmentPresenter<CreateImagePostView>() {
 
-    private var covers = CoverModel.getDefaults(contextHolder.getContext()).map { SelectableCoverModel(it, false) }
+    private var covers = CoverModel.getDefaults(contextHolder.getContext()).map { SelectableCoverModel(it, false) }.apply {
+        first().selected = true
+    }
 
     override fun attachView(v: CreateImagePostView, state: Bundle?) {
         super.attachView(v, state)
