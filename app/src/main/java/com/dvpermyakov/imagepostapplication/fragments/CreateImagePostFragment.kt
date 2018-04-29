@@ -3,12 +3,13 @@ package com.dvpermyakov.imagepostapplication.fragments
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import com.dvpermyakov.base.extensions.hideKeyboard
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
-import com.dvpermyakov.imagepostapplication.models.CoverModel
+import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -23,7 +24,11 @@ import kotlinx.android.synthetic.main.layout_image_post_header.*
 
 class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImagePostPresenter>(), CreateImagePostView {
     private val compositeDisposable = CompositeDisposable()
-    private val adapter by lazy { CoverAdapter() }
+    private val adapter by lazy {
+        CoverAdapter().apply {
+            itemClickListener = { presenter.onCoverItemClick(it) }
+        }
+    }
 
     override val baseView = this
     override val contentResId = R.layout.fragment_image_post
@@ -65,8 +70,12 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         baseActivity.addFragment(StickerListFragment.newInstance())
     }
 
-    override fun setCovers(items: List<CoverModel>) {
+    override fun setCovers(items: List<SelectableCoverModel>) {
         adapter.items = items
+    }
+
+    override fun notifyCoverItemChanged(position: Int) {
+        adapter.notifyItemChanged(position)
     }
 
     companion object {

@@ -1,17 +1,22 @@
 package com.dvpermyakov.imagepostapplication.adapters
 
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.dvpermyakov.base.adapters.BaseRecyclerViewAdapter
 import com.dvpermyakov.imagepostapplication.R
-import com.dvpermyakov.imagepostapplication.models.CoverModel
+import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 import kotlinx.android.synthetic.main.layout_cover.view.*
+import kotlinx.android.synthetic.main.layout_cover_footer.view.*
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class CoverAdapter : BaseRecyclerViewAdapter<CoverModel>() {
+class CoverAdapter : BaseRecyclerViewAdapter<SelectableCoverModel>() {
+
+    var addClickListener: (() -> Unit)? = null
+    var itemClickListener: ((SelectableCoverModel) -> Unit)? = null
 
     override fun getItemCount() = super.getItemCount() + FOOTER_SIZE
 
@@ -28,13 +33,22 @@ class CoverAdapter : BaseRecyclerViewAdapter<CoverModel>() {
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        if (getItemViewType(position) == TYPE_ITEM) {
-            with(holder.itemView) {
-                frameLayoutView.setOnClickListener {  }
-                coverView.coverModel = items[position]
-            }
-        } else {
+        with(holder) {
+            if (itemViewType == TYPE_ITEM) {
+                with(itemView) {
+                    frameLayoutView.setOnClickListener {
+                        if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+                            itemClickListener?.invoke(items[holder.adapterPosition])
+                        }
 
+                    }
+                    coverView.selectableCover = items[position]
+                }
+            } else {
+                itemView.footerFrameLayoutView.setOnClickListener {
+                    addClickListener?.invoke()
+                }
+            }
         }
     }
 

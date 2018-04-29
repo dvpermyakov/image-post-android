@@ -9,7 +9,7 @@ import android.os.Bundle
 abstract class BaseFragmentPresenter<V> {
     protected var view: V? = null
 
-    open fun attachView(v: V) {
+    open fun attachView(v: V, state: Bundle?) {
         view = v
     }
 

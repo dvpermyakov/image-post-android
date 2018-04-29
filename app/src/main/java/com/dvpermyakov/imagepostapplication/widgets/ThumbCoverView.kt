@@ -4,10 +4,11 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
-import com.dvpermyakov.imagepostapplication.models.CoverModel
 import com.dvpermyakov.imagepostapplication.models.ImageCoverModel
+import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -15,10 +16,19 @@ import com.dvpermyakov.imagepostapplication.models.ImageCoverModel
 
 class ThumbCoverView : View {
     private val radius by lazy { resources.getDimension(R.dimen.size_xsmall) }
+    private val strokePaint by lazy {
+        Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = context.getCompatColor(R.color.colorPrimary)
+            style = Paint.Style.STROKE
+            strokeJoin = Paint.Join.ROUND
+            strokeCap = Paint.Cap.ROUND
+            strokeWidth = STROKE_WIDTH
+        }
+    }
     private var paint: Paint? = null
     private var rect: RectF? = null
 
-    var coverModel: CoverModel? = null
+    var selectableCover: SelectableCoverModel? = null
         set(value) {
             if (field != value) {
                 field = value
@@ -39,19 +49,25 @@ class ThumbCoverView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        paint?.let { paint ->
-            canvas.drawRoundRect(rect, radius, radius, paint)
+        selectableCover?.let { selectableCover ->
+            rect?.let { rect ->
+                paint?.let { paint ->
+                    if (selectableCover.selected) {
+                        canvas.scale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY())
+                        canvas.drawRoundRect(rect, radius, radius, strokePaint)
+                        canvas.scale(SELECTED_SCALE_FILL, SELECTED_SCALE_FILL, rect.centerX(), rect.centerY())
+                        canvas.drawRect(rect, paint)
+                    } else {
+                        canvas.drawRoundRect(rect, radius, radius, paint)
+                    }
+                }
+            }
         }
-    }
-
-    override fun onDetachedFromWindow() {
-        coverModel = null
-        super.onDetachedFromWindow()
     }
 
     private fun invalidatePaint() {
         rect?.let { rect ->
-            coverModel?.let { cover ->
+            selectableCover?.cover?.let { cover ->
                 when (cover) {
                     is ColorCoverModel -> {
                         paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -67,5 +83,12 @@ class ThumbCoverView : View {
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SELECTED_SCALE_STROKE = .92f
+        private const val SELECTED_SCALE_FILL = .8f
+
+        private const val STROKE_WIDTH = 10f
     }
 }

@@ -16,7 +16,7 @@ abstract class BaseMvpFragment<V, out P : BaseFragmentPresenter<V>> : BaseFragme
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        presenter.attachView(baseView)
+        presenter.attachView(baseView, savedInstanceState)
     }
 
     override fun onStart() {
