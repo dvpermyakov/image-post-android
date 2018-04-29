@@ -12,10 +12,10 @@ import com.dvpermyakov.imagepostapplication.models.CoverModel
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.michaelrocks.lightsaber.getInstance
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_image_post.*
 import kotlinx.android.synthetic.main.layout_image_post_header.*
-
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -28,7 +28,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     override val baseView = this
     override val contentResId = R.layout.fragment_image_post
 
-    override fun createPresenter() = CreateImagePostPresenter()
+    override fun createPresenter(): CreateImagePostPresenter = injector!!.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

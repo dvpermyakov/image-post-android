@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<View xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/size_large"
-    android:layout_height="@dimen/size_large"
-    android:background="@drawable/shape_cover" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.dvpermyakov.imagepostapplication.widgets.ThumbCoverView
+        android:id="@+id/coverView"
+        android:layout_width="@dimen/size_xlarge"
+        android:layout_height="@dimen/size_xlarge"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/size_small" />
+
+</FrameLayout>
