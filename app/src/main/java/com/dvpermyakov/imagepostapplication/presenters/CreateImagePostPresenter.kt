@@ -21,6 +21,7 @@ class CreateImagePostPresenter @Inject constructor(
         super.attachView(v, state)
         state?.let { covers = it.getParcelableArrayList(KEY_COVERS) }
         v.setCovers(covers)
+        covers.forEach { if (it.selected) view?.setPostCover(it.cover) }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -37,6 +38,7 @@ class CreateImagePostPresenter @Inject constructor(
                 } else if (item.cover == selectedItem.cover) {
                     item.selected = true
                     view?.notifyCoverItemChanged(index)
+                    view?.setPostCover(item.cover)
                 }
             }
         }

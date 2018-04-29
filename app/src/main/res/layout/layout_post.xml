@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/postView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.dvpermyakov.imagepostapplication.widgets.CoverView
+        android:id="@+id/coverView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_post_height"
+        android:layout_gravity="center" />
+
+    <EditText
+        android:id="@+id/editTextView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_post_height"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:hint="@string/app_image_post_text_hint"
+        android:imeOptions="flagNoExtractUi"
+        android:inputType="textMultiLine"
+        android:paddingLeft="@dimen/size_xxlarge"
+        android:paddingRight="@dimen/size_xxlarge"
+        android:textAlignment="center"
+        android:textSize="@dimen/textsize_xlarge" />
+
+</FrameLayout>

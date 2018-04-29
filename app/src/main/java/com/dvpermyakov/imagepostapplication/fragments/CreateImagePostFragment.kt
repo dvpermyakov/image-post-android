@@ -3,12 +3,12 @@ package com.dvpermyakov.imagepostapplication.fragments
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
 import android.view.View
 import com.dvpermyakov.base.extensions.hideKeyboard
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
+import com.dvpermyakov.imagepostapplication.models.CoverModel
 import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
@@ -17,6 +17,7 @@ import io.michaelrocks.lightsaber.getInstance
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_image_post.*
 import kotlinx.android.synthetic.main.layout_image_post_header.*
+import kotlinx.android.synthetic.main.layout_post.*
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -76,6 +77,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun notifyCoverItemChanged(position: Int) {
         adapter.notifyItemChanged(position)
+    }
+
+    override fun setPostCover(cover: CoverModel) {
+        coverView.cover = cover
     }
 
     companion object {

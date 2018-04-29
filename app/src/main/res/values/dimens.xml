@@ -2,4 +2,5 @@
 <resources>
     <dimen name="app_sticker_list_height">420dp</dimen>
     <dimen name="app_sticker_size">120dp</dimen>
+    <dimen name="app_post_height">540dp</dimen>
 </resources>
