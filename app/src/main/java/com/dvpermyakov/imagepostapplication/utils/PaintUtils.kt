@@ -21,6 +21,8 @@ object PaintUtils {
 
     fun getEmptyPaint() = Paint().apply { alpha = 0 }
 
+    fun getColorPaint(@ColorInt color: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply { this.color = color }
+
     fun getStrokePaint(@ColorInt color: Int, strokeWidth: Float) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         this.color = color
         this.strokeWidth = strokeWidth

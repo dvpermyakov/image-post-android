@@ -10,18 +10,21 @@
         android:layout_height="@dimen/app_post_height"
         android:layout_gravity="center" />
 
-    <EditText
+    <com.dvpermyakov.imagepostapplication.widgets.ColoredEditTextView
         android:id="@+id/editTextView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/colorTransparent"
         android:gravity="center"
         android:hint="@string/app_image_post_text_hint"
         android:imeOptions="flagNoExtractUi"
-        android:inputType="textMultiLine"
-        android:layout_marginLeft="@dimen/size_xxlarge"
-        android:layout_marginRight="@dimen/size_xxlarge"
+        android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="10"
+        android:paddingBottom="@dimen/size_medium"
+        android:paddingLeft="@dimen/size_xxlarge"
+        android:paddingRight="@dimen/size_xxlarge"
+        android:paddingTop="@dimen/size_medium"
         android:textAlignment="center"
         android:textSize="@dimen/textsize_xlarge" />
 
