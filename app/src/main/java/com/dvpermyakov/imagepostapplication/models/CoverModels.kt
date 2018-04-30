@@ -106,8 +106,8 @@ data class ImageCoverModel(@DrawableRes val imageThumb: Int, @DrawableRes val im
             override fun newArray(size: Int) = arrayOfNulls<ImageCoverModel?>(size)
         }
 
-        fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach, R.drawable.bg_stars_center)
-        fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars, R.drawable.bg_stars_center)
+        fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach, R.drawable.large_beach)
+        fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars, R.drawable.large_stars)
     }
 }
 
