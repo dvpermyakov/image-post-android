@@ -1,12 +1,20 @@
 package com.dvpermyakov.imagepostapplication.presenters
 
+import android.Manifest
+import android.net.Uri
 import android.os.Bundle
+import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.infrastructure.IApplicationContextHolder
 import com.dvpermyakov.base.presenters.BaseFragmentPresenter
+import com.dvpermyakov.imagepostapplication.interactors.GalleryImageInteractor
 import com.dvpermyakov.imagepostapplication.models.CoverModel
+import com.dvpermyakov.imagepostapplication.models.FileCoverModel
 import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
 import com.dvpermyakov.imagepostapplication.models.TextAppearanceModel
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 /**
@@ -14,11 +22,18 @@ import javax.inject.Inject
  */
 
 class CreateImagePostPresenter @Inject constructor(
-        contextHolder: IApplicationContextHolder) : BaseFragmentPresenter<CreateImagePostView>() {
+        private val contextHolder: IApplicationContextHolder,
+        private val galleryImageInteractor: GalleryImageInteractor) : BaseFragmentPresenter<CreateImagePostView>() {
+    private val compositeDisposable = CompositeDisposable()
 
-    private var covers = CoverModel.getDefaults(contextHolder.getContext()).map { SelectableCoverModel(it, false) }.apply {
-        first().selected = true
-    }
+    private var covers = CoverModel.getDefaults(contextHolder.getContext())
+            .map {
+                SelectableCoverModel(it, false)
+            }
+            .toMutableList()
+            .apply {
+                first().selected = true
+            }
 
     private var textAppearance = TextAppearanceModel()
 
@@ -30,6 +45,16 @@ class CreateImagePostPresenter @Inject constructor(
         }
         v.setCoverList(covers)
         view?.updatePostAppearance(getSelectedCover(), textAppearance)
+    }
+
+    override fun onStop() {
+        compositeDisposable.clear()
+        super.onStop()
+    }
+
+    override fun detachView() {
+        compositeDisposable.dispose()
+        super.detachView()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -53,6 +78,14 @@ class CreateImagePostPresenter @Inject constructor(
         }
     }
 
+    fun onAddCoverClick() {
+        if (contextHolder.getContext().isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            view?.openImageFromGallery()
+        } else {
+            view?.showReadPermissionDialog()
+        }
+    }
+
     fun onFontClick() {
         textAppearance.nextBackground()
         view?.updatePostAppearance(getSelectedCover(), textAppearance)
@@ -60,6 +93,25 @@ class CreateImagePostPresenter @Inject constructor(
 
     fun onStickerButtonClick() {
         view?.showStickerList()
+    }
+
+    fun onImagePick(uri: Uri) {
+        compositeDisposable.add(galleryImageInteractor.getImageBitmap(uri)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe {
+                    view?.showImageLoadingDialog()
+                }
+                .doFinally {
+                    view?.hideImageLoadingDialog()
+                }
+                .subscribe({ imagePath ->
+                    if (covers.add(SelectableCoverModel(FileCoverModel(imagePath), false))) {
+                        view?.notifyCoverItemAdded(covers.lastIndex)
+                    }
+                }, {
+                    view?.showImageLoadingError()
+                }))
     }
 
     private fun getSelectedCover() = covers.first { it.selected }.cover

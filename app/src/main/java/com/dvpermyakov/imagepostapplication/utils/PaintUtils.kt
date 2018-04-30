@@ -1,9 +1,7 @@
 package com.dvpermyakov.imagepostapplication.utils
 
-import android.content.res.Resources
 import android.graphics.*
 import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -14,8 +12,7 @@ object PaintUtils {
         shader = LinearGradient(0f, 0f, rect.right, rect.bottom, colorStart, colorEnd, Shader.TileMode.MIRROR)
     }
 
-    fun getImagePaint(resources: Resources, @DrawableRes image: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        val bitmap = BitmapFactory.decodeResource(resources, image)
+    fun getBitmapPaint(bitmap: Bitmap) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
     }
 

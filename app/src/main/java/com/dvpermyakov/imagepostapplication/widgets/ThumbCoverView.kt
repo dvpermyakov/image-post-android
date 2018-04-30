@@ -1,6 +1,7 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -8,10 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.imagepostapplication.R
-import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
-import com.dvpermyakov.imagepostapplication.models.EmptyColorCoverModel
-import com.dvpermyakov.imagepostapplication.models.ImageCoverModel
-import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
+import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.utils.PaintUtils
 
 /**
@@ -67,7 +65,10 @@ class ThumbCoverView : View {
                 paint = when (cover) {
                     is EmptyColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                    is ImageCoverModel -> PaintUtils.getImagePaint(resources, cover.image)
+                // move decodeResource from mainThread
+                    is ImageCoverModel -> PaintUtils.getBitmapPaint(BitmapFactory.decodeResource(resources, cover.imageThumb))
+                // move decodeResource from mainThread
+                    is FileCoverModel -> PaintUtils.getBitmapPaint(BitmapFactory.decodeFile(cover.path))
                     else -> PaintUtils.getEmptyPaint()
                 }
             }

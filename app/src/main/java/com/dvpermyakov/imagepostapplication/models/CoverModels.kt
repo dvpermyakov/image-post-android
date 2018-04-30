@@ -89,13 +89,14 @@ data class ColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd
     }
 }
 
-data class ImageCoverModel(@DrawableRes val image: Int) : CoverModel() {
-    constructor(parcel: Parcel) : this(parcel.readInt())
+data class ImageCoverModel(@DrawableRes val imageThumb: Int, @DrawableRes val imageLarge: Int) : CoverModel() {
+    constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readInt())
 
     override fun describeContents() = 0
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(image)
+        parcel.writeInt(imageThumb)
+        parcel.writeInt(imageLarge)
     }
 
     companion object {
@@ -105,7 +106,25 @@ data class ImageCoverModel(@DrawableRes val image: Int) : CoverModel() {
             override fun newArray(size: Int) = arrayOfNulls<ImageCoverModel?>(size)
         }
 
-        fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach)
-        fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars)
+        fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach, R.drawable.bg_stars_center)
+        fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars, R.drawable.bg_stars_center)
+    }
+}
+
+data class FileCoverModel(val path: String) : CoverModel() {
+    constructor(parcel: Parcel) : this(parcel.readString())
+
+    override fun describeContents() = 0
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(path)
+    }
+
+    companion object {
+        @JvmField
+        val CREATOR = object : Parcelable.Creator<FileCoverModel> {
+            override fun createFromParcel(parcel: Parcel) = FileCoverModel(parcel)
+            override fun newArray(size: Int) = arrayOfNulls<FileCoverModel?>(size)
+        }
     }
 }

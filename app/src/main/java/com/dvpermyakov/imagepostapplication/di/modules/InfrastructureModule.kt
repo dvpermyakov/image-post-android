@@ -1,5 +1,6 @@
 package com.dvpermyakov.imagepostapplication.di.modules
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.res.AssetManager
 import com.dvpermyakov.base.infrastructure.IApplicationContextHolder
@@ -17,6 +18,10 @@ class InfrastructureModule(private val applicationContext: Context) {
     @Singleton
     @Provides
     fun getAssetManager(): AssetManager = applicationContext.assets
+
+    @Singleton
+    @Provides
+    fun getContentResolver(): ContentResolver = applicationContext.contentResolver
 
     @Singleton
     @Provides

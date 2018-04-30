@@ -16,6 +16,7 @@ class ProgressDialogFragment : DialogFragmentWithContext() {
         argumentsOrBundle.let { args ->
             return MaterialDialog.Builder(context)
                     .content(args.getInt(KEY_MESSAGE))
+                    .cancelable(false)
                     .progress(true, 0)
                     .show()
         }
