@@ -7,9 +7,8 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/app_post_height"
         android:layout_gravity="center"
-        android:scaleType="centerInside"
         android:visibility="gone" />
 
     <com.dvpermyakov.imagepostapplication.widgets.ColoredCoverView

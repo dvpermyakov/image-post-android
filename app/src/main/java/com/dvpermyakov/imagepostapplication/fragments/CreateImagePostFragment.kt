@@ -127,7 +127,6 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 imageView.setVisible(true)
                 Picasso.with(context)
                         .load(File(cover.path))
-                        .fit()
                         .into(imageView)
             }
         }
