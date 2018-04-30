@@ -8,7 +8,7 @@ import com.dvpermyakov.imagepostapplication.R
  * Created by dmitrypermyakov on 29/04/2018.
  */
 
-data class TextAppearanceModel(var backgroundType: Int = TYPE_BACKGROUND_EMPTY) : Parcelable {
+data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND_EMPTY) : Parcelable {
     constructor(parcel: Parcel) : this(parcel.readInt())
 
     override fun describeContents() = 0
@@ -33,6 +33,11 @@ data class TextAppearanceModel(var backgroundType: Int = TYPE_BACKGROUND_EMPTY) 
         backgroundType == TYPE_BACKGROUND_MAIN -> R.color.textColorPrimary
         cover is ColorCoverModel || cover is ImageCoverModel -> R.color.textColorWhite
         else -> R.color.textColorPrimary
+    }
+
+    fun getHintTextColor(cover: CoverModel?) = when (cover) {
+        is ColorCoverModel, is ImageCoverModel -> R.color.textColorWhite
+        else -> R.color.textColorSecondary
     }
 
     companion object {

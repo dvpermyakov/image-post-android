@@ -86,8 +86,11 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun updatePostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
         coverView.cover = cover
-        editTextView.setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
-        editTextView.setTextBackgroundColor(baseActivity.getCompatColor(textAppearance.getBackgroundColor()))
+        with(editTextView) {
+            setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
+            setHintTextColor(baseActivity.getCompatColor(textAppearance.getHintTextColor(cover)))
+            setTextBackgroundColor(baseActivity.getCompatColor(textAppearance.getBackgroundColor()))
+        }
     }
 
     companion object {
