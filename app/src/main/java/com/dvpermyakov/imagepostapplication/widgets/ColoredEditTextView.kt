@@ -46,6 +46,7 @@ class ColoredEditTextView : EditText {
 
     fun setTextBackgroundColor(@ColorInt color: Int) {
         paint = PaintUtils.getColorPaint(color)
+        invalidate()
     }
 
     private fun invalidateRectList() {
