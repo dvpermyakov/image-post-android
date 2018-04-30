@@ -44,7 +44,9 @@ class CreateImagePostPresenter @Inject constructor(
             textAppearance = it.getParcelable(KEY_TEXT_APPEARANCE)
         }
         v.setCoverList(covers)
-        view?.updatePostAppearance(getSelectedCover(), textAppearance)
+        val selectedCover = getSelectedCover()
+        view?.updateTextPostAppearance(selectedCover, textAppearance)
+        view?.updateImagePostAppearance(selectedCover)
     }
 
     override fun onStop() {
@@ -72,7 +74,8 @@ class CreateImagePostPresenter @Inject constructor(
                 } else if (item.cover == selectedItem.cover) {
                     item.selected = true
                     view?.notifyCoverItemChanged(index)
-                    view?.updatePostAppearance(item.cover, textAppearance)
+                    view?.updateTextPostAppearance(item.cover, textAppearance)
+                    view?.updateImagePostAppearance(item.cover)
                 }
             }
         }
@@ -88,7 +91,7 @@ class CreateImagePostPresenter @Inject constructor(
 
     fun onFontClick() {
         textAppearance.nextBackground()
-        view?.updatePostAppearance(getSelectedCover(), textAppearance)
+        view?.updateTextPostAppearance(getSelectedCover(), textAppearance)
     }
 
     fun onStickerButtonClick() {

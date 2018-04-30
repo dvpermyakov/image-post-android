@@ -104,7 +104,15 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         adapter.notifyItemInserted(position)
     }
 
-    override fun updatePostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
+    override fun updateTextPostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
+        with(editTextView) {
+            setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
+            setHintTextColor(baseActivity.getCompatColor(textAppearance.getHintTextColor(cover)))
+            setTextBackgroundColor(baseActivity.getCompatColor(textAppearance.getBackgroundColor()))
+        }
+    }
+
+    override fun updateImagePostAppearance(cover: CoverModel) {
         when (cover) {
             is EmptyColorCoverModel -> {
                 coverView.setVisible(false)
@@ -129,11 +137,6 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                         .load(File(cover.path))
                         .into(imageView)
             }
-        }
-        with(editTextView) {
-            setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
-            setHintTextColor(baseActivity.getCompatColor(textAppearance.getHintTextColor(cover)))
-            setTextBackgroundColor(baseActivity.getCompatColor(textAppearance.getBackgroundColor()))
         }
     }
 
