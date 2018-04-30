@@ -30,10 +30,10 @@ class CreateImagePostPresenter @Inject constructor(
             .map {
                 SelectableCoverModel(it, false)
             }
-            .toMutableList()
             .apply {
                 first().selected = true
             }
+            .toMutableList()
 
     private var textAppearance = TextAppearanceModel()
 
@@ -106,7 +106,8 @@ class CreateImagePostPresenter @Inject constructor(
                     view?.hideImageLoadingDialog()
                 }
                 .subscribe({ imagePath ->
-                    if (covers.add(SelectableCoverModel(FileCoverModel(imagePath), false))) {
+                    val imageCover = SelectableCoverModel(FileCoverModel(imagePath), false)
+                    if (covers.indexOfFirst { it.cover == imageCover.cover } == -1 && covers.add(imageCover)) {
                         view?.notifyCoverItemAdded(covers.lastIndex)
                     }
                 }, {
