@@ -36,7 +36,7 @@ data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND
     }
 
     fun getHintTextColor(cover: CoverModel?) = when (cover) {
-        is ColorCoverModel, is ImageCoverModel -> R.color.textColorWhite
+        is ColorCoverModel, is ImageCoverModel, is FileCoverModel -> R.color.textColorWhite
         else -> R.color.textColorSecondary
     }
 
