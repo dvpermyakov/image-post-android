@@ -53,7 +53,9 @@ class ColoredEditTextView : EditText {
         layout?.let { layout ->
             rectList.clear()
             for (index in 0 until layout.lineCount) {
-                rectList.add(getRectFromLayout(index))
+                if (layout.getLineLeft(index) < layout.getLineRight(index)) {
+                    rectList.add(getRectFromLayout(index))
+                }
             }
         }
     }
