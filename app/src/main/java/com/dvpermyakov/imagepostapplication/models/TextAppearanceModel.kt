@@ -31,7 +31,7 @@ data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND
     fun getTextColor(cover: CoverModel?) = when {
         backgroundType == TYPE_BACKGROUND_BLUE -> R.color.textColorWhite
         backgroundType == TYPE_BACKGROUND_MAIN -> R.color.textColorPrimary
-        cover is ColorCoverModel || cover is ImageCoverModel -> R.color.textColorWhite
+        cover is ColorCoverModel || cover is ImageCoverModel || cover is FileCoverModel -> R.color.textColorWhite
         else -> R.color.textColorPrimary
     }
 

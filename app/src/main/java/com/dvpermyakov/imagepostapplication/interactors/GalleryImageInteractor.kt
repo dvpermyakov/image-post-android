@@ -11,7 +11,7 @@ import javax.inject.Inject
  */
 
 class GalleryImageInteractor @Inject constructor(private val contentResolver: ContentResolver) {
-    fun getImageBitmap(uri: Uri) = Single.create<String> { emitter ->
+    fun getImagePath(uri: Uri) = Single.create<String> { emitter ->
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
         with(contentResolver.query(uri, filePathColumn, null, null, null)) {
             try {

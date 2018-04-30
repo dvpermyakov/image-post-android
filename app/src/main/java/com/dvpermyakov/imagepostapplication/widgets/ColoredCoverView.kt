@@ -1,20 +1,21 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.dvpermyakov.imagepostapplication.models.*
+import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
+import com.dvpermyakov.imagepostapplication.models.CoverModel
+import com.dvpermyakov.imagepostapplication.models.EmptyColorCoverModel
 import com.dvpermyakov.imagepostapplication.utils.PaintUtils
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
  */
 
-class CoverView : View {
+class ColoredCoverView : View {
     private var paint: Paint? = null
     private var rect: RectF? = null
 
@@ -52,10 +53,6 @@ class CoverView : View {
                 paint = when (cover) {
                     is EmptyColorCoverModel -> PaintUtils.getEmptyPaint()
                     is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                // move decodeResource from mainThread
-                    is ImageCoverModel -> PaintUtils.getBitmapPaint(BitmapFactory.decodeResource(resources, cover.imageLarge))
-                // move decodeResource from mainThread
-                    is FileCoverModel -> PaintUtils.getBitmapPaint(BitmapFactory.decodeFile(cover.path))
                     else -> PaintUtils.getEmptyPaint()
                 }
             }

@@ -4,11 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.dvpermyakov.imagepostapplication.widgets.CoverView
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:visibility="gone" />
+
+    <com.dvpermyakov.imagepostapplication.widgets.ColoredCoverView
         android:id="@+id/coverView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_post_height"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
     <com.dvpermyakov.imagepostapplication.widgets.ColoredEditTextView
         android:id="@+id/editTextView"
@@ -20,7 +29,6 @@
         android:hint="@string/app_image_post_text_hint"
         android:imeOptions="flagNoExtractUi"
         android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="10"
         android:paddingBottom="@dimen/size_medium"
         android:paddingLeft="@dimen/size_xxlarge"
         android:paddingRight="@dimen/size_xxlarge"

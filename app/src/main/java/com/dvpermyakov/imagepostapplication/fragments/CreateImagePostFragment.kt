@@ -7,25 +7,22 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import com.dvpermyakov.base.extensions.getCompatColor
-import com.dvpermyakov.base.extensions.hideKeyboard
-import com.dvpermyakov.base.extensions.hideLoadingDialog
-import com.dvpermyakov.base.extensions.showLoadingDialog
+import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
-import com.dvpermyakov.imagepostapplication.models.CoverModel
-import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
-import com.dvpermyakov.imagepostapplication.models.TextAppearanceModel
+import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import com.squareup.picasso.Picasso
 import io.michaelrocks.lightsaber.getInstance
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_image_post.*
 import kotlinx.android.synthetic.main.layout_image_post_header.*
 import kotlinx.android.synthetic.main.layout_post.*
 import org.jetbrains.anko.toast
+import java.io.File
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -108,7 +105,32 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     override fun updatePostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
-        coverView.cover = cover
+        when (cover) {
+            is EmptyColorCoverModel -> {
+                coverView.setVisible(false)
+                imageView.setVisible(false)
+            }
+            is ColorCoverModel -> {
+                coverView.setVisible(true)
+                coverView.cover = cover
+                imageView.setVisible(false)
+            }
+            is ImageCoverModel -> {
+                coverView.setVisible(false)
+                imageView.setVisible(true)
+                Picasso.with(context)
+                        .load(cover.imageLarge)
+                        .into(imageView)
+            }
+            is FileCoverModel -> {
+                coverView.setVisible(false)
+                imageView.setVisible(true)
+                Picasso.with(context)
+                        .load(File(cover.path))
+                        .fit()
+                        .into(imageView)
+            }
+        }
         with(editTextView) {
             setTextColor(baseActivity.getCompatColor(textAppearance.getTextColor(cover)))
             setHintTextColor(baseActivity.getCompatColor(textAppearance.getHintTextColor(cover)))

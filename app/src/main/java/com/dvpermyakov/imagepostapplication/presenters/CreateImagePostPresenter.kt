@@ -96,7 +96,7 @@ class CreateImagePostPresenter @Inject constructor(
     }
 
     fun onImagePick(uri: Uri) {
-        compositeDisposable.add(galleryImageInteractor.getImageBitmap(uri)
+        compositeDisposable.add(galleryImageInteractor.getImagePath(uri)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
