@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSemiTransparentBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <android.support.v7.widget.CardView
+        style="@style/MainTheme.CardView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/size_xxlarge"
+        card_view:cardCornerRadius="@dimen/size_small"
+        card_view:cardElevation="@dimen/size_xsmall"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:gravity="center"
+                android:padding="@dimen/size_large"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="@dimen/textsize_large"
+                card_view:layout_constraintLeft_toLeftOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/cancelButtonView"
+                style="@style/MainTheme.BorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/size_small"
+                android:padding="@dimen/size_medium"
+                android:text="@string/app_permissions_cancel"
+                android:textSize="@dimen/textsize_medium"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintRight_toLeftOf="@+id/okButtonView"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <Button
+                android:id="@+id/okButtonView"
+                style="@style/MainTheme.BorderlessButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/size_small"
+                android:layout_marginLeft="@dimen/size_small"
+                android:layout_marginRight="@dimen/size_medium"
+                android:layout_marginTop="@dimen/size_small"
+                android:padding="@dimen/size_medium"
+                android:text="@string/app_permissions_ok"
+                android:textSize="@dimen/textsize_medium"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintRight_toRightOf="parent"
+                card_view:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>

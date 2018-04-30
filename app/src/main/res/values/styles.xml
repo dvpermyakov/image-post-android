@@ -19,4 +19,18 @@
         <item name="android:textColor">@color/textColorWhite</item>
     </style>
 
+    <style name="MainTheme.BorderlessButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:padding">@dimen/size_small</item>
+        <item name="android:textSize">@dimen/textsize_xsmall</item>
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:minHeight">@dimen/size_medium</item>
+        <item name="android:minWidth">@dimen/size_medium</item>
+    </style>
+
+    <style name="MainTheme.CardView">
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+        <item name="cardCornerRadius">0dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
 </resources>

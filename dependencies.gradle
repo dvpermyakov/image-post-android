@@ -15,7 +15,9 @@ ext.versions = [
         rxKotlin        : '2.0.2',
         rxAndroid       : '2.0.1',
 
-        picasso         : '2.5.2'
+        picasso         : '2.5.2',
+        materialDialog  : '0.9.6.0',
+        anko            : '0.10.2',
 ]
 
 ext.gradlePlugins = [
@@ -44,4 +46,6 @@ ext.libraries = [
         rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
 
         picasso            : "com.squareup.picasso:picasso:$versions.picasso",
+        materialDialog     : "com.afollestad.material-dialogs:core:$versions.materialDialog",
+        anko               : "org.jetbrains.anko:anko-commons:$versions.anko",
 ]
