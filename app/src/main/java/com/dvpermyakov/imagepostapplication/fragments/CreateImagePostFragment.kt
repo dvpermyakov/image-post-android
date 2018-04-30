@@ -128,6 +128,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 imageView.setVisible(true)
                 Picasso.with(context)
                         .load(cover.imageLarge)
+                        .resize(POST_IMAGE_MAX_SIZE, POST_IMAGE_MAX_SIZE)
+                        .centerInside()
+                        .onlyScaleDown()
                         .into(imageView)
             }
             is FileCoverModel -> {
@@ -135,6 +138,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 imageView.setVisible(true)
                 Picasso.with(context)
                         .load(File(cover.path))
+                        .resize(POST_IMAGE_MAX_SIZE, POST_IMAGE_MAX_SIZE)
+                        .centerInside()
+                        .onlyScaleDown()
                         .into(imageView)
             }
         }
@@ -160,6 +166,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     companion object {
+        private const val POST_IMAGE_MAX_SIZE = 2048
         private const val TAG_LOADING_DIALOG_IMAGE = "LoadingDialogImage"
         private const val REQUEST_CODE_IMAGE_FROM_GALLERY = 4121
 
