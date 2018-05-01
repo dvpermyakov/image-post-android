@@ -179,7 +179,8 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun addSticker(stickerUi: StickerUiModel) {
         val stickerImageView = DraggableImageView(baseActivity).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
+            layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
             draggableModel = stickerUi
         }
         postView.addView(stickerImageView)
