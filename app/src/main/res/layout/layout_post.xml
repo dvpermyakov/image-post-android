@@ -1,38 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/postView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <FrameLayout
+        android:id="@+id/postView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_post_height"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:layout_gravity="center">
 
-    <com.dvpermyakov.imagepostapplication.widgets.ColoredCoverView
-        android:id="@+id/coverView"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_post_height"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
-    <com.dvpermyakov.imagepostapplication.widgets.ColoredEditTextView
-        android:id="@+id/editTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@color/colorTransparent"
-        android:gravity="center"
-        android:hint="@string/app_image_post_text_hint"
-        android:imeOptions="flagNoExtractUi"
-        android:inputType="textCapSentences|textMultiLine"
-        android:paddingBottom="@dimen/size_medium"
-        android:paddingLeft="@dimen/size_xxlarge"
-        android:paddingRight="@dimen/size_xxlarge"
-        android:paddingTop="@dimen/size_medium"
-        android:textAlignment="center"
-        android:textSize="@dimen/textsize_xlarge" />
+        <com.dvpermyakov.imagepostapplication.widgets.ColoredCoverView
+            android:id="@+id/coverView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <com.dvpermyakov.imagepostapplication.widgets.ColoredEditTextView
+            android:id="@+id/editTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/colorTransparent"
+            android:gravity="center"
+            android:hint="@string/app_image_post_text_hint"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textCapSentences|textMultiLine"
+            android:paddingBottom="@dimen/size_medium"
+            android:paddingLeft="@dimen/size_xxlarge"
+            android:paddingRight="@dimen/size_xxlarge"
+            android:paddingTop="@dimen/size_medium"
+            android:textAlignment="center"
+            android:textSize="@dimen/textsize_xlarge" />
+
+    </FrameLayout>
 
 </FrameLayout>
