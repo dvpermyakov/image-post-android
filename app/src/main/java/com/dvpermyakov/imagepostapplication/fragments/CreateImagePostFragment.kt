@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
+import android.view.ViewGroup
 import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
@@ -17,6 +16,7 @@ import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
 import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
+import com.dvpermyakov.imagepostapplication.widgets.DraggableImageView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.squareup.picasso.Picasso
 import io.michaelrocks.lightsaber.getInstance
@@ -178,8 +178,8 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     override fun addSticker(sticker: StickerUiModel) {
-        val stickerImageView = ImageView(context).apply {
-            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        val stickerImageView = DraggableImageView(baseActivity).apply {
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         }
         postView.addView(stickerImageView)
 
