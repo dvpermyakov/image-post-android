@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ImageView
+import com.dvpermyakov.imagepostapplication.gestures.DraggableGesture
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
 /**
@@ -11,22 +12,32 @@ import com.dvpermyakov.imagepostapplication.models.DraggableModel
  */
 
 class DraggableImageView : ImageView {
-    constructor(context: Context) : super(context)
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    private val draggableGesture = DraggableGesture(context).apply {
+        listener = object : DraggableGesture.Draggable {
+            override fun moveTo(x: Float, y: Float) {
+                this@DraggableImageView.x = x
+                this@DraggableImageView.y = y
+            }
 
-    private var downViewX = 0f
-    private var downViewY = 0f
-
-    private var downEventX = 0f
-    private var downEventY = 0f
+            override fun scaleTo(scale: Float) {
+                scaleX = scale
+                scaleY = scale
+            }
+        }
+    }
 
     var draggableModel: DraggableModel? = null
         set(value) {
             field = value
             x = value?.x ?: 0f
             y = value?.y ?: 0f
+            scaleX = value?.scale ?: 1f
+            scaleY = value?.scale ?: 1f
         }
+
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     override fun setX(x: Float) {
         super.setX(x)
@@ -38,29 +49,18 @@ class DraggableImageView : ImageView {
         invalidateDraggableModel()
     }
 
+    override fun setScaleX(scaleX: Float) {
+        super.setScaleX(scaleX)
+        invalidateDraggableModel()
+    }
+
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        super.onTouchEvent(event)
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                if (event.pointerCount == 1) {
-                    downViewX = x
-                    downViewY = y
-                    downEventX = event.rawX
-                    downEventY = event.rawY
-                }
-            }
-            MotionEvent.ACTION_MOVE -> {
-                if (event.pointerCount == 1) {
-                    x = downViewX + event.rawX - downEventX
-                    y = downViewY + event.rawY - downEventY
-                }
-            }
-        }
-        return true
+        return draggableGesture.consumeMotionEvent(event, x, y, scaleX)
     }
 
     private fun invalidateDraggableModel() {
         draggableModel?.x = x
         draggableModel?.y = y
+        draggableModel?.scale = scaleX
     }
 }
