@@ -177,14 +177,16 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 R.string.app_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
     }
 
-    override fun addSticker(sticker: StickerUiModel) {
+    override fun addSticker(stickerUi: StickerUiModel) {
         val stickerImageView = DraggableImageView(baseActivity).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            draggableModel = stickerUi
         }
         postView.addView(stickerImageView)
+        postView.bringChildToFront(editTextView)
 
         Picasso.with(context)
-                .load(sticker.sticker.image)
+                .load(stickerUi.sticker.image)
                 .into(stickerImageView)
     }
 

@@ -5,7 +5,7 @@ package com.dvpermyakov.imagepostapplication.models
  */
 
 abstract class DraggableModel {
-    protected val x = 0
-    protected val y = 0
-    protected val scale = 1f
+    var x = 0f
+    var y = 0f
+    var scale = 1f
 }

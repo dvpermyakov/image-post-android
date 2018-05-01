@@ -46,6 +46,9 @@ class CreateImagePostPresenter @Inject constructor(
         val selectedCover = getSelectedCover()
         view?.updateTextPostAppearance(selectedCover, textAppearance)
         view?.updateImagePostAppearance(selectedCover)
+        stickers.forEach {
+            view?.addSticker(it)
+        }
     }
 
     override fun onStop() {

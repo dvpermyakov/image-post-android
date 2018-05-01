@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ImageView
+import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
 /**
  * Created by dmitrypermyakov on 01/05/2018.
@@ -19,6 +20,23 @@ class DraggableImageView : ImageView {
 
     private var downEventX = 0f
     private var downEventY = 0f
+
+    var draggableModel: DraggableModel? = null
+        set(value) {
+            field = value
+            x = value?.x ?: 0f
+            y = value?.y ?: 0f
+        }
+
+    override fun setX(x: Float) {
+        super.setX(x)
+        invalidateDraggableModel()
+    }
+
+    override fun setY(y: Float) {
+        super.setY(y)
+        invalidateDraggableModel()
+    }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         super.onTouchEvent(event)
@@ -39,5 +57,10 @@ class DraggableImageView : ImageView {
             }
         }
         return true
+    }
+
+    private fun invalidateDraggableModel() {
+        draggableModel?.x = x
+        draggableModel?.y = y
     }
 }

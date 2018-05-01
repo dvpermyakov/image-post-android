@@ -18,5 +18,5 @@ interface CreateImagePostView {
     fun hideImageLoadingDialog()
     fun showImageLoadingError()
     fun showReadPermissionDialog()
-    fun addSticker(sticker: StickerUiModel)
+    fun addSticker(stickerUi: StickerUiModel)
 }
