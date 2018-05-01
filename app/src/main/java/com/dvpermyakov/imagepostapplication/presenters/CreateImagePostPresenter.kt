@@ -101,6 +101,10 @@ class CreateImagePostPresenter @Inject constructor(
         view?.showStickerList()
     }
 
+    fun onPostImageClick() {
+        view?.showKeyboard()
+    }
+
     fun onImagePick(uri: Uri) {
         compositeDisposable.add(galleryImageInteractor.getImagePath(uri)
                 .subscribeOn(Schedulers.io())

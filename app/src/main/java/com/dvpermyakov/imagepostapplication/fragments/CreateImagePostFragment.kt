@@ -53,6 +53,12 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         fontButtonView.setOnClickListener {
             presenter.onFontClick()
         }
+        imageView.setOnClickListener {
+            presenter.onPostImageClick()
+        }
+        coverView.setOnClickListener {
+            presenter.onPostImageClick()
+        }
 
         compositeDisposable.add(RxTextView.textChanges(editTextView).subscribe { text ->
             saveButtonView.isEnabled = text.isNotEmpty()
@@ -189,6 +195,11 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         Picasso.with(context)
                 .load(stickerUi.sticker.image)
                 .into(stickerImageView)
+    }
+
+    override fun showKeyboard() {
+        editTextView.requestFocus()
+        baseActivity.showKeyboard()
     }
 
     companion object {

@@ -53,7 +53,7 @@ class ColoredEditTextView : EditText {
         layout?.let { layout ->
             rectList.clear()
             for (index in 0 until layout.lineCount) {
-                if (layout.getLineLeft(index) < layout.getLineRight(index)) {
+                if (layout.getLineRight(index) - layout.getLineLeft(index) > EPSILON) {
                     rectList.add(getRectFromLayout(index))
                 }
             }
@@ -66,5 +66,9 @@ class ColoredEditTextView : EditText {
                 layout.getLineTop(index).toFloat() - offset + paddingTop,
                 layout.getLineRight(index) + offset + paddingLeft,
                 layout.getLineBottom(index).toFloat() + offset + paddingTop)
+    }
+
+    companion object {
+        private const val EPSILON = 10
     }
 }
