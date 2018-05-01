@@ -1,8 +1,6 @@
 package com.dvpermyakov.imagepostapplication.views
 
-import com.dvpermyakov.imagepostapplication.models.CoverModel
-import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
-import com.dvpermyakov.imagepostapplication.models.TextAppearanceModel
+import com.dvpermyakov.imagepostapplication.models.*
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -20,4 +18,5 @@ interface CreateImagePostView {
     fun hideImageLoadingDialog()
     fun showImageLoadingError()
     fun showReadPermissionDialog()
+    fun addSticker(sticker: StickerUiModel)
 }

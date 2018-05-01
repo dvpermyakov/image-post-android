@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageView
 import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
 import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
+import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.squareup.picasso.Picasso
@@ -76,15 +79,24 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_FROM_GALLERY) {
-            data?.let { presenter.onImagePick(it.data) }
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_CODE_IMAGE_FROM_GALLERY -> data?.let {
+                    presenter.onImagePick(it.data)
+                }
+                REQUEST_CODE_STICKERS -> data?.let {
+                    presenter.onStickerAdd(it.extras.getParcelable(ImagePostApplicationConstants.INTENT_EXTRA_STICKER_MODEL))
+                }
+            }
         }
     }
 
     override fun showStickerList() {
         editTextView.clearFocus()
         baseActivity.hideKeyboard()
-        baseActivity.addFragment(StickerListFragment.newInstance())
+        baseActivity.addFragment(StickerListFragment.newInstance().apply {
+            setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
+        })
     }
 
     override fun openImageFromGallery() {
@@ -165,10 +177,23 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 R.string.app_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
     }
 
+    override fun addSticker(sticker: StickerUiModel) {
+        val stickerImageView = ImageView(context).apply {
+            layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+        }
+        postView.addView(stickerImageView)
+
+        Picasso.with(context)
+                .load(sticker.sticker.image)
+                .into(stickerImageView)
+    }
+
     companion object {
         private const val POST_IMAGE_MAX_SIZE = 2048
         private const val TAG_LOADING_DIALOG_IMAGE = "LoadingDialogImage"
+
         private const val REQUEST_CODE_IMAGE_FROM_GALLERY = 4121
+        private const val REQUEST_CODE_STICKERS = 9523
 
         fun newInstance() = CreateImagePostFragment()
     }

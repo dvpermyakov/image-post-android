@@ -1,5 +1,7 @@
 package com.dvpermyakov.imagepostapplication.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
@@ -10,6 +12,7 @@ import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.StickerAdapter
 import com.dvpermyakov.imagepostapplication.models.StickerModel
 import com.dvpermyakov.imagepostapplication.presenters.StickerListPresenter
+import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.StickerListView
 import io.michaelrocks.lightsaber.getInstance
 import kotlinx.android.synthetic.main.fragment_sticker_list.*
@@ -78,6 +81,12 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
 
     override fun showPreviousScreen() {
         baseActivity.onBackPressed()
+    }
+
+    override fun sendChosenSticker(sticker: StickerModel) {
+        targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, Intent().apply {
+            putExtra(ImagePostApplicationConstants.INTENT_EXTRA_STICKER_MODEL, sticker)
+        })
     }
 
     companion object {

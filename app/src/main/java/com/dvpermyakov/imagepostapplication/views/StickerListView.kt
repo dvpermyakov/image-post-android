@@ -12,4 +12,5 @@ interface StickerListView {
     fun showError()
     fun showStickers(list: List<StickerModel>)
     fun showPreviousScreen()
+    fun sendChosenSticker(sticker: StickerModel)
 }

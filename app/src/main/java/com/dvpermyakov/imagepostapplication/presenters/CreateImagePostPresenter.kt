@@ -7,10 +7,7 @@ import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.infrastructure.IApplicationContextHolder
 import com.dvpermyakov.base.presenters.BaseFragmentPresenter
 import com.dvpermyakov.imagepostapplication.interactors.GalleryImageInteractor
-import com.dvpermyakov.imagepostapplication.models.CoverModel
-import com.dvpermyakov.imagepostapplication.models.FileCoverModel
-import com.dvpermyakov.imagepostapplication.models.SelectableCoverModel
-import com.dvpermyakov.imagepostapplication.models.TextAppearanceModel
+import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -36,12 +33,14 @@ class CreateImagePostPresenter @Inject constructor(
             .toMutableList()
 
     private var textAppearance = TextAppearanceModel()
+    private var stickers = mutableListOf<StickerUiModel>()
 
     override fun attachView(v: CreateImagePostView, state: Bundle?) {
         super.attachView(v, state)
         state?.let {
             covers = it.getParcelableArrayList(KEY_COVERS)
             textAppearance = it.getParcelable(KEY_TEXT_APPEARANCE)
+            stickers = it.getParcelableArrayList(KEY_STICKERS)
         }
         v.setCoverList(covers)
         val selectedCover = getSelectedCover()
@@ -62,6 +61,7 @@ class CreateImagePostPresenter @Inject constructor(
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putParcelableArrayList(KEY_COVERS, ArrayList(covers))
         outState.putParcelable(KEY_TEXT_APPEARANCE, textAppearance)
+        outState.putParcelableArrayList(KEY_STICKERS, ArrayList(stickers))
         super.onSaveInstanceState(outState)
     }
 
@@ -118,10 +118,17 @@ class CreateImagePostPresenter @Inject constructor(
                 }))
     }
 
+    fun onStickerAdd(sticker: StickerModel) {
+        val stickerUi = StickerUiModel(sticker)
+        stickers.add(stickerUi)
+        view?.addSticker(stickerUi)
+    }
+
     private fun getSelectedCover() = covers.first { it.selected }.cover
 
     companion object {
         private const val KEY_COVERS = "covers"
         private const val KEY_TEXT_APPEARANCE = "textAppearance"
+        private const val KEY_STICKERS = "stickers"
     }
 }

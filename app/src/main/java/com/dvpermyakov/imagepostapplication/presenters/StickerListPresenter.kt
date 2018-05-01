@@ -56,6 +56,7 @@ class StickerListPresenter @Inject constructor(
     }
 
     fun onStickerClick(sticker: StickerModel) {
-
+        view?.sendChosenSticker(sticker)
+        view?.showPreviousScreen()
     }
 }
