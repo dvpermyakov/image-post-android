@@ -192,12 +192,17 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
             layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
             draggableModel = stickerUi
-            motionStateListener = { isInMotion ->
+            motionStateListener = { isInMotion, isInsideParent ->
                 trashView.setVisible(isInMotion)
                 Picasso.with(context)
                         .load(R.drawable.ic_fab_trash)
                         .transform(trashCircleTransformation)
                         .into(trashView)
+                if (!isInMotion && !isInsideParent) {
+                    presenter.onStickerRemove(stickerUi)
+                    onDispose()
+                    setVisible(false)
+                }
             }
             boundaryStateListener = { isInsideParent ->
                 trashView.setVisible(true)

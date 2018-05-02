@@ -13,11 +13,11 @@ import com.dvpermyakov.imagepostapplication.models.DraggableModel
  * Created by dmitrypermyakov on 01/05/2018.
  */
 
-class DraggableImageView : ImageView {
+class DraggableImageView : ImageView, IDisposableView {
     private val draggableGesture = DraggableGesture(context).apply {
         listener = object : DraggableGesture.Draggable {
             override fun startMove() {
-                motionStateListener?.invoke(true)
+                motionStateListener?.invoke(true, isInsideParent)
             }
 
             override fun moveTo(x: Float, y: Float) {
@@ -26,7 +26,7 @@ class DraggableImageView : ImageView {
             }
 
             override fun endMove() {
-                motionStateListener?.invoke(false)
+                motionStateListener?.invoke(false, isInsideParent)
             }
 
             override fun scaleTo(scale: Float) {
@@ -43,7 +43,7 @@ class DraggableImageView : ImageView {
             }
         }
 
-    var motionStateListener: ((isInMotion: Boolean) -> Unit)? = null
+    var motionStateListener: ((isInMotion: Boolean, isInsideParent: Boolean) -> Unit)? = null
     var boundaryStateListener: ((isInsideParent: Boolean) -> Unit)? = null
 
     var draggableModel: DraggableModel? = null
@@ -77,6 +77,12 @@ class DraggableImageView : ImageView {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         checkBoundaries()
         return draggableGesture.consumeMotionEvent(event, x, y, scaleX)
+    }
+
+    override fun onDispose() {
+        motionStateListener = null
+        boundaryStateListener = null
+        draggableModel = null
     }
 
     private fun invalidateDraggableModel() {
