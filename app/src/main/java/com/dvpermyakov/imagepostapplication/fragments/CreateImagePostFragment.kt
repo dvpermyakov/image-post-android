@@ -14,6 +14,7 @@ import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
 import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
+import com.dvpermyakov.imagepostapplication.transformations.CircleTransformation
 import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import com.dvpermyakov.imagepostapplication.widgets.DraggableImageView
@@ -38,6 +39,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             itemClickListener = { presenter.onCoverItemClick(it) }
             addClickListener = { presenter.onAddCoverClick() }
         }
+    }
+    private val trashCircleTransformation by lazy {
+        CircleTransformation(baseActivity.getCompatColor(R.color.colorPrimary), baseActivity.getCompatColor(R.color.colorBackground))
     }
 
     override val baseView = this
@@ -190,11 +194,17 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             draggableModel = stickerUi
             motionStateListener = { isInMotion ->
                 trashView.setVisible(isInMotion)
-                trashView.setImageResource(R.drawable.ic_fab_trash)
+                Picasso.with(context)
+                        .load(R.drawable.ic_fab_trash)
+                        .transform(trashCircleTransformation)
+                        .into(trashView)
             }
             boundaryStateListener = { isInsideParent ->
                 trashView.setVisible(true)
-                trashView.setImageResource(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                Picasso.with(context)
+                        .load(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                        .transform(trashCircleTransformation)
+                        .into(trashView)
             }
         }
         postView.addView(stickerImageView)
