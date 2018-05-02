@@ -1,6 +1,7 @@
 package com.dvpermyakov.imagepostapplication.interactors
 
 import android.content.ContentResolver
+import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.MediaStore
 import io.reactivex.Single
@@ -22,6 +23,15 @@ class GalleryImageInteractor @Inject constructor(private val contentResolver: Co
             } finally {
                 close()
             }
+        }
+    }
+
+    fun saveImage(source: Bitmap, title: String, description: String) = Single.create<String> { emitter ->
+        try {
+            val url = MediaStore.Images.Media.insertImage(contentResolver, source, title, description)
+            emitter.onSuccess(url)
+        } catch (ex: Exception) {
+            emitter.onError(ex)
         }
     }
 }

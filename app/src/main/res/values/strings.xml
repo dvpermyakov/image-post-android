@@ -3,11 +3,15 @@
     <string name="app_image_post_header_title">New Post</string>
     <string name="app_image_post_text_hint">What is new?</string>
     <string name="app_image_post_footer_button">Save</string>
+    <string name="app_image_post_default_image_title">Your post from Image Post Application</string>
+    <string name="app_image_post_default_image_description">It was created from Image Post Application</string>
+    <string name="app_image_post_save_success">Your post was saved to the gallery! Check it out!</string>
+    <string name="app_image_post_save_failure">Unfortunately, we cannot save your post now. Try it later…</string>
     <string name="app_sticker_list_title">Stickers</string>
     <string name="app_sticker_list_error">Error</string>
-    <string name="app_loading_dialog_image_message">Image is loading…</string>
-    <string name="app_image_loading_error">File loading is failed</string>
     <string name="app_permissions_message">To choose a photo, allow access to device memory</string>
     <string name="app_permissions_ok">OK</string>
     <string name="app_permissions_cancel">Cancel</string>
+    <string name="app_loading_dialog_image_message">Image is loading…</string>
+    <string name="app_image_loading_error">File loading is failed</string>
 </resources>

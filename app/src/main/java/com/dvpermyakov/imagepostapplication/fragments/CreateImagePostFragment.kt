@@ -3,6 +3,7 @@ package com.dvpermyakov.imagepostapplication.fragments
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -63,6 +64,11 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         coverView.setOnClickListener {
             presenter.onPostImageClick()
         }
+        saveButtonView.setOnClickListener {
+            postView.buildDrawingCache()
+            presenter.onSaveClick(postView.drawingCache.copy(Bitmap.Config.ARGB_8888, false))
+            postView.destroyDrawingCache()
+        }
 
         compositeDisposable.add(RxTextView.textChanges(editTextView).subscribe { text ->
             saveButtonView.isEnabled = text.isNotEmpty()
@@ -101,19 +107,6 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         }
     }
 
-    override fun showStickerList() {
-        editTextView.clearFocus()
-        baseActivity.hideKeyboard()
-        baseActivity.addFragment(StickerListFragment.newInstance().apply {
-            setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
-        })
-    }
-
-    override fun openImageFromGallery() {
-        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
-        startActivityForResult(intent, REQUEST_CODE_IMAGE_FROM_GALLERY)
-    }
-
     override fun setCoverList(items: List<SelectableCoverModel>) {
         adapter.items = items
     }
@@ -124,6 +117,52 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun notifyCoverItemAdded(position: Int) {
         adapter.notifyItemInserted(position)
+    }
+
+    override fun showStickerList() {
+        editTextView.clearFocus()
+        baseActivity.hideKeyboard()
+        baseActivity.addFragment(StickerListFragment.newInstance().apply {
+            setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
+        })
+    }
+
+    override fun addSticker(stickerUi: StickerUiModel) {
+        val stickerImageView = DraggableImageView(baseActivity).apply {
+            val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
+            layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
+            draggableModel = stickerUi
+            motionStateListener = { isInMotion, isInsideParent ->
+                trashView.setVisible(isInMotion)
+                Picasso.with(context)
+                        .load(R.drawable.ic_fab_trash)
+                        .transform(trashCircleTransformation)
+                        .into(trashView)
+                if (!isInMotion && !isInsideParent) {
+                    presenter.onStickerRemove(stickerUi)
+                    onDispose()
+                    setVisible(false)
+                }
+            }
+            boundaryStateListener = { isInsideParent ->
+                trashView.setVisible(true)
+                Picasso.with(context)
+                        .load(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                        .transform(trashCircleTransformation)
+                        .into(trashView)
+            }
+        }
+        postView.addView(stickerImageView)
+        postView.bringChildToFront(editTextView)
+
+        Picasso.with(context)
+                .load(stickerUi.sticker.image)
+                .into(stickerImageView)
+    }
+
+    override fun showKeyboard() {
+        editTextView.requestFocus()
+        baseActivity.showKeyboard()
     }
 
     override fun updateTextPostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel) {
@@ -168,6 +207,17 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         }
     }
 
+    override fun openImageFromGallery() {
+        startActivityForImageFromGallery(REQUEST_CODE_IMAGE_FROM_GALLERY)
+    }
+
+    override fun showReadPermissionDialog() {
+        editTextView.clearFocus()
+        baseActivity.hideKeyboard()
+        baseActivity.addFragment(PermissionFragment.newInstance(
+                R.string.app_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+    }
+
     override fun showImageLoadingDialog() {
         baseActivity.showLoadingDialog(R.string.app_loading_dialog_image_message, TAG_LOADING_DIALOG_IMAGE)
     }
@@ -180,49 +230,12 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         baseActivity.toast(R.string.app_image_loading_error)
     }
 
-    override fun showReadPermissionDialog() {
-        editTextView.clearFocus()
-        baseActivity.hideKeyboard()
-        baseActivity.addFragment(PermissionFragment.newInstance(
-                R.string.app_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+    override fun showSaveImageSuccess() {
+        baseActivity.toast(R.string.app_image_post_save_success)
     }
 
-    override fun addSticker(stickerUi: StickerUiModel) {
-        val stickerImageView = DraggableImageView(baseActivity).apply {
-            val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
-            layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
-            draggableModel = stickerUi
-            motionStateListener = { isInMotion, isInsideParent ->
-                trashView.setVisible(isInMotion)
-                Picasso.with(context)
-                        .load(R.drawable.ic_fab_trash)
-                        .transform(trashCircleTransformation)
-                        .into(trashView)
-                if (!isInMotion && !isInsideParent) {
-                    presenter.onStickerRemove(stickerUi)
-                    onDispose()
-                    setVisible(false)
-                }
-            }
-            boundaryStateListener = { isInsideParent ->
-                trashView.setVisible(true)
-                Picasso.with(context)
-                        .load(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                        .transform(trashCircleTransformation)
-                        .into(trashView)
-            }
-        }
-        postView.addView(stickerImageView)
-        postView.bringChildToFront(editTextView)
-
-        Picasso.with(context)
-                .load(stickerUi.sticker.image)
-                .into(stickerImageView)
-    }
-
-    override fun showKeyboard() {
-        editTextView.requestFocus()
-        baseActivity.showKeyboard()
+    override fun showSaveImageFailure() {
+        baseActivity.toast(R.string.app_image_post_save_failure)
     }
 
     companion object {

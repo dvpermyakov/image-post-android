@@ -1,11 +1,14 @@
 package com.dvpermyakov.imagepostapplication.presenters
 
 import android.Manifest
+import android.content.res.Resources
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.infrastructure.IApplicationContextHolder
 import com.dvpermyakov.base.presenters.BaseFragmentPresenter
+import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.interactors.GalleryImageInteractor
 import com.dvpermyakov.imagepostapplication.models.*
 import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
@@ -19,6 +22,7 @@ import javax.inject.Inject
  */
 
 class CreateImagePostPresenter @Inject constructor(
+        private val resources: Resources,
         private val contextHolder: IApplicationContextHolder,
         private val galleryImageInteractor: GalleryImageInteractor) : BaseFragmentPresenter<CreateImagePostView>() {
     private val compositeDisposable = CompositeDisposable()
@@ -103,6 +107,24 @@ class CreateImagePostPresenter @Inject constructor(
 
     fun onPostImageClick() {
         view?.showKeyboard()
+    }
+
+    fun onSaveClick(bitmap: Bitmap?) {
+        if (bitmap != null) {
+            compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doFinally {
+                        bitmap.recycle()
+                    }
+                    .subscribe({
+                        view?.showSaveImageSuccess()
+                    }, {
+                        view?.showSaveImageFailure()
+                    }))
+        } else {
+            view?.showSaveImageFailure()
+        }
     }
 
     fun onImagePick(uri: Uri) {

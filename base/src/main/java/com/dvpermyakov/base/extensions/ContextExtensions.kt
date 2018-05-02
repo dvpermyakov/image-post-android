@@ -11,4 +11,6 @@ import android.support.v4.content.ContextCompat
 
 fun Context.getCompatColor(@ColorRes color: Int) = ContextCompat.getColor(this, color)
 
-fun Context.isPermissionGranted(permission: String) = ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+fun Context.isPermissionGranted(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+}
