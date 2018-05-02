@@ -137,24 +137,24 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
             layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
             draggableModel = stickerUi
-            motionStateListener = { isInMotion, isInsideParent ->
-                trashView.setVisible(isInMotion)
+            positionChangeListener = { isInsideParent ->
                 Picasso.get()
-                        .load(R.drawable.ic_fab_trash)
+                        .load(if (isInsideParent && !isIntersectedByOtherView(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
                         .transform(trashCircleTransformation)
                         .into(trashView)
-                if (!isInMotion && !isInsideParent) {
+            }
+            motionStateListener = { isInMotion, isInsideParent ->
+                val isIntersectedByTrashView = isIntersectedByOtherView(trashView)
+                trashView.setVisible(isInMotion)
+                Picasso.get()
+                        .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                        .transform(trashCircleTransformation)
+                        .into(trashView)
+                if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
                     presenter.onStickerRemove(stickerUi)
                     onDispose()
                     setVisible(false)
                 }
-            }
-            boundaryStateListener = { isInsideParent ->
-                trashView.setVisible(true)
-                Picasso.get()
-                        .load(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                        .transform(trashCircleTransformation)
-                        .into(trashView)
             }
         }
         postView.addView(stickerImageView)

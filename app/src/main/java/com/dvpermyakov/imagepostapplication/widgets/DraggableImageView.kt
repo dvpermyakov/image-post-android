@@ -21,6 +21,7 @@ class DraggableImageView : ImageView, IDisposableView {
             }
 
             override fun moveTo(x: Float, y: Float) {
+                positionChangeListener?.invoke(isInsideParent)
                 setCenterX(x)
                 setCenterY(y)
             }
@@ -36,15 +37,9 @@ class DraggableImageView : ImageView, IDisposableView {
         }
     }
     private var isInsideParent = true
-        set(value) {
-            if (field != value) {
-                field = value
-                boundaryStateListener?.invoke(value)
-            }
-        }
 
+    var positionChangeListener: ((isInsideParent: Boolean) -> Unit)? = null
     var motionStateListener: ((isInMotion: Boolean, isInsideParent: Boolean) -> Unit)? = null
-    var boundaryStateListener: ((isInsideParent: Boolean) -> Unit)? = null
 
     var draggableModel: DraggableModel? = null
         set(value) {
@@ -93,8 +88,8 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     override fun onDispose() {
+        positionChangeListener = null
         motionStateListener = null
-        boundaryStateListener = null
         draggableModel = null
     }
 
