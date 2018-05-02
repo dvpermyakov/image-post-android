@@ -65,9 +65,14 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             presenter.onPostImageClick()
         }
         saveButtonView.setOnClickListener {
+            val hadEditTextFocus = editTextView.hasFocus()
+            editTextView.clearFocus()
             postView.buildDrawingCache()
             presenter.onSaveClick(postView.drawingCache.copy(Bitmap.Config.ARGB_8888, false))
             postView.destroyDrawingCache()
+            if (hadEditTextFocus) {
+                editTextView.requestFocus()
+            }
         }
 
         compositeDisposable.add(RxTextView.textChanges(editTextView).subscribe { text ->
