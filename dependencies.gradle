@@ -8,16 +8,16 @@ ext.versions = [
         gradle          : '3.0.0',
         support         : '27.0.2',
 
-        lightsaber      : '0.8.3-beta',
-
         constraintLayout: '1.0.2',
 
         rxKotlin        : '2.0.2',
         rxAndroid       : '2.0.1',
+        rxBinding       : '2.1.1',
 
-        picasso         : '2.5.2',
-        materialDialog  : '0.9.6.0',
         anko            : '0.10.2',
+        lightsaber      : '0.8.3-beta',
+        picasso         : '2.71828',
+        materialDialog  : '0.9.6.0',
 ]
 
 ext.gradlePlugins = [
@@ -40,12 +40,12 @@ ext.libraries = [
 
         constraintLayout   : "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
 
-        lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
-
         rxKotlin           : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
         rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
+        rxBinding          : "com.jakewharton.rxbinding2:rxbinding:$versions.rxBinding",
 
+        anko               : "org.jetbrains.anko:anko-commons:$versions.anko",
+        lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
         picasso            : "com.squareup.picasso:picasso:$versions.picasso",
         materialDialog     : "com.afollestad.material-dialogs:core:$versions.materialDialog",
-        anko               : "org.jetbrains.anko:anko-commons:$versions.anko",
 ]

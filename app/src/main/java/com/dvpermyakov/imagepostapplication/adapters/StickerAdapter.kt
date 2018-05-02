@@ -27,7 +27,7 @@ class StickerAdapter : BaseRecyclerViewAdapter<StickerModel>() {
                     clickListener?.invoke(items[holder.adapterPosition])
                 }
             }
-            Picasso.with(context)
+            Picasso.get()
                     .load(item.image)
                     .into(imageView)
         }

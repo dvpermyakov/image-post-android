@@ -35,7 +35,8 @@ dependencies {
     implementation libraries.supportRecyclerView
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
-    implementation libraries.lightsaber
+
     implementation libraries.anko
+    implementation libraries.lightsaber
     implementation(libraries.materialDialog) { transitive = true }
 }

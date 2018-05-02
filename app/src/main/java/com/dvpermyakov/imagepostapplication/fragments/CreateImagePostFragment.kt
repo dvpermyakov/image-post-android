@@ -139,7 +139,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             draggableModel = stickerUi
             motionStateListener = { isInMotion, isInsideParent ->
                 trashView.setVisible(isInMotion)
-                Picasso.with(context)
+                Picasso.get()
                         .load(R.drawable.ic_fab_trash)
                         .transform(trashCircleTransformation)
                         .into(trashView)
@@ -151,7 +151,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             }
             boundaryStateListener = { isInsideParent ->
                 trashView.setVisible(true)
-                Picasso.with(context)
+                Picasso.get()
                         .load(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
                         .transform(trashCircleTransformation)
                         .into(trashView)
@@ -160,7 +160,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         postView.addView(stickerImageView)
         postView.bringChildToFront(editTextView)
 
-        Picasso.with(context)
+        Picasso.get()
                 .load(stickerUi.sticker.image)
                 .into(stickerImageView)
     }
@@ -194,7 +194,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             is ImageCoverModel -> {
                 coverView.setVisible(false)
                 imageView.setVisible(true)
-                Picasso.with(context)
+                Picasso.get()
                         .load(cover.imageLarge)
                         .resize(POST_IMAGE_MAX_SIZE, POST_IMAGE_MAX_SIZE)
                         .centerInside()
@@ -204,7 +204,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             is FileCoverModel -> {
                 coverView.setVisible(false)
                 imageView.setVisible(true)
-                Picasso.with(context)
+                Picasso.get()
                         .load(File(cover.path))
                         .resize(POST_IMAGE_MAX_SIZE, POST_IMAGE_MAX_SIZE)
                         .centerInside()

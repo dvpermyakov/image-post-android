@@ -42,12 +42,12 @@ dependencies {
     implementation libraries.supportRecyclerView
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
-    implementation libraries.lightsaber
 
     implementation libraries.rxKotlin
     implementation libraries.rxAndroid
-    implementation libraries.picasso
-    implementation libraries.anko
+    implementation libraries.rxBinding
 
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    implementation libraries.anko
+    implementation libraries.lightsaber
+    implementation libraries.picasso
 }
