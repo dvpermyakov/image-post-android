@@ -8,7 +8,7 @@ import android.view.ScaleGestureDetector
  * Created by dmitrypermyakov on 01/05/2018.
  */
 
-class DraggableGesture(context: Context) {
+class DraggableGestureDetector(context: Context) {
     private var scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureImplementation())
 
     private var firstPointer: PointerData? = null

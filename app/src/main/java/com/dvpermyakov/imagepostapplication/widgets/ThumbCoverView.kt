@@ -25,8 +25,8 @@ import io.reactivex.schedulers.Schedulers
 
 class ThumbCoverView : View {
     private val compositeDisposable = CompositeDisposable()
-    private val radius by lazy { resources.getDimension(R.dimen.size_xsmall) }
-    private val strokePaint by lazy { PaintUtils.getStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH) }
+    private val radius = resources.getDimension(R.dimen.size_xsmall)
+    private val strokePaint = PaintUtils.getStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH)
     private var paint: Paint? = null
     private var rect: RectF? = null
 

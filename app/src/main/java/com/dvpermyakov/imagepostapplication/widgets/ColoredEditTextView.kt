@@ -15,8 +15,8 @@ import com.dvpermyakov.imagepostapplication.utils.PaintUtils
  */
 
 class ColoredEditTextView : EditText {
-    private val radius by lazy { resources.getDimension(R.dimen.size_xsmall) }
-    private val offset by lazy { resources.getDimension(R.dimen.size_small) }
+    private val radius = resources.getDimension(R.dimen.size_xsmall)
+    private val offset = resources.getDimension(R.dimen.size_small)
 
     private var paint: Paint? = null
     private var rectList = mutableListOf<RectF>()

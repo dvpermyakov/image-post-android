@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.widget.ImageView
 import com.dvpermyakov.base.extensions.*
-import com.dvpermyakov.imagepostapplication.gestures.DraggableGesture
+import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
 /**
@@ -14,8 +14,8 @@ import com.dvpermyakov.imagepostapplication.models.DraggableModel
  */
 
 class DraggableImageView : ImageView, IDisposableView {
-    private val draggableGesture = DraggableGesture(context).apply {
-        listener = object : DraggableGesture.Draggable {
+    private val draggableGesture = DraggableGestureDetector(context).apply {
+        listener = object : DraggableGestureDetector.Draggable {
             override fun startMove() {
                 motionStateListener?.invoke(true, isInsideParent)
             }
