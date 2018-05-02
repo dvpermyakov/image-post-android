@@ -26,6 +26,7 @@ class DraggableGesture(context: Context) {
         if (!onScale) {
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> {
+                    listener?.startMove()
                     firstPointer = PointerData(event.getPointerId(event.actionIndex), x, y, event.rawX, event.rawY)
                 }
                 MotionEvent.ACTION_MOVE -> {
@@ -36,9 +37,11 @@ class DraggableGesture(context: Context) {
                     }
                 }
                 MotionEvent.ACTION_UP -> {
+                    listener?.endMove()
                     firstPointer = null
                 }
                 MotionEvent.ACTION_CANCEL -> {
+                    listener?.endMove()
                     firstPointer = null
                 }
                 MotionEvent.ACTION_POINTER_UP -> {
@@ -72,7 +75,9 @@ class DraggableGesture(context: Context) {
     }
 
     interface Draggable {
+        fun startMove()
         fun moveTo(x: Float, y: Float)
+        fun endMove()
         fun scaleTo(scale: Float)
     }
 }

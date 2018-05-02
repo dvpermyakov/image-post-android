@@ -1,8 +1,10 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGesture
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
@@ -14,9 +16,17 @@ import com.dvpermyakov.imagepostapplication.models.DraggableModel
 class DraggableImageView : ImageView {
     private val draggableGesture = DraggableGesture(context).apply {
         listener = object : DraggableGesture.Draggable {
+            override fun startMove() {
+                motionStateListener?.invoke(true)
+            }
+
             override fun moveTo(x: Float, y: Float) {
                 this@DraggableImageView.x = x
                 this@DraggableImageView.y = y
+            }
+
+            override fun endMove() {
+                motionStateListener?.invoke(false)
             }
 
             override fun scaleTo(scale: Float) {
@@ -25,6 +35,16 @@ class DraggableImageView : ImageView {
             }
         }
     }
+    private var isInsideParent = true
+        set(value) {
+            if (field != value) {
+                field = value
+                boundaryStateListener?.invoke(value)
+            }
+        }
+
+    var motionStateListener: ((isInMotion: Boolean) -> Unit)? = null
+    var boundaryStateListener: ((isInsideParent: Boolean) -> Unit)? = null
 
     var draggableModel: DraggableModel? = null
         set(value) {
@@ -55,6 +75,7 @@ class DraggableImageView : ImageView {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        checkBoundaries()
         return draggableGesture.consumeMotionEvent(event, x, y, scaleX)
     }
 
@@ -62,5 +83,12 @@ class DraggableImageView : ImageView {
         draggableModel?.x = x
         draggableModel?.y = y
         draggableModel?.scale = scaleX
+    }
+
+    private fun checkBoundaries() {
+        val parent = parent as ViewGroup
+        val rect = Rect()
+        getHitRect(rect)
+        isInsideParent = rect.left >= 0 && rect.top >= 0 && rect.right <= parent.width && rect.bottom <= parent.height
     }
 }

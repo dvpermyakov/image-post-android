@@ -188,6 +188,14 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
             layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
             draggableModel = stickerUi
+            motionStateListener = { isInMotion ->
+                trashView.setVisible(isInMotion)
+                trashView.setImageResource(R.drawable.ic_fab_trash)
+            }
+            boundaryStateListener = { isInsideParent ->
+                trashView.setVisible(true)
+                trashView.setImageResource(if (isInsideParent) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+            }
         }
         postView.addView(stickerImageView)
         postView.bringChildToFront(editTextView)
