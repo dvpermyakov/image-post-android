@@ -2,6 +2,7 @@ package com.dvpermyakov.imagepostapplication.fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
@@ -16,6 +17,7 @@ import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.StickerListView
 import io.michaelrocks.lightsaber.getInstance
 import kotlinx.android.synthetic.main.fragment_sticker_list.*
+import kotlinx.android.synthetic.main.layout_sticker_list.*
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -43,7 +45,7 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
 
         mainContainerView.setOnClickListener { }  // to prevent clicking on empty container
 
-        recyclerView.layoutManager = GridLayoutManager(context, STICKERS_LIST_SPAN_COUNT)
+        recyclerView.layoutManager = GridLayoutManager(context, getStickerListSpan())
         recyclerView.adapter = adapter
 
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -89,8 +91,15 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         })
     }
 
+    private fun getStickerListSpan() = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        STICKERS_LIST_SPAN_COUNT_PORTRAIT
+    } else {
+        STICKERS_LIST_SPAN_COUNT_LANDSCAPE
+    }
+
     companion object {
-        private const val STICKERS_LIST_SPAN_COUNT = 4
+        private const val STICKERS_LIST_SPAN_COUNT_PORTRAIT = 4
+        private const val STICKERS_LIST_SPAN_COUNT_LANDSCAPE = 6
 
         fun newInstance() = StickerListFragment()
     }

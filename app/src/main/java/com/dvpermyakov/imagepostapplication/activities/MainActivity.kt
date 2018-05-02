@@ -9,7 +9,6 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
 
 /* todo:
 
-    1) StickerListFragment should have landscape layout. Height is hardcoded now.
     2) Thumb image may disappear after recycler view scrolling.
     3) ColoredEditText has colored padding which may overlay text.
     4) Lack of Rotation gesture detection.

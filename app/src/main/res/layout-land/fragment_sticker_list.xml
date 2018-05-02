@@ -14,9 +14,9 @@
         android:id="@+id/mainContainerView"
         layout="@layout/layout_sticker_list"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_sticker_list_height_portrait"
+        android:layout_height="@dimen/app_sticker_list_height_landscape"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="@dimen/app_sticker_list_height_portrait"
+        app:behavior_peekHeight="@dimen/app_sticker_list_height_landscape"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior" />
 
 </android.support.design.widget.CoordinatorLayout>

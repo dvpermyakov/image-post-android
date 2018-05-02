@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="app_sticker_list_height">420dp</dimen>
+    <dimen name="app_sticker_list_height_portrait">420dp</dimen>
+    <dimen name="app_sticker_list_height_landscape">300dp</dimen>
     <dimen name="app_sticker_size">120dp</dimen>
     <dimen name="app_post_height">420dp</dimen>
 </resources>
