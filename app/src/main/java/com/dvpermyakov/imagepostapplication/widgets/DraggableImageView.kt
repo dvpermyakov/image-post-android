@@ -88,7 +88,7 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        checkBoundaries()
+        checkBoundaries(event.x.toInt(), event.y.toInt())
         return draggableGesture.consumeMotionEvent(event, getCenterX(), getCenterY(), scaleX)
     }
 
@@ -109,11 +109,15 @@ class DraggableImageView : ImageView, IDisposableView {
         }
     }
 
-    private fun checkBoundaries() {
+    private fun checkBoundaries(eventX: Int, eventY: Int) {
         getViewGroupParent()?.let { parent ->
             val rect = Rect()
             getHitRect(rect)
-            isInsideParent = rect.left >= 0 && rect.top >= 0 && rect.right <= parent.width && rect.bottom <= parent.height
+            isInsideParent =
+                    rect.left + eventX >= 0 &&
+                    rect.top + eventY >= 0 &&
+                    rect.right - (width - eventX) <= parent.width &&
+                    rect.bottom - (height - eventY) <= parent.height
         }
     }
 }

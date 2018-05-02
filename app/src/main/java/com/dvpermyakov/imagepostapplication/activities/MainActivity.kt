@@ -15,9 +15,9 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
     4) Lack of Rotation gesture detection.
     5) Scale gesture detection doesn't interact with Movement gesture detection.
     6) Sticker should be removed in case it is above trash image view.
-    7) Sticker will be removed if it intersects boundaries not if motion event intersects boundaries.
     8) Saved image has quality worse than original.
     9) Not all steps are implemented in read permission request.
+    10) StickerListFragment is shown before keyboard is hidden.
 
  */
 
