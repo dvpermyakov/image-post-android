@@ -4,17 +4,17 @@ ext.versions = [
         minSdk          : 19,
         targetSdk       : 27,
 
-        kotlin          : '1.2.31',
+        kotlin          : '1.2.41',
         gradle          : '3.0.0',
         support         : '27.0.2',
 
         constraintLayout: '1.0.2',
 
         rxKotlin        : '2.0.2',
-        rxAndroid       : '2.0.1',
+        rxAndroid       : '2.0.2',
         rxBinding       : '2.1.1',
 
-        anko            : '0.10.2',
+        anko            : '0.10.5',
         lightsaber      : '0.8.3-beta',
         picasso         : '2.71828',
         materialDialog  : '0.9.6.0',
