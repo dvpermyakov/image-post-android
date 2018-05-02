@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.dvpermyakov.base.extensions.setVisible
 import com.dvpermyakov.base.fragments.BaseMvpFragment
@@ -45,7 +46,14 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
 
         mainContainerView.setOnClickListener { }  // to prevent clicking on empty container
 
-        recyclerView.layoutManager = GridLayoutManager(context, getStickerListSpan())
+        val layoutManager = object : GridLayoutManager(context, getStickerListSpan()) {
+            override fun computeVerticalScrollOffset(state: RecyclerView.State?): Int {
+                val offset = super.computeVerticalScrollOffset(state)
+                dividerView?.alpha = offset / DIVIDER_ALPHA_HEIGHT
+                return offset
+            }
+        }
+        recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -98,6 +106,8 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
     }
 
     companion object {
+        private const val DIVIDER_ALPHA_HEIGHT = 300f
+
         private const val STICKERS_LIST_SPAN_COUNT_PORTRAIT = 4
         private const val STICKERS_LIST_SPAN_COUNT_LANDSCAPE = 6
 
