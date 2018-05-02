@@ -176,7 +176,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     override fun updateImagePostAppearance(cover: CoverModel) {
         when (cover) {
             is EmptyColorCoverModel -> {
-                coverView.setVisible(false)
+                coverView.setVisible(true)
+                val backgroundColor = baseActivity.getCompatColor(R.color.colorBackground)
+                coverView.cover = ColorCoverModel(backgroundColor, backgroundColor)
                 imageView.setVisible(false)
             }
             is ColorCoverModel -> {
