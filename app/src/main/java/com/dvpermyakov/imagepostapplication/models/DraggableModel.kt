@@ -5,7 +5,8 @@ package com.dvpermyakov.imagepostapplication.models
  */
 
 abstract class DraggableModel {
-    var x = 0f
-    var y = 0f
-    var scale = 1f
+    var translationX = .25f  // [0f, 1f]
+    var translationY = .25f  // [0f, 1f]
+    var scaleX = 1f          // [0f, 1f]
+    var scaleY = 1f          // [0f, 1f]
 }

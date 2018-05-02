@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.ViewGroup
 import android.widget.ImageView
+import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGesture
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
@@ -21,8 +21,8 @@ class DraggableImageView : ImageView, IDisposableView {
             }
 
             override fun moveTo(x: Float, y: Float) {
-                this@DraggableImageView.x = x
-                this@DraggableImageView.y = y
+                setCenterX(x)
+                setCenterY(y)
             }
 
             override fun endMove() {
@@ -48,11 +48,10 @@ class DraggableImageView : ImageView, IDisposableView {
 
     var draggableModel: DraggableModel? = null
         set(value) {
-            field = value
-            x = value?.x ?: 0f
-            y = value?.y ?: 0f
-            scaleX = value?.scale ?: 1f
-            scaleY = value?.scale ?: 1f
+            if (field != value) {
+                field = value
+                applyDraggableModel()
+            }
         }
 
     constructor(context: Context) : super(context)
@@ -61,22 +60,36 @@ class DraggableImageView : ImageView, IDisposableView {
 
     override fun setX(x: Float) {
         super.setX(x)
-        invalidateDraggableModel()
+        getViewGroupParent()?.let { parent ->
+            draggableModel?.translationX = getCenterX() / parent.width
+        }
     }
 
     override fun setY(y: Float) {
         super.setY(y)
-        invalidateDraggableModel()
+        getViewGroupParent()?.let { parent ->
+            draggableModel?.translationY = getCenterY() / parent.height
+        }
     }
 
     override fun setScaleX(scaleX: Float) {
         super.setScaleX(scaleX)
-        invalidateDraggableModel()
+        draggableModel?.scaleX = scaleX
+    }
+
+    override fun setScaleY(scaleY: Float) {
+        super.setScaleY(scaleY)
+        draggableModel?.scaleY = scaleY
+    }
+
+    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+        super.onLayout(changed, left, top, right, bottom)
+        applyDraggableModel()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         checkBoundaries()
-        return draggableGesture.consumeMotionEvent(event, x, y, scaleX)
+        return draggableGesture.consumeMotionEvent(event, getCenterX(), getCenterY(), scaleX)
     }
 
     override fun onDispose() {
@@ -85,16 +98,22 @@ class DraggableImageView : ImageView, IDisposableView {
         draggableModel = null
     }
 
-    private fun invalidateDraggableModel() {
-        draggableModel?.x = x
-        draggableModel?.y = y
-        draggableModel?.scale = scaleX
+    private fun applyDraggableModel() {
+        getViewGroupParent()?.let { parent ->
+            draggableModel?.let { model ->
+                setCenterX(model.translationX * parent.width)
+                setCenterY(model.translationY * parent.height)
+                scaleX = model.scaleX
+                scaleY = model.scaleY
+            }
+        }
     }
 
     private fun checkBoundaries() {
-        val parent = parent as ViewGroup
-        val rect = Rect()
-        getHitRect(rect)
-        isInsideParent = rect.left >= 0 && rect.top >= 0 && rect.right <= parent.width && rect.bottom <= parent.height
+        getViewGroupParent()?.let { parent ->
+            val rect = Rect()
+            getHitRect(rect)
+            isInsideParent = rect.left >= 0 && rect.top >= 0 && rect.right <= parent.width && rect.bottom <= parent.height
+        }
     }
 }
