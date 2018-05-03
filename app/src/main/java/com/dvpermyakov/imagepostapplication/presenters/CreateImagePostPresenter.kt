@@ -152,7 +152,7 @@ class CreateImagePostPresenter @Inject constructor(
     }
 
     fun onStickerAdd(sticker: StickerModel) {
-        val stickerUi = StickerUiModel(sticker)
+        val stickerUi = StickerUiModel(resources.getDimensionPixelOffset(R.dimen.app_sticker_size), sticker)
         stickers.add(stickerUi)
         view?.addSticker(stickerUi)
     }

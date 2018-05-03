@@ -1,83 +1,107 @@
 package com.dvpermyakov.imagepostapplication.gestures
 
 import android.content.Context
+import android.graphics.Matrix
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
+import com.almeros.android.multitouch.MoveGestureDetector
+import com.almeros.android.multitouch.RotateGestureDetector
+import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
 /**
  * Created by dmitrypermyakov on 01/05/2018.
  */
 
-class DraggableGestureDetector(context: Context) {
-    private var scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureImplementation())
+class DraggableGestureDetector(
+        context: Context,
+        private val viewWidth: Int,
+        private val viewHeight: Int,
+        private val draggable: DraggableModel) {
 
-    private var firstPointer: PointerData? = null
-    private var onScale = false
+    private val scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureImplementation())
+    private val rotateGestureDetector = RotateGestureDetector(context, RotateImplementation())
+    private val moveGestureDetector = MoveGestureDetector(context, MoveImplementation())
 
-    private var scale = 1f
+    private val matrix = Matrix()
+    private var focusX = draggable.translationX * viewWidth - draggable.width / 2
+        set(value) {
+            field = value
+            draggable.translationX = (value + draggable.width / 2) / viewWidth
+        }
+    private var focusY = draggable.translationY * viewHeight - draggable.height / 2
+        set(value) {
+            field = value
+            draggable.translationY = (value + draggable.height / 2) / viewHeight
+        }
 
     var listener: Draggable? = null
 
-    fun consumeMotionEvent(event: MotionEvent, x: Float, y: Float, scale: Float): Boolean {
-        this.scale = scale
-
+    fun consumeMotionEvent(event: MotionEvent): Boolean {
         scaleGestureDetector.onTouchEvent(event)
+        rotateGestureDetector.onTouchEvent(event)
+        moveGestureDetector.onTouchEvent(event)
 
-        if (!onScale) {
-            when (event.actionMasked) {
-                MotionEvent.ACTION_DOWN -> {
-                    listener?.startMove()
-                    firstPointer = PointerData(event.getPointerId(event.actionIndex), x, y, event.rawX, event.rawY)
-                }
-                MotionEvent.ACTION_MOVE -> {
-                    firstPointer?.let { pointerData ->
-                        val moveToX = pointerData.downViewX + (event.rawX - pointerData.downEventX)
-                        val moveToY = pointerData.downViewY + (event.rawY - pointerData.downEventY)
-                        listener?.moveTo(moveToX, moveToY)
-                    }
-                }
-                MotionEvent.ACTION_UP -> {
-                    listener?.endMove()
-                    firstPointer = null
-                }
-                MotionEvent.ACTION_CANCEL -> {
-                    listener?.endMove()
-                    firstPointer = null
-                }
-                MotionEvent.ACTION_POINTER_UP -> {
-                    if (event.getPointerId(event.actionIndex) == firstPointer?.id) {
-                        firstPointer = null
-                    }
-                }
-            }
-        }
+        listener?.onMatrixChange(getMatrix())
 
         return true
     }
 
-    data class PointerData(var id: Int, var downViewX: Float, var downViewY: Float, var downEventX: Float, var downEventY: Float)
+    fun getMatrix(): Matrix {
+        val cx = draggable.scaleFactor * draggable.width / 2
+        val cy = draggable.scaleFactor * draggable.height / 2
 
-    inner class ScaleGestureImplementation : ScaleGestureDetector.OnScaleGestureListener {
-        override fun onScaleBegin(detector: ScaleGestureDetector?): Boolean {
-            onScale = true
+        with(matrix) {
+            reset()
+            postScale(draggable.scaleFactor, draggable.scaleFactor)
+            postRotate(draggable.rotationDegrees, cx, cy)
+            postTranslate(focusX, focusY)
+        }
+
+        return matrix
+    }
+
+    inner class MoveImplementation : MoveGestureDetector.SimpleOnMoveGestureListener() {
+        override fun onMoveBegin(detector: MoveGestureDetector): Boolean {
+            listener?.onMoveBegin()
             return true
         }
 
-        override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            onScale = false
+        override fun onMove(detector: MoveGestureDetector): Boolean {
+            val delta = detector.focusDelta
+            focusX += delta.x
+            focusY += delta.y
+            listener?.onMove()
+            return true
         }
 
+        override fun onMoveEnd(detector: MoveGestureDetector) {
+            listener?.onMoveEnd()
+        }
+    }
+
+    inner class ScaleGestureImplementation : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            scale *= detector.scaleFactor
-            listener?.scaleTo(scale)
+            draggable.scaleFactor = Math.max(SCALE_FACTOR_MIN, Math.min(draggable.scaleFactor * detector.scaleFactor, SCALE_FACTOR_MAX))
+            return true
+        }
+    }
+
+    inner class RotateImplementation : RotateGestureDetector.SimpleOnRotateGestureListener() {
+        override fun onRotate(detector: RotateGestureDetector): Boolean {
+            draggable.rotationDegrees -= detector.rotationDegreesDelta
             return true
         }
     }
 
     interface Draggable {
-        fun startMove()
-        fun moveTo(x: Float, y: Float)
-        fun endMove()
-        fun scaleTo(scale: Float)
+        fun onMoveBegin()
+        fun onMove()
+        fun onMoveEnd()
+        fun onMatrixChange(matrix: Matrix)
+    }
+
+    companion object {
+        private const val SCALE_FACTOR_MIN = .5f
+        private const val SCALE_FACTOR_MAX = 2f
     }
 }

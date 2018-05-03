@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
@@ -134,17 +135,17 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun addSticker(stickerUi: StickerUiModel) {
         val stickerImageView = DraggableImageView(baseActivity).apply {
-            val stickerSize = resources.getDimensionPixelOffset(R.dimen.app_sticker_size)
-            layoutParams = ViewGroup.LayoutParams(stickerSize, stickerSize)
+            scaleType = ImageView.ScaleType.MATRIX
+            layoutParams = ViewGroup.LayoutParams(postView.width, postView.height)
             draggableModel = stickerUi
             positionChangeListener = { isInsideParent ->
                 Picasso.get()
-                        .load(if (isInsideParent && !isIntersectedByOtherView(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                        .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
                         .transform(trashCircleTransformation)
                         .into(trashView)
             }
             motionStateListener = { isInMotion, isInsideParent ->
-                val isIntersectedByTrashView = isIntersectedByOtherView(trashView)
+                val isIntersectedByTrashView = isIntersectedBy(trashView)
                 trashView.setVisible(isInMotion)
                 Picasso.get()
                         .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
@@ -162,6 +163,8 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
         Picasso.get()
                 .load(stickerUi.sticker.image)
+                .resize(stickerUi.width, stickerUi.height)
+                .centerInside()
                 .into(stickerImageView)
     }
 

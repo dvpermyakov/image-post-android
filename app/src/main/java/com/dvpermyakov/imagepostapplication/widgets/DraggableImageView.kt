@@ -1,11 +1,15 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
+import android.graphics.Matrix
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
+import android.view.View
 import android.widget.ImageView
-import com.dvpermyakov.base.extensions.*
+import com.dvpermyakov.base.extensions.getLocationPoint
+import com.dvpermyakov.base.extensions.getLocationRect
+import com.dvpermyakov.base.extensions.getRectFromImageMatrix
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 
@@ -14,105 +18,93 @@ import com.dvpermyakov.imagepostapplication.models.DraggableModel
  */
 
 class DraggableImageView : ImageView, IDisposableView {
-    private val draggableGesture = DraggableGestureDetector(context).apply {
-        listener = object : DraggableGestureDetector.Draggable {
-            override fun startMove() {
-                motionStateListener?.invoke(true, isInsideParent)
-            }
+    private val draggableGestureDetector by lazy {
+        DraggableGestureDetector(context, width, height, draggableModel).apply {
+            listener = object : DraggableGestureDetector.Draggable {
+                override fun onMoveBegin() {
+                    motionStateListener?.invoke(true, isInsideParent)
+                }
 
-            override fun moveTo(x: Float, y: Float) {
-                positionChangeListener?.invoke(isInsideParent)
-                setCenterX(x)
-                setCenterY(y)
-            }
+                override fun onMove() {
+                    positionChangeListener?.invoke(isInsideParent)
+                }
 
-            override fun endMove() {
-                motionStateListener?.invoke(false, isInsideParent)
-            }
+                override fun onMoveEnd() {
+                    motionStateListener?.invoke(false, isInsideParent)
+                }
 
-            override fun scaleTo(scale: Float) {
-                scaleX = scale
-                scaleY = scale
+                override fun onMatrixChange(matrix: Matrix) {
+                    imageMatrix = matrix
+                }
             }
         }
     }
+
+    private var isDragged = false
     private var isInsideParent = true
 
     var positionChangeListener: ((isInsideParent: Boolean) -> Unit)? = null
     var motionStateListener: ((isInMotion: Boolean, isInsideParent: Boolean) -> Unit)? = null
 
-    var draggableModel: DraggableModel? = null
-        set(value) {
-            if (field != value) {
-                field = value
-                applyDraggableModel()
-            }
-        }
+    lateinit var draggableModel: DraggableModel
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
-    override fun setX(x: Float) {
-        super.setX(x)
-        getViewGroupParent()?.let { parent ->
-            draggableModel?.translationX = getCenterX() / parent.width
-        }
-    }
-
-    override fun setY(y: Float) {
-        super.setY(y)
-        getViewGroupParent()?.let { parent ->
-            draggableModel?.translationY = getCenterY() / parent.height
-        }
-    }
-
-    override fun setScaleX(scaleX: Float) {
-        super.setScaleX(scaleX)
-        draggableModel?.scaleX = scaleX
-    }
-
-    override fun setScaleY(scaleY: Float) {
-        super.setScaleY(scaleY)
-        draggableModel?.scaleY = scaleY
-    }
-
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
-        applyDraggableModel()
+        imageMatrix = draggableGestureDetector.getMatrix()
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        checkBoundaries(event.x.toInt(), event.y.toInt())
-        return draggableGesture.consumeMotionEvent(event, getCenterX(), getCenterY(), scaleX)
+        var consumed = false
+
+        val eventX = event.x.toInt()
+        val eventY = event.y.toInt()
+        checkBoundaries(eventX, eventY)
+
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                val viewRect = getRectFromImageMatrix(draggableModel.width, draggableModel.height)
+                if (viewRect.contains(eventX, eventY)) {
+                    isDragged = true
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                isDragged = false
+                draggableGestureDetector.consumeMotionEvent(event)
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                isDragged = false
+                draggableGestureDetector.consumeMotionEvent(event)
+            }
+        }
+
+        if (isDragged) {
+            consumed = draggableGestureDetector.consumeMotionEvent(event)
+        }
+
+        return consumed
     }
 
     override fun onDispose() {
         positionChangeListener = null
         motionStateListener = null
-        draggableModel = null
     }
 
-    private fun applyDraggableModel() {
-        getViewGroupParent()?.let { parent ->
-            draggableModel?.let { model ->
-                setCenterX(model.translationX * parent.width)
-                setCenterY(model.translationY * parent.height)
-                scaleX = model.scaleX
-                scaleY = model.scaleY
-            }
-        }
+    fun isIntersectedBy(other: View): Boolean {
+        val imageMatrixRect = getRectFromImageMatrix(draggableModel.width, draggableModel.height)
+        val locationPoint = getLocationPoint()
+        val locationRect = Rect(
+                locationPoint.x + imageMatrixRect.left,
+                locationPoint.y + imageMatrixRect.top,
+                locationPoint.x + imageMatrixRect.right,
+                locationPoint.y + imageMatrixRect.bottom)
+        return Rect.intersects(locationRect, other.getLocationRect())
     }
 
     private fun checkBoundaries(eventX: Int, eventY: Int) {
-        getViewGroupParent()?.let { parent ->
-            val rect = Rect()
-            getHitRect(rect)
-            isInsideParent =
-                    rect.left + eventX >= 0 &&
-                    rect.top + eventY >= 0 &&
-                    rect.right - (width - eventX) <= parent.width &&
-                    rect.bottom - (height - eventY) <= parent.height
-        }
+        isInsideParent = Rect(0, 0, width, height).contains(eventX, eventY)
     }
 }
