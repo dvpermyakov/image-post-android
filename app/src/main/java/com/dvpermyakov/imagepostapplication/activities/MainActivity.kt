@@ -9,7 +9,6 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
 
 /* todo:
 
-    2) Thumb image may disappear after recycler view scrolling.
     3) ColoredEditText has colored padding which may overlay text.
     4) Lack of Rotation gesture detection.
     5) Scale gesture detection doesn't interact with Movement gesture detection.

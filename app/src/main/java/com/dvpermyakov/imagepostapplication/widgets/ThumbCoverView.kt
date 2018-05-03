@@ -1,7 +1,6 @@
 package com.dvpermyakov.imagepostapplication.widgets
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -80,8 +79,8 @@ class ThumbCoverView : View {
                     is EmptyColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     is ImageCoverModel -> {
-                        val bitmap = BitmapFactory.decodeResource(resources, cover.imageThumb)
-                        PaintUtils.getBitmapPaint(bitmap)
+                        loadBitmapFromDrawable(cover.imageThumb)
+                        PaintUtils.getEmptyPaint()
                     }
                     is FileCoverModel -> {
                         loadBitmapFromPath(cover.path)
@@ -97,7 +96,6 @@ class ThumbCoverView : View {
         compositeDisposable.clear()
     }
 
-    // todo: It doesn't work. WHY?
     private fun loadBitmapFromDrawable(@DrawableRes drawable: Int) {
         getInjector()?.getInstance<BitmapInteractor>()?.let { interactor ->
             compositeDisposable.add(interactor.getBitmap(drawable)
