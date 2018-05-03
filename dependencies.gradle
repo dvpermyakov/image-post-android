@@ -18,12 +18,13 @@ ext.versions = [
         lightsaber      : '0.8.3-beta',
         picasso         : '2.71828',
         materialDialog  : '0.9.6.0',
+        gestureDetectors: 'v1.0',
 ]
 
 ext.gradlePlugins = [
         android   : "com.android.tools.build:gradle:$versions.gradle",
         kotlin    : "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin",
-        lightsaber: "io.michaelrocks:lightsaber-gradle-plugin:$versions.lightsaber"
+        lightsaber: "io.michaelrocks:lightsaber-gradle-plugin:$versions.lightsaber",
 ]
 
 ext.libraries = [
@@ -48,4 +49,5 @@ ext.libraries = [
         lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
         picasso            : "com.squareup.picasso:picasso:$versions.picasso",
         materialDialog     : "com.afollestad.material-dialogs:core:$versions.materialDialog",
+        gestureDetectors   : "com.github.Almeros:android-gesture-detectors:$versions.gestureDetectors",
 ]

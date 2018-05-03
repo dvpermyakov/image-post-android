@@ -50,4 +50,5 @@ dependencies {
     implementation libraries.anko
     implementation libraries.lightsaber
     implementation libraries.picasso
+    implementation libraries.gestureDetectors
 }
