@@ -9,7 +9,8 @@
     <string name="app_image_post_save_failure">Unfortunately, we cannot save your post now. Try it later…</string>
     <string name="app_sticker_list_title">Stickers</string>
     <string name="app_sticker_list_error">Error</string>
-    <string name="app_permissions_message">To choose a photo, allow access to device memory</string>
+    <string name="app_read_permissions_message">To choose a photo, allow access to device memory</string>
+    <string name="app_write_permissions_message">To save your post, allow access to device memory</string>
     <string name="app_permissions_ok">OK</string>
     <string name="app_permissions_cancel">Cancel</string>
     <string name="app_loading_dialog_image_message">Image is loading…</string>

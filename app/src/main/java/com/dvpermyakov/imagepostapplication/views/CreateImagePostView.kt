@@ -17,6 +17,7 @@ interface CreateImagePostView {
     fun updateImagePostAppearance(cover: CoverModel)
     fun openImageFromGallery()
     fun showReadPermissionDialog()
+    fun showWritePermissionDialog()
     fun showImageLoadingDialog()
     fun hideImageLoadingDialog()
     fun showImageLoadingError()

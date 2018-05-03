@@ -222,7 +222,14 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         editTextView.clearFocus()
         baseActivity.hideKeyboard()
         baseActivity.addFragment(PermissionFragment.newInstance(
-                R.string.app_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+                R.string.app_read_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+    }
+
+    override fun showWritePermissionDialog() {
+        editTextView.clearFocus()
+        baseActivity.hideKeyboard()
+        baseActivity.addFragment(PermissionFragment.newInstance(
+                R.string.app_write_permissions_message, Manifest.permission.WRITE_EXTERNAL_STORAGE))
     }
 
     override fun showImageLoadingDialog() {

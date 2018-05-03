@@ -110,20 +110,24 @@ class CreateImagePostPresenter @Inject constructor(
     }
 
     fun onSaveClick(bitmap: Bitmap?) {
-        if (bitmap != null) {
-            compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doFinally {
-                        bitmap.recycle()
-                    }
-                    .subscribe({
-                        view?.showSaveImageSuccess()
-                    }, {
-                        view?.showSaveImageFailure()
-                    }))
+        if (contextHolder.getContext().isPermissionGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            if (bitmap != null) {
+                compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .doFinally {
+                            bitmap.recycle()
+                        }
+                        .subscribe({
+                            view?.showSaveImageSuccess()
+                        }, {
+                            view?.showSaveImageFailure()
+                        }))
+            } else {
+                view?.showSaveImageFailure()
+            }
         } else {
-            view?.showSaveImageFailure()
+            view?.showWritePermissionDialog()
         }
     }
 
