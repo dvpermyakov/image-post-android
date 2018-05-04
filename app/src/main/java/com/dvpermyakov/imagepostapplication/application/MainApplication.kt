@@ -9,8 +9,10 @@ import android.support.v4.app.FragmentActivity
 import android.support.v4.app.FragmentManager
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
+import com.dvpermyakov.imagepostapplication.BuildConfig
 import com.dvpermyakov.imagepostapplication.di.components.ApplicationComponent
 import io.michaelrocks.lightsaber.Lightsaber
+import timber.log.Timber
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -21,6 +23,9 @@ class MainApplication : Application(), IInjectorHolder {
 
     override fun onCreate() {
         super.onCreate()
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
         registerActivityLifecycleCallbacks(ActivityEnrichingImplementation(this))
     }
 

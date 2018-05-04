@@ -7,6 +7,8 @@ import android.view.ScaleGestureDetector
 import com.almeros.android.multitouch.MoveGestureDetector
 import com.almeros.android.multitouch.RotateGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Created by dmitrypermyakov on 01/05/2018.
@@ -81,7 +83,7 @@ class DraggableGestureDetector(
 
     inner class ScaleGestureImplementation : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            draggable.scaleFactor = Math.max(SCALE_FACTOR_MIN, Math.min(draggable.scaleFactor * detector.scaleFactor, SCALE_FACTOR_MAX))
+            draggable.scaleFactor = max(SCALE_FACTOR_MIN, min(draggable.scaleFactor * detector.scaleFactor, SCALE_FACTOR_MAX))
             return true
         }
     }

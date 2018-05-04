@@ -19,7 +19,8 @@ import com.google.android.flexbox.JustifyContent
 import io.michaelrocks.lightsaber.getInstance
 import kotlinx.android.synthetic.main.fragment_sticker_list.*
 import kotlinx.android.synthetic.main.layout_sticker_list.*
-
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -43,19 +44,27 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
             presenter.onEmptyClick()
         }
 
-        val layoutManager = object : FlexboxLayoutManager(context) {
-            override fun computeVerticalScrollOffset(state: RecyclerView.State?): Int {
-                val offset = super.computeVerticalScrollOffset(state)
-                dividerView?.alpha = offset / DIVIDER_ALPHA_HEIGHT
-                return offset
-            }
-        }.apply {
+        val layoutManager = FlexboxLayoutManager(context).apply {
             flexDirection = FlexDirection.ROW
             justifyContent = JustifyContent.SPACE_AROUND
         }
 
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                setDividerViewAlpha(dy)
+            }
+        })
+
+        savedInstanceState?.let {
+            dividerView.alpha = it.getFloat(KEY_DIVIDER_VIEW_ALPHA)
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putFloat(KEY_DIVIDER_VIEW_ALPHA, dividerView.alpha)
     }
 
     override fun showLoading() {
@@ -90,7 +99,12 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         })
     }
 
+    private fun setDividerViewAlpha(offset: Int) {
+        dividerView?.alpha = max(0f, min(1f, dividerView.alpha + offset / DIVIDER_ALPHA_HEIGHT))
+    }
+
     companion object {
+        private const val KEY_DIVIDER_VIEW_ALPHA = "dividerAlpha"
         private const val DIVIDER_ALPHA_HEIGHT = 300f
 
         fun newInstance() = StickerListFragment()
