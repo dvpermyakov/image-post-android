@@ -43,6 +43,7 @@ dependencies {
     implementation libraries.supportRecyclerView
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
+    implementation libraries.flexboxLayout
 
     implementation libraries.rxKotlin
     implementation libraries.rxAndroid

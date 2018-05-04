@@ -9,6 +9,7 @@ ext.versions = [
         support         : '27.1.1',
 
         constraintLayout: '1.0.2',
+        flexboxLayout   : '0.3.2',
 
         rxKotlin        : '2.0.2',
         rxAndroid       : '2.0.2',
@@ -42,6 +43,7 @@ ext.libraries = [
         supportCardView    : "com.android.support:cardview-v7:$versions.support",
 
         constraintLayout   : "com.android.support.constraint:constraint-layout:$versions.constraintLayout",
+        flexboxLayout      : "com.google.android:flexbox:$versions.flexboxLayout",
 
         rxKotlin           : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
         rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",

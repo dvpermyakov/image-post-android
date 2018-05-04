@@ -2,10 +2,7 @@ package com.dvpermyakov.imagepostapplication.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.dvpermyakov.base.extensions.setVisible
@@ -16,9 +13,13 @@ import com.dvpermyakov.imagepostapplication.models.StickerModel
 import com.dvpermyakov.imagepostapplication.presenters.StickerListPresenter
 import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.StickerListView
+import com.google.android.flexbox.FlexDirection
+import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.flexbox.JustifyContent
 import io.michaelrocks.lightsaber.getInstance
 import kotlinx.android.synthetic.main.fragment_sticker_list.*
 import kotlinx.android.synthetic.main.layout_sticker_list.*
+
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -34,8 +35,6 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
     override val baseView = this
     override val contentResId = R.layout.fragment_sticker_list
 
-    private val bottomSheetBehavior by lazy { BottomSheetBehavior.from<View>(mainContainerView) }
-
     override fun createPresenter(): StickerListPresenter = getApplicationInjector().getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,27 +43,19 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
             presenter.onEmptyClick()
         }
 
-        mainContainerView.setOnClickListener { }  // to prevent clicking on empty container
-
-        val layoutManager = object : GridLayoutManager(context, getStickerListSpan()) {
+        val layoutManager = object : FlexboxLayoutManager(context) {
             override fun computeVerticalScrollOffset(state: RecyclerView.State?): Int {
                 val offset = super.computeVerticalScrollOffset(state)
                 dividerView?.alpha = offset / DIVIDER_ALPHA_HEIGHT
                 return offset
             }
+        }.apply {
+            flexDirection = FlexDirection.ROW
+            justifyContent = JustifyContent.SPACE_AROUND
         }
+
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) = Unit
-
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    showPreviousScreen()
-                }
-            }
-        })
     }
 
     override fun showLoading() {
@@ -99,17 +90,8 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         })
     }
 
-    private fun getStickerListSpan() = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-        STICKERS_LIST_SPAN_COUNT_PORTRAIT
-    } else {
-        STICKERS_LIST_SPAN_COUNT_LANDSCAPE
-    }
-
     companion object {
         private const val DIVIDER_ALPHA_HEIGHT = 300f
-
-        private const val STICKERS_LIST_SPAN_COUNT_PORTRAIT = 4
-        private const val STICKERS_LIST_SPAN_COUNT_LANDSCAPE = 6
 
         fun newInstance() = StickerListFragment()
     }
