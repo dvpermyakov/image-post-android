@@ -5,6 +5,7 @@ apply plugin: 'io.michaelrocks.lightsaber.android'
 
 buildscript {
     repositories {
+        google()
         jcenter()
     }
     dependencies {
@@ -47,7 +48,9 @@ dependencies {
     implementation libraries.rxAndroid
     implementation libraries.rxBinding
 
+    implementation libraries.timber
     implementation libraries.anko
+    implementation libraries.androidKtx
     implementation libraries.lightsaber
     implementation libraries.picasso
     implementation libraries.gestureDetectors

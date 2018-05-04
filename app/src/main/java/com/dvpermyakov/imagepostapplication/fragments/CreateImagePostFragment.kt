@@ -3,13 +3,13 @@ package com.dvpermyakov.imagepostapplication.fragments
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.toBitmap
 import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.base.fragments.BaseMvpFragment
 import com.dvpermyakov.imagepostapplication.R
@@ -68,9 +68,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         saveButtonView.setOnClickListener {
             val hadEditTextFocus = editTextView.hasFocus()
             editTextView.clearFocus()
-            postView.buildDrawingCache()
-            presenter.onSaveClick(postView.drawingCache.copy(Bitmap.Config.ARGB_8888, false))
-            postView.destroyDrawingCache()
+            presenter.onSaveClick(postView.toBitmap())
             if (hadEditTextFocus) {
                 editTextView.requestFocus()
             }

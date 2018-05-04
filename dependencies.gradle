@@ -14,7 +14,9 @@ ext.versions = [
         rxAndroid       : '2.0.2',
         rxBinding       : '2.1.1',
 
+        timber          : '4.7.0',
         anko            : '0.10.5',
+        androidKtx      : '0.3',
         lightsaber      : '0.8.3-beta',
         picasso         : '2.71828',
         materialDialog  : '0.9.6.0',
@@ -45,7 +47,9 @@ ext.libraries = [
         rxAndroid          : "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid",
         rxBinding          : "com.jakewharton.rxbinding2:rxbinding:$versions.rxBinding",
 
+        timber             : "com.jakewharton.timber:timber:$versions.timber",
         anko               : "org.jetbrains.anko:anko-commons:$versions.anko",
+        androidKtx         : "androidx.core:core-ktx:$versions.androidKtx",
         lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
         picasso            : "com.squareup.picasso:picasso:$versions.picasso",
         materialDialog     : "com.afollestad.material-dialogs:core:$versions.materialDialog",
