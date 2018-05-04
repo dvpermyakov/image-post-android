@@ -7,6 +7,7 @@ import android.graphics.RectF
 import android.support.annotation.DrawableRes
 import android.util.AttributeSet
 import android.view.View
+import androidx.core.graphics.withScale
 import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.base.extensions.getInjector
 import com.dvpermyakov.imagepostapplication.R
@@ -55,10 +56,12 @@ class ThumbCoverView : View {
             selectableCover?.let { selectableCover ->
                 paint?.let { paint ->
                     if (selectableCover.selected) {
-                        canvas.scale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY())
-                        canvas.drawRoundRect(rect, radius, radius, strokePaint)
-                        canvas.scale(SELECTED_SCALE_FILL, SELECTED_SCALE_FILL, rect.centerX(), rect.centerY())
-                        canvas.drawRect(rect, paint)
+                        canvas.withScale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY(), {
+                            drawRoundRect(rect, radius, radius, strokePaint)
+                            withScale(SELECTED_SCALE_FILL, SELECTED_SCALE_FILL, rect.centerX(), rect.centerY(), {
+                                canvas.drawRect(rect, paint)
+                            })
+                        })
                     } else {
                         canvas.drawRoundRect(rect, radius, radius, paint)
                     }
