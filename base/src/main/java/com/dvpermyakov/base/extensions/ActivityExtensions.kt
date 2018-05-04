@@ -2,13 +2,13 @@ package com.dvpermyakov.base.extensions
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import android.support.annotation.StringRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.systemService
+import androidx.core.net.toUri
 import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 
 /**
@@ -33,7 +33,7 @@ fun Activity.shouldShowRequestPermissionDetails(permission: String): Boolean {
 }
 
 fun Activity.openApplicationSettings() {
-    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")).apply {
+    startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, "package:$packageName".toUri()).apply {
         addCategory(Intent.CATEGORY_DEFAULT)
         flags = Intent.FLAG_ACTIVITY_NEW_TASK
     })
