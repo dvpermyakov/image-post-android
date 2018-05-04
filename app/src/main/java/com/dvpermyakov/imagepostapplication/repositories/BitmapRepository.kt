@@ -5,7 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
 import android.support.annotation.DrawableRes
-import android.support.v4.util.LruCache
+import androidx.core.util.lruCache
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BitmapRepository @Inject constructor(private val resources: Resources) {
-    private val bitmapCache = LruCache<String, Bitmap>((Runtime.getRuntime().maxMemory() / 1024 / 8).toInt())
+    private val bitmapCache = lruCache<String, Bitmap>((Runtime.getRuntime().maxMemory() / 1024 / 8).toInt())
 
     fun getBitmap(path: String, size: Int): Single<Bitmap> {
         return bitmapCache.get(path)?.let {
