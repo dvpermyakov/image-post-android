@@ -1,7 +1,6 @@
 package com.dvpermyakov.base.extensions
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -9,6 +8,7 @@ import android.support.annotation.StringRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.systemService
 import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 
 /**
@@ -17,15 +17,14 @@ import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 
 fun Activity.showKeyboard() {
     currentFocus?.let { focus ->
-        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .showSoftInput(focus, InputMethodManager.SHOW_IMPLICIT)
+        systemService<InputMethodManager>().showSoftInput(focus, InputMethodManager.SHOW_IMPLICIT)
+
     }
 }
 
 fun Activity.hideKeyboard() {
     currentFocus?.windowToken?.let { token ->
-        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
-                .hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
+        systemService<InputMethodManager>().hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }
 

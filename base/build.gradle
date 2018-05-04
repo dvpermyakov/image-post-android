@@ -36,6 +36,8 @@ dependencies {
     implementation libraries.supportCardView
     implementation libraries.constraintLayout
 
+    implementation libraries.timber
+    implementation libraries.androidKtx
     implementation libraries.anko
     implementation libraries.lightsaber
     implementation(libraries.materialDialog) { transitive = true }
