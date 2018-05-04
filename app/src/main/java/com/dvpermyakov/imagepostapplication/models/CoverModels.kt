@@ -2,17 +2,18 @@ package com.dvpermyakov.imagepostapplication.models
 
 import android.content.Context
 import android.os.Parcel
-import android.os.Parcelable
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import com.dvpermyakov.base.extensions.getCompatColor
+import com.dvpermyakov.base.models.KParcelable
+import com.dvpermyakov.base.models.parcelableCreator
 import com.dvpermyakov.imagepostapplication.R
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-abstract class CoverModel : Parcelable {
+abstract class CoverModel : KParcelable {
     companion object {
         fun getDefaults(ctx: Context) = listOf(
                 EmptyColorCoverModel.getModelEmpty(ctx),
@@ -30,19 +31,14 @@ data class EmptyColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val col
 
     constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readInt())
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(colorStart)
-        parcel.writeInt(colorEnd)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(colorStart)
+        writeInt(colorEnd)
     }
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<EmptyColorCoverModel> {
-            override fun createFromParcel(parcel: Parcel) = EmptyColorCoverModel(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<EmptyColorCoverModel?>(size)
-        }
+        val CREATOR = parcelableCreator(::EmptyColorCoverModel)
 
         fun getModelEmpty(ctx: Context) = EmptyColorCoverModel(
                 ctx.getCompatColor(R.color.colorPickerEmpty),
@@ -53,19 +49,14 @@ data class EmptyColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val col
 data class ColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd: Int) : CoverModel() {
     constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readInt())
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(colorStart)
-        parcel.writeInt(colorEnd)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(colorStart)
+        writeInt(colorEnd)
     }
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<ColorCoverModel> {
-            override fun createFromParcel(parcel: Parcel) = ColorCoverModel(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<ColorCoverModel?>(size)
-        }
+        val CREATOR = parcelableCreator(::ColorCoverModel)
 
         fun getModelBlue(ctx: Context) = ColorCoverModel(
                 ctx.getCompatColor(R.color.colorPickerBlueStart),
@@ -92,19 +83,14 @@ data class ColorCoverModel(@ColorInt val colorStart: Int, @ColorInt val colorEnd
 data class ImageCoverModel(@DrawableRes val imageThumb: Int, @DrawableRes val imageLarge: Int) : CoverModel() {
     constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readInt())
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(imageThumb)
-        parcel.writeInt(imageLarge)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(imageThumb)
+        writeInt(imageLarge)
     }
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<ImageCoverModel> {
-            override fun createFromParcel(parcel: Parcel) = ImageCoverModel(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<ImageCoverModel?>(size)
-        }
+        val CREATOR = parcelableCreator(::ImageCoverModel)
 
         fun getModelBeach() = ImageCoverModel(R.drawable.thumb_beach, R.drawable.large_beach)
         fun getModelStars() = ImageCoverModel(R.drawable.thumb_stars, R.drawable.large_stars)
@@ -114,17 +100,12 @@ data class ImageCoverModel(@DrawableRes val imageThumb: Int, @DrawableRes val im
 data class FileCoverModel(val path: String) : CoverModel() {
     constructor(parcel: Parcel) : this(parcel.readString())
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(path)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeString(path)
     }
 
     companion object {
         @JvmField
-        val CREATOR = object : Parcelable.Creator<FileCoverModel> {
-            override fun createFromParcel(parcel: Parcel) = FileCoverModel(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<FileCoverModel?>(size)
-        }
+        val CREATOR = parcelableCreator(::FileCoverModel)
     }
 }

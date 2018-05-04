@@ -1,24 +1,23 @@
 package com.dvpermyakov.imagepostapplication.models
 
 import android.os.Parcel
-import android.os.Parcelable
+import com.dvpermyakov.base.models.KParcelable
+import com.dvpermyakov.base.models.parcelableCreator
 
 /**
  * Created by dmitrypermyakov on 01/05/2018.
  */
 
-data class StickerUiModel(private val size: Int, val sticker: StickerModel) : DraggableModel(size, size), Parcelable {
+data class StickerUiModel(private val size: Int, val sticker: StickerModel) : DraggableModel(size, size), KParcelable {
     constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readParcelable<StickerModel>(StickerModel::class.java.classLoader))
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(size)
-        parcel.writeParcelable(sticker, flags)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(size)
+        writeParcelable(sticker, flags)
     }
 
-    companion object CREATOR : Parcelable.Creator<StickerUiModel> {
-        override fun createFromParcel(parcel: Parcel) = StickerUiModel(parcel)
-        override fun newArray(size: Int) = arrayOfNulls<StickerUiModel>(size)
+    companion object {
+        @JvmField
+        val CREATOR = parcelableCreator(::StickerUiModel)
     }
 }

@@ -1,20 +1,19 @@
 package com.dvpermyakov.imagepostapplication.models
 
 import android.os.Parcel
-import android.os.Parcelable
+import com.dvpermyakov.base.models.KParcelable
+import com.dvpermyakov.base.models.parcelableCreator
 import com.dvpermyakov.imagepostapplication.R
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
  */
 
-data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND_EMPTY) : Parcelable {
+data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND_EMPTY) : KParcelable {
     constructor(parcel: Parcel) : this(parcel.readInt())
 
-    override fun describeContents() = 0
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(backgroundType)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(backgroundType)
     }
 
     fun nextBackground() {
@@ -48,9 +47,6 @@ data class TextAppearanceModel(private var backgroundType: Int = TYPE_BACKGROUND
         const val BACKGROUND_TYPE_SIZE = 3
 
         @JvmField
-        val CREATOR = object : Parcelable.Creator<TextAppearanceModel> {
-            override fun createFromParcel(parcel: Parcel) = TextAppearanceModel(parcel)
-            override fun newArray(size: Int) = arrayOfNulls<TextAppearanceModel?>(size)
-        }
+        val CREATOR = parcelableCreator(::TextAppearanceModel)
     }
 }
