@@ -1,11 +1,8 @@
 package com.dvpermyakov.base.extensions
 
-import android.graphics.Matrix
 import android.graphics.Point
 import android.graphics.Rect
 import android.view.View
-import android.widget.ImageView
-import androidx.core.graphics.values
 import com.dvpermyakov.base.ioc.IInjectorHolder
 
 /**
@@ -28,27 +25,3 @@ fun View.getLocationRect(): Rect {
 }
 
 fun View.getInjector() = (context.applicationContext as? IInjectorHolder)?.getInjector()
-
-fun ImageView.getTransitionXFromImageMatrix(): Float {
-    return imageMatrix.values()[Matrix.MTRANS_X]
-}
-
-fun ImageView.getTransitionYFromImageMatrix(): Float {
-    return imageMatrix.values()[Matrix.MTRANS_Y]
-}
-
-fun ImageView.getScaleXFromImageMatrix(): Float {
-    return imageMatrix.values()[Matrix.MSCALE_X]
-}
-
-fun ImageView.getScaleYFromImageMatrix(): Float {
-    return imageMatrix.values()[Matrix.MSCALE_Y]
-}
-
-fun ImageView.getRectFromImageMatrix(imageWidth: Int, imageHeight: Int): Rect {
-    val x = getTransitionXFromImageMatrix()
-    val y = getTransitionYFromImageMatrix()
-    val width = getScaleXFromImageMatrix() * imageWidth
-    val height = getScaleYFromImageMatrix() * imageHeight
-    return Rect(x.toInt(), y.toInt(), (x + width).toInt(), (y + height).toInt())
-}

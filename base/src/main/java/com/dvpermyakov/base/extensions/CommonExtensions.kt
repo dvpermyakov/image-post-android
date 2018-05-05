@@ -1,7 +1,9 @@
 package com.dvpermyakov.base.extensions
 
 import android.content.res.AssetManager
+import android.graphics.Point
 import android.util.Log
+import android.view.MotionEvent
 import java.io.IOException
 import java.io.InputStream
 
@@ -25,4 +27,14 @@ fun InputStream.safetyRead(): String? {
         Log.e("InputStream", "safetyRead", ioe)
         null
     }
+}
+
+fun MotionEvent.getPointersCenter(): Point {
+    var x = 0f
+    var y = 0f
+    for (index in 0 until pointerCount) {
+        x += getX(index)
+        y += getY(index)
+    }
+    return Point((x / pointerCount.toFloat()).toInt(), (y / pointerCount.toFloat()).toInt())
 }

@@ -56,7 +56,7 @@ class DraggableGestureDetector(
             reset()
             postScale(draggable.scaleFactor, draggable.scaleFactor)
             postRotate(draggable.rotationDegrees, cx, cy)
-            postTranslate(focusX, focusY)
+            postTranslate(focusX - cx + draggable.width / 2, focusY - cy + draggable.height / 2)
         }
 
         return matrix

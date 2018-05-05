@@ -9,9 +9,10 @@ import android.view.View
 import android.widget.ImageView
 import com.dvpermyakov.base.extensions.getLocationPoint
 import com.dvpermyakov.base.extensions.getLocationRect
-import com.dvpermyakov.base.extensions.getRectFromImageMatrix
+import com.dvpermyakov.base.extensions.getPointersCenter
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
+import com.dvpermyakov.imagepostapplication.models.getRect
 
 /**
  * Created by dmitrypermyakov on 01/05/2018.
@@ -60,15 +61,16 @@ class DraggableImageView : ImageView, IDisposableView {
     override fun onTouchEvent(event: MotionEvent): Boolean {
         var consumed = false
 
-        val eventX = event.x.toInt()
-        val eventY = event.y.toInt()
-        checkBoundaries(eventX, eventY)
+        val centerPoint = event.getPointersCenter()
+        val eventX = centerPoint.x
+        val eventY = centerPoint.y
 
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                val viewRect = getRectFromImageMatrix(draggableModel.width, draggableModel.height)
-                if (viewRect.contains(eventX, eventY)) {
-                    isDragged = true
+                if (event.pointerCount == 1 || isDragged) {
+                    if (draggableModel.getRect(width, height).contains(eventX, eventY)) {
+                        isDragged = true
+                    }
                 }
             }
             MotionEvent.ACTION_UP -> {
@@ -83,6 +85,7 @@ class DraggableImageView : ImageView, IDisposableView {
 
         if (isDragged) {
             consumed = draggableGestureDetector.consumeMotionEvent(event)
+            checkBoundaries(eventX, eventY)
         }
 
         return consumed
@@ -94,13 +97,13 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     fun isIntersectedBy(other: View): Boolean {
-        val imageMatrixRect = getRectFromImageMatrix(draggableModel.width, draggableModel.height)
+        val imageRect = draggableModel.getRect(width, height)
         val locationPoint = getLocationPoint()
         val locationRect = Rect(
-                locationPoint.x + imageMatrixRect.left,
-                locationPoint.y + imageMatrixRect.top,
-                locationPoint.x + imageMatrixRect.right,
-                locationPoint.y + imageMatrixRect.bottom)
+                locationPoint.x + imageRect.left,
+                locationPoint.y + imageRect.top,
+                locationPoint.x + imageRect.right,
+                locationPoint.y + imageRect.bottom)
         return Rect.intersects(locationRect, other.getLocationRect())
     }
 
