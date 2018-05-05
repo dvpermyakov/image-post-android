@@ -8,7 +8,7 @@ import android.support.annotation.ColorInt
 import android.util.AttributeSet
 import android.widget.EditText
 import com.dvpermyakov.imagepostapplication.R
-import com.dvpermyakov.imagepostapplication.utils.PaintUtils
+import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -45,7 +45,7 @@ class ColoredEditTextView : EditText {
     }
 
     fun setTextBackgroundColor(@ColorInt color: Int) {
-        paint = PaintUtils.getColorPaint(color)
+        paint = PaintFactory.createColorPaint(color)
         invalidate()
     }
 

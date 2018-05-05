@@ -13,7 +13,7 @@ import com.dvpermyakov.base.extensions.getInjector
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.interactors.BitmapInteractor
 import com.dvpermyakov.imagepostapplication.models.*
-import com.dvpermyakov.imagepostapplication.utils.PaintUtils
+import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 import io.michaelrocks.lightsaber.getInstance
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -26,7 +26,7 @@ import io.reactivex.schedulers.Schedulers
 class ThumbCoverView : View {
     private val compositeDisposable = CompositeDisposable()
     private val radius = resources.getDimension(R.dimen.size_xsmall)
-    private val strokePaint = PaintUtils.getStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH)
+    private val strokePaint = PaintFactory.createStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH)
     private var paint: Paint? = null
     private var rect: RectF? = null
 
@@ -77,9 +77,9 @@ class ThumbCoverView : View {
         rect?.let { rect ->
             selectableCover?.cover?.let { cover ->
                 paint = when (cover) {
-                    is EmptyColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                    is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                    else -> PaintUtils.getEmptyPaint()
+                    is EmptyColorCoverModel -> PaintFactory.createGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
+                    is ColorCoverModel -> PaintFactory.createGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
+                    else -> PaintFactory.createEmptyPaint()
                 }
                 if (cover is ImageCoverModel) {
                     loadBitmapFromDrawable(cover.imageThumb)
@@ -100,7 +100,7 @@ class ThumbCoverView : View {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ bitmap ->
-                        paint = PaintUtils.getBitmapPaint(bitmap)
+                        paint = PaintFactory.createBitmapPaint(bitmap)
                         invalidate()
                     }, {}))
         }
@@ -112,7 +112,7 @@ class ThumbCoverView : View {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ bitmap ->
-                        paint = PaintUtils.getBitmapPaint(bitmap)
+                        paint = PaintFactory.createBitmapPaint(bitmap)
                         invalidate()
                     }, {}))
         }

@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.RectF
 import android.support.annotation.ColorInt
 import androidx.core.graphics.withScale
-import com.dvpermyakov.imagepostapplication.utils.PaintUtils
+import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 import com.squareup.picasso.Transformation
 
 /**
@@ -13,8 +13,8 @@ import com.squareup.picasso.Transformation
  */
 
 class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int) : Transformation {
-    private val strokePaint = PaintUtils.getStrokePaint(strokeColor, STROKE_WIDTH)
-    private var fillPaint = PaintUtils.getColorPaint(fillColor)
+    private val strokePaint = PaintFactory.createStrokePaint(strokeColor, STROKE_WIDTH)
+    private var fillPaint = PaintFactory.createColorPaint(fillColor)
 
     override fun transform(source: Bitmap): Bitmap {
         val size = Math.max(source.width, source.height)
@@ -33,7 +33,7 @@ class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int)
     override fun key() = KEY_TRANSFORMATION
 
     private fun drawSource(canvas: Canvas, source: Bitmap, rect: RectF) {
-        val paint = PaintUtils.getBitmapPaint(source)
+        val paint = PaintFactory.createBitmapPaint(source)
         canvas.withScale(SCALE_SOURCE, SCALE_SOURCE, rect.centerX(), rect.centerY(), {
             drawRect(rect, paint)
         })

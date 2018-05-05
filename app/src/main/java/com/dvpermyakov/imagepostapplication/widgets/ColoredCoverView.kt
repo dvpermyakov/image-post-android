@@ -9,7 +9,7 @@ import android.view.View
 import com.dvpermyakov.imagepostapplication.models.ColorCoverModel
 import com.dvpermyakov.imagepostapplication.models.CoverModel
 import com.dvpermyakov.imagepostapplication.models.EmptyColorCoverModel
-import com.dvpermyakov.imagepostapplication.utils.PaintUtils
+import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -51,9 +51,9 @@ class ColoredCoverView : View {
         rect?.let { rect ->
             cover?.let { cover ->
                 paint = when (cover) {
-                    is EmptyColorCoverModel -> PaintUtils.getEmptyPaint()
-                    is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                    else -> PaintUtils.getEmptyPaint()
+                    is EmptyColorCoverModel -> PaintFactory.createEmptyPaint()
+                    is ColorCoverModel -> PaintFactory.createGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
+                    else -> PaintFactory.createEmptyPaint()
                 }
             }
         }
