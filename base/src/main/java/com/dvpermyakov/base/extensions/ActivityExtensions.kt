@@ -6,9 +6,11 @@ import android.provider.Settings
 import android.support.annotation.StringRes
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
+import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.systemService
 import androidx.core.net.toUri
+import com.dvpermyakov.base.activities.BaseActivity
 import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 
 /**
@@ -49,4 +51,26 @@ fun FragmentActivity.showLoadingDialog(@StringRes messageId: Int, tag: String) {
 
 fun FragmentActivity.hideLoadingDialog(tag: String) {
     (supportFragmentManager.findFragmentByTag(tag) as? ProgressDialogFragment)?.dismiss()
+}
+
+inline fun BaseActivity.hideKeyboardWithInvokable(crossinline invokable: () -> Unit) {
+    hideKeyboard()
+    getContainerViewTreeObserver().let { treeObserver ->
+        treeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (!isKeyboardVisible) {
+                    treeObserver.removeOnGlobalLayoutListener(this)
+                    invokable.invoke()
+                }
+            }
+        })
+    }
+}
+
+inline fun BaseActivity.invokeOrHideKeyboardWithInvokable(crossinline invokable: () -> Unit) {
+    if (!isKeyboardVisible) {
+        invokable.invoke()
+    } else {
+        hideKeyboardWithInvokable(invokable)
+    }
 }

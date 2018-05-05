@@ -125,10 +125,11 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun showStickerList() {
         editTextView.clearFocus()
-        baseActivity.hideKeyboard()
-        baseActivity.addFragment(StickerListFragment.newInstance().apply {
-            setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
-        })
+        baseActivity.invokeOrHideKeyboardWithInvokable {
+            baseActivity.addFragment(StickerListFragment.newInstance().apply {
+                setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
+            })
+        }
     }
 
     override fun addSticker(stickerUi: StickerUiModel) {
@@ -221,16 +222,16 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
 
     override fun showReadPermissionDialog() {
         editTextView.clearFocus()
-        baseActivity.hideKeyboard()
-        baseActivity.addFragment(PermissionFragment.newInstance(
-                R.string.app_read_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+        baseActivity.invokeOrHideKeyboardWithInvokable {
+            baseActivity.addFragment(PermissionFragment.newInstance(R.string.app_read_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
+        }
     }
 
     override fun showWritePermissionDialog() {
         editTextView.clearFocus()
-        baseActivity.hideKeyboard()
-        baseActivity.addFragment(PermissionFragment.newInstance(
-                R.string.app_write_permissions_message, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        baseActivity.invokeOrHideKeyboardWithInvokable {
+            baseActivity.addFragment(PermissionFragment.newInstance(R.string.app_write_permissions_message, Manifest.permission.WRITE_EXTERNAL_STORAGE))
+        }
     }
 
     override fun showImageLoadingDialog() {

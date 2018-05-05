@@ -8,6 +8,7 @@ import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
 import com.dvpermyakov.base.models.AnimationConfig
 import io.michaelrocks.lightsaber.Injector
+import kotlinx.android.synthetic.main.activity_base.*
 
 /**
  * Created by dmitrypermyakov on 28/04/2018.
@@ -18,11 +19,19 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
 
     protected open val layoutId = R.layout.activity_base
 
+    var isKeyboardVisible = false
+        private set
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId)
         if (savedInstanceState == null) {
             replaceFragment(createFragment(), false)
+        }
+
+        fragmentContainerView.viewTreeObserver.addOnGlobalLayoutListener {
+            val dy = fragmentContainerView.rootView.height - fragmentContainerView.height
+            isKeyboardVisible = dy > 100
         }
     }
 
@@ -34,9 +43,11 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
         injector = null
     }
 
+    fun getContainerViewTreeObserver() = fragmentContainerView.viewTreeObserver
+
     fun replaceFragment(fragment: Fragment, withBackStack: Boolean) {
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragment_container, fragment)
+            replace(R.id.fragmentContainerView, fragment)
             if (withBackStack) {
                 addToBackStack(geFragmentBackStackName(fragment))
             }
@@ -49,9 +60,9 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
             transaction.setCustomAnimations(it.enter, it.exit, it.enterPop, it.exitPop)
         }
         if (tag.isNotEmpty()) {
-            transaction.add(R.id.fragment_container, fragment, tag)
+            transaction.add(R.id.fragmentContainerView, fragment, tag)
         } else {
-            transaction.add(R.id.fragment_container, fragment)
+            transaction.add(R.id.fragmentContainerView, fragment)
         }
         transaction
                 .addToBackStack(geFragmentBackStackName(fragment))
