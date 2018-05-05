@@ -21,7 +21,7 @@ class DraggableGestureDetector(
         private val draggable: DraggableModel) {
 
     private val scaleGestureDetector = ScaleGestureDetector(context, ScaleGestureImplementation())
-    private val rotateGestureDetector = RotateGestureDetector(context, RotateImplementation())
+    private val rotateGestureDetector = UniversalRotateGestureDetector(context, RotateImplementation())
     private val moveGestureDetector = MoveGestureDetector(context, MoveImplementation())
 
     private val matrix = Matrix()

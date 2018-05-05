@@ -35,10 +35,7 @@
             android:hint="@string/app_image_post_text_hint"
             android:imeOptions="flagNoExtractUi"
             android:inputType="textCapSentences|textMultiLine|textNoSuggestions"
-            android:paddingBottom="@dimen/size_medium"
-            android:paddingLeft="@dimen/size_xxlarge"
-            android:paddingRight="@dimen/size_xxlarge"
-            android:paddingTop="@dimen/size_medium"
+            android:padding="@dimen/size_medium"
             android:textAlignment="center"
             android:textSize="@dimen/textsize_xlarge" />
 
