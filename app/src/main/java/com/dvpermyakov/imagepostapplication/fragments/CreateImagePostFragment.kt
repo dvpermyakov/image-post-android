@@ -74,6 +74,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
             }
         }
 
+        view.addOnLayoutChangeListener { _, _, _, _, _, _, _, _, _ ->
+            presenter.onViewSizeChange()
+        }
+
         compositeDisposable.add(RxTextView.textChanges(editTextView).subscribe { text ->
             saveButtonView.isEnabled = text.isNotEmpty()
         })
@@ -216,6 +220,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                         .into(imageView)
             }
         }
+    }
+
+    override fun updateTrashAppearance(cover: CoverModel) {
+        trashCircleTransformation.withStroke = cover is EmptyColorCoverModel || !trashView.isInside(postView)
     }
 
     override fun openImageFromGallery() {

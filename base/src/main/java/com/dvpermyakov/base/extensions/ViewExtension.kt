@@ -24,4 +24,8 @@ fun View.getLocationRect(): Rect {
     return Rect(point.x, point.y, point.x + width, point.y + height)
 }
 
+fun View.isInside(other: View): Boolean {
+    return other.getLocationRect().contains(getLocationRect())
+}
+
 fun View.getInjector() = (context.applicationContext as? IInjectorHolder)?.getInjector()

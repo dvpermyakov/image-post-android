@@ -161,6 +161,10 @@ class CreateImagePostPresenter @Inject constructor(
         stickers.remove(stickerUi)
     }
 
+    fun onViewSizeChange() {
+        view?.updateTrashAppearance(getSelectedCover())
+    }
+
     private fun getSelectedCover() = covers.first { it.selected }.cover
 
     companion object {

@@ -15,6 +15,7 @@ interface CreateImagePostView {
     fun showKeyboard()
     fun updateTextPostAppearance(cover: CoverModel, textAppearance: TextAppearanceModel)
     fun updateImagePostAppearance(cover: CoverModel)
+    fun updateTrashAppearance(cover: CoverModel)
     fun openImageFromGallery()
     fun showReadPermissionDialog()
     fun showWritePermissionDialog()

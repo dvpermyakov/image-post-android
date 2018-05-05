@@ -16,6 +16,8 @@ class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int)
     private val strokePaint = PaintFactory.createStrokePaint(strokeColor, STROKE_WIDTH)
     private var fillPaint = PaintFactory.createColorPaint(fillColor)
 
+    var withStroke = true
+
     override fun transform(source: Bitmap): Bitmap {
         val size = Math.max(source.width, source.height)
         val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
@@ -30,7 +32,7 @@ class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int)
         return bitmap
     }
 
-    override fun key() = KEY_TRANSFORMATION
+    override fun key() = KEY_TRANSFORMATION + withStroke.toString()
 
     private fun drawSource(canvas: Canvas, source: Bitmap, rect: RectF) {
         val paint = PaintFactory.createBitmapPaint(source)
@@ -42,7 +44,9 @@ class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int)
     private fun drawCircleBackground(canvas: Canvas, rect: RectF) {
         val radius = Math.min(rect.centerX(), rect.centerY())
         canvas.withScale(SCALE_CIRCLE, SCALE_CIRCLE, rect.centerX(), rect.centerY(), {
-            drawCircle(rect.centerX(), rect.centerY(), radius, strokePaint)
+            if (withStroke) {
+                drawCircle(rect.centerX(), rect.centerY(), radius, strokePaint)
+            }
             drawCircle(rect.centerX(), rect.centerY(), radius, fillPaint)
         })
     }
