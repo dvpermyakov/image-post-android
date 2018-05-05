@@ -26,14 +26,14 @@ import io.reactivex.schedulers.Schedulers
 class ThumbCoverView : View {
     private val compositeDisposable = CompositeDisposable()
     private val radius = resources.getDimension(R.dimen.size_xsmall)
-    private val strokePaint = PaintFactory.createStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH)
-    private var paint: Paint? = null
     private var rect: RectF? = null
+
+    private val strokePaint = PaintFactory.createStrokePaint(context.getCompatColor(R.color.colorPrimary), STROKE_WIDTH)
+    private var fillPaint: Paint? = null
 
     var selectableCover: SelectableCoverModel? = null
         set(value) {
             field = value
-            invalidateDisposables()
             invalidatePaint()
             invalidate()
         }
@@ -52,7 +52,7 @@ class ThumbCoverView : View {
         super.onDraw(canvas)
         rect?.let { rect ->
             selectableCover?.let { selectableCover ->
-                paint?.let { paint ->
+                fillPaint?.let { paint ->
                     if (selectableCover.selected) {
                         canvas.withScale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY(), {
                             drawRoundRect(rect, radius, radius, strokePaint)
@@ -63,7 +63,7 @@ class ThumbCoverView : View {
                     } else {
                         canvas.drawRoundRect(rect, radius, radius, paint)
                     }
-                }
+                } ?: post { invalidatePaint() }
             }
         }
     }
@@ -74,9 +74,10 @@ class ThumbCoverView : View {
     }
 
     private fun invalidatePaint() {
+        invalidateDisposables()
         rect?.let { rect ->
             selectableCover?.cover?.let { cover ->
-                paint = when (cover) {
+                fillPaint = when (cover) {
                     is EmptyColorCoverModel -> PaintFactory.createGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     is ColorCoverModel -> PaintFactory.createGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     else -> PaintFactory.createEmptyPaint()
@@ -99,8 +100,11 @@ class ThumbCoverView : View {
             compositeDisposable.add(interactor.getBitmap(drawable)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnDispose {
+                        fillPaint = null
+                    }
                     .subscribe({ bitmap ->
-                        paint = PaintFactory.createBitmapPaint(bitmap)
+                        fillPaint = PaintFactory.createBitmapPaint(bitmap)
                         invalidate()
                     }, {}))
         }
@@ -111,8 +115,11 @@ class ThumbCoverView : View {
             compositeDisposable.add(interactor.getBitmap(path, width)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnDispose {
+                        fillPaint = null
+                    }
                     .subscribe({ bitmap ->
-                        paint = PaintFactory.createBitmapPaint(bitmap)
+                        fillPaint = PaintFactory.createBitmapPaint(bitmap)
                         invalidate()
                     }, {}))
         }
