@@ -14,7 +14,6 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
     5) Scale gesture detection doesn't interact with Movement gesture detection.
     8) Saved image has quality worse than original.
     9) Not all steps are implemented in read permission request.
-    10) StickerListFragment is shown before keyboard is hidden.
 
  */
 
