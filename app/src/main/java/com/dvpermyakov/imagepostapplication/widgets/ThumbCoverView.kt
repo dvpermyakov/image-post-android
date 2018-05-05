@@ -32,12 +32,10 @@ class ThumbCoverView : View {
 
     var selectableCover: SelectableCoverModel? = null
         set(value) {
-            if (field != value) {
-                field = value
-                invalidateDisposables()
-                invalidatePaint()
-                invalidate()
-            }
+            field = value
+            invalidateDisposables()
+            invalidatePaint()
+            invalidate()
         }
 
     constructor(context: Context) : super(context)
@@ -81,15 +79,12 @@ class ThumbCoverView : View {
                 paint = when (cover) {
                     is EmptyColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
                     is ColorCoverModel -> PaintUtils.getGradientColorPaint(cover.colorStart, cover.colorEnd, rect)
-                    is ImageCoverModel -> {
-                        loadBitmapFromDrawable(cover.imageThumb)
-                        PaintUtils.getEmptyPaint()
-                    }
-                    is FileCoverModel -> {
-                        loadBitmapFromPath(cover.path)
-                        PaintUtils.getEmptyPaint()
-                    }
                     else -> PaintUtils.getEmptyPaint()
+                }
+                if (cover is ImageCoverModel) {
+                    loadBitmapFromDrawable(cover.imageThumb)
+                } else if (cover is FileCoverModel) {
+                    loadBitmapFromPath(cover.path)
                 }
             }
         }
