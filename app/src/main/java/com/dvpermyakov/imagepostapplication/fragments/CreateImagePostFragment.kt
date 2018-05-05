@@ -133,38 +133,40 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     override fun addSticker(stickerUi: StickerUiModel) {
-        val stickerImageView = DraggableImageView(baseActivity).apply {
-            scaleType = ImageView.ScaleType.MATRIX
-            layoutParams = ViewGroup.LayoutParams(postView.width, postView.height)
-            draggableModel = stickerUi
-            positionChangeListener = { isInsideParent ->
-                Picasso.get()
-                        .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                        .transform(trashCircleTransformation)
-                        .into(trashView)
-            }
-            motionStateListener = { isInMotion, isInsideParent ->
-                val isIntersectedByTrashView = isIntersectedBy(trashView)
-                trashView.setVisible(isInMotion)
-                Picasso.get()
-                        .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                        .transform(trashCircleTransformation)
-                        .into(trashView)
-                if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
-                    presenter.onStickerRemove(stickerUi)
-                    onDispose()
-                    setVisible(false)
+        postView.post {
+            val stickerImageView = DraggableImageView(baseActivity).apply {
+                scaleType = ImageView.ScaleType.MATRIX
+                layoutParams = ViewGroup.LayoutParams(postView.width, postView.height)
+                draggableModel = stickerUi
+                positionChangeListener = { isInsideParent ->
+                    Picasso.get()
+                            .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                            .transform(trashCircleTransformation)
+                            .into(trashView)
+                }
+                motionStateListener = { isInMotion, isInsideParent ->
+                    val isIntersectedByTrashView = isIntersectedBy(trashView)
+                    trashView.setVisible(isInMotion)
+                    Picasso.get()
+                            .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                            .transform(trashCircleTransformation)
+                            .into(trashView)
+                    if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
+                        presenter.onStickerRemove(stickerUi)
+                        onDispose()
+                        setVisible(false)
+                    }
                 }
             }
-        }
-        postView.addView(stickerImageView)
-        postView.bringChildToFront(editTextView)
+            postView.addView(stickerImageView)
+            postView.bringChildToFront(editTextView)
 
-        Picasso.get()
-                .load(stickerUi.sticker.image)
-                .resize(stickerUi.width, stickerUi.height)
-                .centerInside()
-                .into(stickerImageView)
+            Picasso.get()
+                    .load(stickerUi.sticker.image)
+                    .resize(stickerUi.width, stickerUi.height)
+                    .centerInside()
+                    .into(stickerImageView)
+        }
     }
 
     override fun showKeyboard() {
