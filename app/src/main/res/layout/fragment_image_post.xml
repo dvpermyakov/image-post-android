@@ -64,13 +64,13 @@
         android:id="@+id/recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@color/colorBackground"
         android:clipToPadding="false"
-        android:paddingLeft="@dimen/size_small"
-        android:paddingRight="@dimen/size_small"
-        app:layout_constraintBottom_toBottomOf="@+id/saveButtonView"
+        android:padding="@dimen/size_small"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/horizontalDividerView"
-        app:layout_constraintTop_toTopOf="@+id/saveButtonView" />
+        app:layout_constraintTop_toBottomOf="@+id/dividerView" />
 
 </android.support.constraint.ConstraintLayout>
