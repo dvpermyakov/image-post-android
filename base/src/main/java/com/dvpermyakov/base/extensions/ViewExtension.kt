@@ -19,6 +19,8 @@ fun View.getLocationPoint(): Point {
     return Point(locationPoint[0], locationPoint[1])
 }
 
+fun View.getViewRect() = Rect(0, 0, width, height)
+
 fun View.getLocationRect(): Rect {
     val point = getLocationPoint()
     return Rect(point.x, point.y, point.x + width, point.y + height)

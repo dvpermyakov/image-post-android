@@ -6,7 +6,10 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.support.annotation.ColorInt
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.EditText
+import com.dvpermyakov.base.extensions.getPointersCenter
+import com.dvpermyakov.base.extensions.getViewRect
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 
@@ -33,6 +36,20 @@ class ColoredEditTextView : EditText {
     override fun onTextChanged(text: CharSequence?, start: Int, lengthBefore: Int, lengthAfter: Int) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
         invalidateRectList()
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val centerPoint = event.getPointersCenter()
+        if (getViewRect().contains(centerPoint.x, centerPoint.y)) {
+            val eventX = centerPoint.x.toFloat()
+            val eventY = centerPoint.y.toFloat()
+            rectList.forEach {
+                if (it.contains(eventX, eventY)) {
+                    return super.onTouchEvent(event)
+                }
+            }
+        }
+        return false
     }
 
     override fun onDraw(canvas: Canvas) {

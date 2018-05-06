@@ -10,6 +10,7 @@ import android.widget.ImageView
 import com.dvpermyakov.base.extensions.getLocationPoint
 import com.dvpermyakov.base.extensions.getLocationRect
 import com.dvpermyakov.base.extensions.getPointersCenter
+import com.dvpermyakov.base.extensions.getViewRect
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 import com.dvpermyakov.imagepostapplication.models.getRect
@@ -108,6 +109,6 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     private fun checkBoundaries(eventX: Int, eventY: Int) {
-        isInsideParent = Rect(0, 0, width, height).contains(eventX, eventY)
+        isInsideParent = getViewRect().contains(eventX, eventY)
     }
 }
