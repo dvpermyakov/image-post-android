@@ -86,7 +86,11 @@ class DraggableImageView : ImageView, IDisposableView {
 
         if (isDragged) {
             consumed = draggableGestureDetector.consumeMotionEvent(event)
-            checkBoundaries(eventX, eventY)
+            if (event.pointerCount == 1 && draggableModel.getRect(width, height).contains(eventX, eventY)) {
+                checkBoundaries(eventX, eventY)
+            } else {
+                isInsideParent = true
+            }
         }
 
         return consumed
