@@ -29,7 +29,13 @@ class StickerAdapter : BaseRecyclerViewAdapter<StickerModel>() {
             }
             Picasso.get()
                     .load(item.image)
+                    .resize(STICKER_SIZE, STICKER_SIZE)
+                    .centerInside()
                     .into(imageView)
         }
+    }
+
+    companion object {
+        private const val STICKER_SIZE = 256
     }
 }
