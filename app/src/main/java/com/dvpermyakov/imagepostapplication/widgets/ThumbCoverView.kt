@@ -127,7 +127,7 @@ class ThumbCoverView : View {
 
     companion object {
         private const val SELECTED_SCALE_STROKE = .92f
-        private const val SELECTED_SCALE_FILL = .8f
+        private const val SELECTED_SCALE_FILL = .75f
 
         private const val STROKE_WIDTH = 10f
     }

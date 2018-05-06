@@ -12,11 +12,24 @@ import com.squareup.picasso.Transformation
  * Created by dmitrypermyakov on 02/05/2018.
  */
 
-class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int) : Transformation {
-    private val strokePaint = PaintFactory.createStrokePaint(strokeColor, STROKE_WIDTH)
-    private var fillPaint = PaintFactory.createColorPaint(fillColor)
+class CircleTransformation(
+        @ColorInt private val strokeColor: Int,
+        @ColorInt private val fillColor: Int) : Transformation {
+
+    private var strokePaint = PaintFactory.createStrokePaint(strokeColor, STROKE_WIDTH)
+    private val fillPaint = PaintFactory.createColorPaint(fillColor)
 
     var withStroke = true
+        set(value) {
+            if (value != field) {
+                field = value
+                strokePaint = if (withStroke) {
+                    PaintFactory.createStrokePaint(strokeColor, STROKE_WIDTH)
+                } else {
+                    PaintFactory.createStrokePaint(fillColor, STROKE_WIDTH)
+                }
+            }
+        }
 
     override fun transform(source: Bitmap): Bitmap {
         val size = Math.max(source.width, source.height)
@@ -52,7 +65,7 @@ class CircleTransformation(@ColorInt strokeColor: Int, @ColorInt fillColor: Int)
     }
 
     companion object {
-        private const val SCALE_CIRCLE = .9f
+        private const val SCALE_CIRCLE = .8f
         private const val SCALE_SOURCE = .6f
         private const val STROKE_WIDTH = 30f
         private const val KEY_TRANSFORMATION = "CircleTransformation"
