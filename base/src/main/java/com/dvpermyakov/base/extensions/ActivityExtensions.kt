@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.app.FragmentActivity
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.systemService
 import androidx.core.net.toUri
 import com.dvpermyakov.base.activities.BaseActivity
 import com.dvpermyakov.base.dialogs.ProgressDialogFragment
@@ -19,13 +18,13 @@ import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 
 fun Activity.showKeyboard() {
     currentFocus?.let { focus ->
-        systemService<InputMethodManager>().showSoftInput(focus, InputMethodManager.SHOW_IMPLICIT)
+        getInputManager().showSoftInput(focus, InputMethodManager.SHOW_IMPLICIT)
     }
 }
 
 fun Activity.hideKeyboard() {
     currentFocus?.windowToken?.let { token ->
-        systemService<InputMethodManager>().hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
+        getInputManager().hideSoftInputFromWindow(token, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 }
 
