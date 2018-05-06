@@ -20,7 +20,6 @@ import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 fun Activity.showKeyboard() {
     currentFocus?.let { focus ->
         systemService<InputMethodManager>().showSoftInput(focus, InputMethodManager.SHOW_IMPLICIT)
-
     }
 }
 

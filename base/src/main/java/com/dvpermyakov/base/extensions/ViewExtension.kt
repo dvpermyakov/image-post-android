@@ -24,7 +24,7 @@ fun View.getLocationRect(): Rect {
     return Rect(point.x, point.y, point.x + width, point.y + height)
 }
 
-fun View.isInside(other: View): Boolean {
+infix fun View.inside(other: View): Boolean {
     return other.getLocationRect().contains(getLocationRect())
 }
 

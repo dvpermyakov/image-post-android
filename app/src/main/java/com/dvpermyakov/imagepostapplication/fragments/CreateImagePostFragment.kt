@@ -223,7 +223,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     override fun updateTrashAppearance(cover: CoverModel) {
-        trashCircleTransformation.withStroke = cover is EmptyColorCoverModel || !trashView.isInside(postView)
+        trashCircleTransformation.withStroke = cover is EmptyColorCoverModel || !(trashView inside postView)
     }
 
     override fun openImageFromGallery() {
