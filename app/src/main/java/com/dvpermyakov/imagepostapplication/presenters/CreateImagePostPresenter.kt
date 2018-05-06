@@ -149,6 +149,8 @@ class CreateImagePostPresenter @Inject constructor(
                     val imageCover = SelectableCoverModel(FileCoverModel(imagePath), false)
                     if (covers.indexOfFirst { it.cover == imageCover.cover } == -1 && covers.add(imageCover)) {
                         view?.notifyCoverItemAdded(covers.lastIndex)
+                    } else {
+                        view?.showImageIsAddedError()
                     }
                 }, {
                     view?.showImageLoadingError()

@@ -230,6 +230,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         startActivityForImageFromGallery(REQUEST_CODE_IMAGE_FROM_GALLERY)
     }
 
+    override fun showImageIsAddedError() {
+        baseActivity.toast(R.string.app_open_image_from_gallery_error_exist_already)
+    }
+
     override fun showReadPermissionDialog() {
         editTextView.clearFocus()
         baseActivity.invokeOrHideKeyboardWithInvokable {
