@@ -22,6 +22,8 @@ interface CreateImagePostView {
     fun showImageLoadingDialog()
     fun hideImageLoadingDialog()
     fun showImageLoadingError()
+    fun showSaveImageLoadingDialog()
+    fun hideSaveImageLoadingDialog()
     fun showSaveImageSuccess()
     fun showSaveImageFailure()
 }

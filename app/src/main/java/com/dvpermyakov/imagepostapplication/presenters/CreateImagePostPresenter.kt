@@ -115,7 +115,11 @@ class CreateImagePostPresenter @Inject constructor(
                 compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
+                        .doOnSubscribe {
+                            view?.showSaveImageLoadingDialog()
+                        }
                         .doFinally {
+                            view?.hideSaveImageLoadingDialog()
                             bitmap.recycle()
                         }
                         .subscribe({

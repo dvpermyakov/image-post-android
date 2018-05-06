@@ -14,5 +14,6 @@
     <string name="app_permissions_ok">OK</string>
     <string name="app_permissions_cancel">Cancel</string>
     <string name="app_loading_dialog_image_message">Image is loading…</string>
+    <string name="app_loading_dialog_image_saving_message">Image is saving…</string>
     <string name="app_image_loading_error">File loading is failed</string>
 </resources>

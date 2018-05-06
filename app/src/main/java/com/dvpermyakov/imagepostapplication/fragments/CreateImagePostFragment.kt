@@ -256,6 +256,14 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         baseActivity.toast(R.string.app_image_loading_error)
     }
 
+    override fun showSaveImageLoadingDialog() {
+        baseActivity.showLoadingDialog(R.string.app_loading_dialog_image_saving_message, TAG_LOADING_DIALOG_SAVING_IMAGE)
+    }
+
+    override fun hideSaveImageLoadingDialog() {
+        baseActivity.hideLoadingDialog(TAG_LOADING_DIALOG_SAVING_IMAGE)
+    }
+
     override fun showSaveImageSuccess() {
         baseActivity.toast(R.string.app_image_post_save_success)
     }
@@ -267,6 +275,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     companion object {
         private const val POST_IMAGE_MAX_SIZE = 2048
         private const val TAG_LOADING_DIALOG_IMAGE = "LoadingDialogImage"
+        private const val TAG_LOADING_DIALOG_SAVING_IMAGE = "LoadingDiaSavinglogImage"
 
         private const val REQUEST_CODE_IMAGE_FROM_GALLERY = 4121
         private const val REQUEST_CODE_STICKERS = 9523
