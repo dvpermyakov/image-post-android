@@ -9,8 +9,10 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
 
 /* todo:
 
+    1) PostView can be hosted in Scroll View.
+    2) Loading dialogs don't save their state.
     3) ColoredEditText has colored padding which may overlay text.
-    8) Saved image has quality worse than original.
+    4) Saved image with linear shader has quality worse than original.
 
  */
 

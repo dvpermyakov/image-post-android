@@ -55,6 +55,12 @@ class CreateImagePostPresenter @Inject constructor(
         }
     }
 
+    override fun onPause() {
+        view?.hideImageLoadingDialog()
+        view?.hideSaveImageLoadingDialog()
+        super.onPause()
+    }
+
     override fun onStop() {
         compositeDisposable.clear()
         super.onStop()
