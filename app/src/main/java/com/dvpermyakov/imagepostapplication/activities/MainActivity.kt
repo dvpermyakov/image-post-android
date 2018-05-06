@@ -11,7 +11,6 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
 
     3) ColoredEditText has colored padding which may overlay text.
     8) Saved image has quality worse than original.
-    9) Not all steps are implemented in read permission request.
 
  */
 

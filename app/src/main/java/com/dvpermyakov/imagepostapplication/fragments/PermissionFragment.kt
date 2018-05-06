@@ -3,6 +3,7 @@ package com.dvpermyakov.imagepostapplication.fragments
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.view.View
+import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.extensions.openApplicationSettings
 import com.dvpermyakov.base.extensions.requestPermission
 import com.dvpermyakov.base.extensions.shouldShowRequestPermissionDetails
@@ -40,6 +41,13 @@ class PermissionFragment : BaseMvpFragment<PermissionView, PermissionPresenter>(
             } else {
                 requestPermission(getPermission(), REQUEST_CODE_PERMISSION)
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (baseActivity.isPermissionGranted(getPermission())) {
+            view?.post { showPreviousScreen() }
         }
     }
 
