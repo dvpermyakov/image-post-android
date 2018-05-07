@@ -3,6 +3,7 @@ package com.dvpermyakov.base.activities
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+import android.util.TypedValue
 import com.dvpermyakov.base.R
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
@@ -31,7 +32,8 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
 
         fragmentContainerView.viewTreeObserver.addOnGlobalLayoutListener {
             val dy = fragmentContainerView.rootView.height - fragmentContainerView.height
-            isKeyboardVisible = dy > 100
+            val systemBarHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, SYSTEM_BAR_DP, resources.displayMetrics)
+            isKeyboardVisible = dy > systemBarHeight
         }
     }
 
@@ -78,4 +80,8 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
     private fun geFragmentBackStackName(fragment: Fragment) = fragment.javaClass.canonicalName
 
     protected abstract fun createFragment(): Fragment
+
+    companion object {
+        private const val SYSTEM_BAR_DP = 90f
+    }
 }
