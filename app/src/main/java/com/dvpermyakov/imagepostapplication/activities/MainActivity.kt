@@ -14,6 +14,7 @@ import com.dvpermyakov.imagepostapplication.fragments.CreateImagePostFragment
     3) ColoredEditText has colored padding which may overlay text.
     4) Saved image with linear shader has quality worse than original.
     5) Sticker list update its layout during animation.
+    6) Write permission is requested if read permission is granted.
 
  */
 
