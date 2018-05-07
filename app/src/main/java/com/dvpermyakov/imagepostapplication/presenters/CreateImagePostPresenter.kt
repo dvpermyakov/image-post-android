@@ -15,6 +15,7 @@ import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -120,6 +121,7 @@ class CreateImagePostPresenter @Inject constructor(
             if (bitmap != null) {
                 compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
                         .subscribeOn(Schedulers.io())
+                        .delay(400, TimeUnit.MILLISECONDS, Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe {
                             view?.showSaveImageLoadingDialog()
@@ -144,6 +146,7 @@ class CreateImagePostPresenter @Inject constructor(
     fun onImagePick(uri: Uri) {
         compositeDisposable.add(galleryImageInteractor.getImagePath(uri)
                 .subscribeOn(Schedulers.io())
+                .delay(400, TimeUnit.MILLISECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     view?.showImageLoadingDialog()
