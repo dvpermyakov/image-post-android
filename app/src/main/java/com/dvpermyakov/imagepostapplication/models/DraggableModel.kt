@@ -12,6 +12,17 @@ abstract class DraggableModel(val width: Int, val height: Int) {
     var translationY = .25f       // [0f, 1f]
     var scaleFactor = 1f          // [0f, 1f]
     var rotationDegrees = 0f
+
+    var state = STATE_IDLE
+
+    companion object {
+        const val STATE_IDLE = 0
+        const val STATE_MOVE = 1
+        const val STATE_SCALE = 2
+        const val STATE_ROTATE = 3
+
+        val removeEliminatedStates = listOf(DraggableModel.STATE_SCALE, DraggableModel.STATE_ROTATE)
+    }
 }
 
 fun DraggableModel.centerPoint(viewWidth: Int, viewHeight: Int): Point {

@@ -147,27 +147,32 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 scaleType = ImageView.ScaleType.MATRIX
                 layoutParams = ViewGroup.LayoutParams(postView.width, postView.height)
                 draggableModel = stickerUi
-                positionChangeListener = { isInsideParent ->
-                    Picasso.get()
-                            .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                            .transform(trashCircleTransformation)
-                            .into(trashView)
+                positionChangeListener = { isInsideParent, isRemovable ->
+                    trashView.setVisible(isRemovable)
+                    if (isRemovable) {
+                        Picasso.get()
+                                .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                                .transform(trashCircleTransformation)
+                                .into(trashView)
+                    }
                 }
-                motionStateListener = { isInMotion, isInsideParent ->
+                draggableStateListener = { isInMotion, isInsideParent, isRemovable ->
                     if (isInMotion) {
                         postView.bringChildToFront(this)
                         postView.bringChildToFront(editTextView)
                     }
-                    val isIntersectedByTrashView = isIntersectedBy(trashView)
-                    trashView.setVisible(isInMotion)
-                    Picasso.get()
-                            .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                            .transform(trashCircleTransformation)
-                            .into(trashView)
-                    if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
-                        presenter.onStickerRemove(stickerUi)
-                        onDispose()
-                        setVisible(false)
+                    trashView.setVisible(isRemovable && isInMotion)
+                    if (isRemovable) {
+                        val isIntersectedByTrashView = isIntersectedBy(trashView)
+                        Picasso.get()
+                                .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
+                                .transform(trashCircleTransformation)
+                                .into(trashView)
+                        if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
+                            presenter.onStickerRemove(stickerUi)
+                            onDispose()
+                            setVisible(false)
+                        }
                     }
                 }
             }

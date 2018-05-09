@@ -64,7 +64,8 @@ class DraggableGestureDetector(
 
     inner class MoveImplementation : MoveGestureDetector.SimpleOnMoveGestureListener() {
         override fun onMoveBegin(detector: MoveGestureDetector): Boolean {
-            listener?.onMoveBegin()
+            draggable.state = DraggableModel.STATE_MOVE
+            listener?.onStateChange(true)
             return true
         }
 
@@ -72,33 +73,57 @@ class DraggableGestureDetector(
             val delta = detector.focusDelta
             focusX += delta.x
             focusY += delta.y
-            listener?.onMove()
+            listener?.onPositionChange()
             return true
         }
 
         override fun onMoveEnd(detector: MoveGestureDetector) {
-            listener?.onMoveEnd()
+            draggable.state = DraggableModel.STATE_IDLE
+            listener?.onStateChange(false)
         }
     }
 
     inner class ScaleGestureImplementation : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+            draggable.state = DraggableModel.STATE_SCALE
+            listener?.onStateChange(true)
+            return true
+        }
+
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             draggable.scaleFactor = max(SCALE_FACTOR_MIN, min(draggable.scaleFactor * detector.scaleFactor, SCALE_FACTOR_MAX))
+            listener?.onPositionChange()
             return true
+        }
+
+        override fun onScaleEnd(detector: ScaleGestureDetector) {
+            draggable.state = DraggableModel.STATE_IDLE
+            listener?.onStateChange(false)
         }
     }
 
     inner class RotateImplementation : RotateGestureDetector.SimpleOnRotateGestureListener() {
+        override fun onRotateBegin(detector: RotateGestureDetector?): Boolean {
+            draggable.state = DraggableModel.STATE_ROTATE
+            listener?.onStateChange(true)
+            return true
+        }
+
         override fun onRotate(detector: RotateGestureDetector): Boolean {
             draggable.rotationDegrees -= detector.rotationDegreesDelta
+            listener?.onPositionChange()
             return true
+        }
+
+        override fun onRotateEnd(detector: RotateGestureDetector?) {
+            draggable.state = DraggableModel.STATE_IDLE
+            listener?.onStateChange(false)
         }
     }
 
     interface Draggable {
-        fun onMoveBegin()
-        fun onMove()
-        fun onMoveEnd()
+        fun onStateChange(isInMotion: Boolean)
+        fun onPositionChange()
         fun onMatrixChange(matrix: Matrix)
     }
 

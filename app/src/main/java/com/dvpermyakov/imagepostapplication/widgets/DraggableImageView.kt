@@ -23,16 +23,15 @@ class DraggableImageView : ImageView, IDisposableView {
     private val draggableGestureDetector by lazy {
         DraggableGestureDetector(context, width, height, draggableModel).apply {
             listener = object : DraggableGestureDetector.Draggable {
-                override fun onMoveBegin() {
-                    motionStateListener?.invoke(true, isInsideParent)
+                override fun onStateChange(isInMotion: Boolean) {
+                    if (isRemovable) {
+                        isRemovable = draggableModel.state !in DraggableModel.removeEliminatedStates
+                    }
+                    draggableStateListener?.invoke(isInMotion, isInsideParent, isRemovable)
                 }
 
-                override fun onMove() {
-                    positionChangeListener?.invoke(isInsideParent)
-                }
-
-                override fun onMoveEnd() {
-                    motionStateListener?.invoke(false, isInsideParent)
+                override fun onPositionChange() {
+                    positionChangeListener?.invoke(isInsideParent, isRemovable)
                 }
 
                 override fun onMatrixChange(matrix: Matrix) {
@@ -42,11 +41,12 @@ class DraggableImageView : ImageView, IDisposableView {
         }
     }
 
+    private var isRemovable = false
     private var isDragged = false
     private var isInsideParent = true
 
-    var positionChangeListener: ((isInsideParent: Boolean) -> Unit)? = null
-    var motionStateListener: ((isInMotion: Boolean, isInsideParent: Boolean) -> Unit)? = null
+    var positionChangeListener: ((isInsideParent: Boolean, isRemovable: Boolean) -> Unit)? = null
+    var draggableStateListener: ((isInMotion: Boolean, isInsideParent: Boolean, isRemovable: Boolean) -> Unit)? = null
 
     lateinit var draggableModel: DraggableModel
 
@@ -71,6 +71,7 @@ class DraggableImageView : ImageView, IDisposableView {
                 if (event.pointerCount == 1 || isDragged) {
                     if (draggableModel.getRect(width, height).contains(eventX, eventY)) {
                         isDragged = true
+                        isRemovable = true
                     }
                 }
             }
@@ -98,7 +99,7 @@ class DraggableImageView : ImageView, IDisposableView {
 
     override fun onDispose() {
         positionChangeListener = null
-        motionStateListener = null
+        draggableStateListener = null
     }
 
     fun isIntersectedBy(other: View): Boolean {
