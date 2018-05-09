@@ -36,6 +36,7 @@ import java.io.File
  */
 
 class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImagePostPresenter>(), CreateImagePostView {
+    private val stickerViewMap = hashMapOf<StickerUiModel, DraggableImageView>()
     private val compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
         CoverAdapter().apply {
@@ -98,6 +99,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     override fun onDestroy() {
+        stickerViewMap.clear()
         compositeDisposable.dispose()
         super.onDestroy()
     }
@@ -148,36 +150,27 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                 layoutParams = ViewGroup.LayoutParams(postView.width, postView.height)
                 draggableModel = stickerUi
                 positionChangeListener = { isInsideParent, isRemovable ->
-                    trashView.setVisible(isRemovable)
-                    if (isRemovable) {
-                        Picasso.get()
-                                .load(if (isInsideParent && !isIntersectedBy(trashView)) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                                .transform(trashCircleTransformation)
-                                .into(trashView)
-                    }
+                    presenter.onStickerPositionChange(stickerUi, isInsideParent, isRemovable, isIntersectedBy(trashView))
                 }
                 draggableStateListener = { isInMotion, isInsideParent, isRemovable ->
                     if (isInMotion) {
                         postView.bringChildToFront(this)
                         postView.bringChildToFront(editTextView)
                     }
-                    trashView.setVisible(isRemovable && isInMotion)
-                    if (isRemovable) {
-                        val isIntersectedByTrashView = isIntersectedBy(trashView)
-                        Picasso.get()
-                                .load(if (isInsideParent && !isIntersectedByTrashView) R.drawable.ic_fab_trash else R.drawable.ic_fab_trash_released)
-                                .transform(trashCircleTransformation)
-                                .into(trashView)
-                        if (!isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
-                            presenter.onStickerRemove(stickerUi)
-                            onDispose()
-                            setVisible(false)
-                        }
+
+                    val isIntersectedByTrashView = isIntersectedBy(trashView)
+                    presenter.onStickerStateChange(stickerUi, isInMotion, isInsideParent, isRemovable, isIntersectedByTrashView)
+
+                    if (isRemovable && !isInMotion && (!isInsideParent || isIntersectedByTrashView)) {
+                        presenter.onStickerRemove(stickerUi)
+                        onDispose()
+                        setVisible(false)
                     }
                 }
             }
             postView.addView(stickerImageView)
             postView.bringChildToFront(editTextView)
+            stickerViewMap[stickerUi] = stickerImageView
 
             Picasso.get()
                     .load(stickerUi.sticker.image)
@@ -185,6 +178,34 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                     .centerInside()
                     .into(stickerImageView)
         }
+    }
+
+    override fun showClosedTrash(stickerUi: StickerUiModel) {
+        stickerViewMap[stickerUi]?.alpha = 1f
+        trashView.setVisible(true)
+        Picasso.get()
+                .load(R.drawable.ic_fab_trash)
+                .transform(trashCircleTransformation)
+                .into(trashView)
+    }
+
+    override fun showOpenedTrash(stickerUi: StickerUiModel) {
+        stickerViewMap[stickerUi]?.let { stickerView ->
+            if (stickerView.alpha > REMOVABLE_STICKER_ALPHA) {
+                stickerView.alpha = REMOVABLE_STICKER_ALPHA
+                baseActivity.vibrate(VIBRATION_DURATION)
+            }
+        }
+        trashView.setVisible(true)
+        Picasso.get()
+                .load(R.drawable.ic_fab_trash_released)
+                .transform(trashCircleTransformation)
+                .into(trashView)
+    }
+
+    override fun hideTrash(stickerUi: StickerUiModel) {
+        stickerViewMap[stickerUi]?.alpha = 1f
+        trashView.setVisible(false)
     }
 
     override fun showKeyboard() {
@@ -293,6 +314,9 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
     }
 
     companion object {
+        private const val VIBRATION_DURATION = 10L
+        private const val REMOVABLE_STICKER_ALPHA = .5f
+
         private const val POST_IMAGE_MAX_SIZE = 2048
         private const val TAG_LOADING_DIALOG_IMAGE = "LoadingDialogImage"
         private const val TAG_LOADING_DIALOG_SAVING_IMAGE = "LoadingDiaSavinglogImage"

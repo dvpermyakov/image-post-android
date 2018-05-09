@@ -172,6 +172,18 @@ class CreateImagePostPresenter @Inject constructor(
         view?.updateTrashAppearance(getSelectedCover())
     }
 
+    fun onStickerPositionChange(stickerUi: StickerUiModel, isInsideParent: Boolean, isRemovable: Boolean, isIntersectedByTrash: Boolean) {
+        onStickerStateChange(stickerUi, true, isInsideParent, isRemovable, isIntersectedByTrash)
+    }
+
+    fun onStickerStateChange(stickerUi: StickerUiModel, isInMotion: Boolean, isInsideParent: Boolean, isRemovable: Boolean, isIntersectedByTrash: Boolean) {
+        when {
+            !isRemovable || !isInMotion -> view?.hideTrash(stickerUi)
+            isInsideParent && !isIntersectedByTrash -> view?.showClosedTrash(stickerUi)
+            else -> view?.showOpenedTrash(stickerUi)
+        }
+    }
+
     private fun getSelectedCover() = covers.first { it.selected }.cover
 
     private fun setSelectedCover(selectedCover: SelectableCoverModel) {
