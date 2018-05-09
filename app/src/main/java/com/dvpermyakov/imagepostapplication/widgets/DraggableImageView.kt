@@ -11,6 +11,7 @@ import com.dvpermyakov.base.extensions.getLocationPoint
 import com.dvpermyakov.base.extensions.getLocationRect
 import com.dvpermyakov.base.extensions.getPointersCenter
 import com.dvpermyakov.base.extensions.getViewRect
+import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
 import com.dvpermyakov.imagepostapplication.models.getRect
@@ -20,6 +21,7 @@ import com.dvpermyakov.imagepostapplication.models.getRect
  */
 
 class DraggableImageView : ImageView, IDisposableView {
+    private val boundaryOffset = resources.getDimensionPixelOffset(R.dimen.size_xlarge)
     private val draggableGestureDetector by lazy {
         DraggableGestureDetector(context, width, height, draggableModel).apply {
             listener = object : DraggableGestureDetector.Draggable {
@@ -114,6 +116,13 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     private fun checkBoundaries(eventX: Int, eventY: Int) {
-        isInsideParent = getViewRect().contains(eventX, eventY)
+        isInsideParent = getViewRectWithOffset().contains(eventX, eventY)
+    }
+
+    private fun getViewRectWithOffset() = getViewRect().apply {
+        left -= boundaryOffset
+        top -= boundaryOffset
+        right += boundaryOffset
+        bottom += boundaryOffset
     }
 }
