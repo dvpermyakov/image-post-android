@@ -39,6 +39,9 @@ class ColoredEditTextView : EditText {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        if (text.isEmpty()) {
+            return super.onTouchEvent(event)
+        }
         val centerPoint = event.getPointersCenter()
         if (getViewRect().contains(centerPoint.x, centerPoint.y)) {
             val eventX = centerPoint.x.toFloat()
