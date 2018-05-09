@@ -154,6 +154,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
                             .into(trashView)
                 }
                 motionStateListener = { isInMotion, isInsideParent ->
+                    if (isInMotion) {
+                        postView.bringChildToFront(this)
+                        postView.bringChildToFront(editTextView)
+                    }
                     val isIntersectedByTrashView = isIntersectedBy(trashView)
                     trashView.setVisible(isInMotion)
                     Picasso.get()
