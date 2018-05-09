@@ -2,12 +2,12 @@ package com.dvpermyakov.base.activities
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.util.TypedValue
 import com.dvpermyakov.base.R
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
-import com.dvpermyakov.base.models.AnimationConfig
 import io.michaelrocks.lightsaber.Injector
 import kotlinx.android.synthetic.main.activity_base.*
 
@@ -56,17 +56,15 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
         }.commit()
     }
 
-    fun addFragment(fragment: Fragment, tag: String = "", animConfig: AnimationConfig? = AnimationConfig.getBottomAnimationConfig()) {
+    fun addFragment(fragment: Fragment, tag: String = "", transit: Int = FragmentTransaction.TRANSIT_FRAGMENT_OPEN) {
         val transaction = supportFragmentManager.beginTransaction()
-        animConfig?.let {
-            transaction.setCustomAnimations(it.enter, it.exit, it.enterPop, it.exitPop)
-        }
         if (tag.isNotEmpty()) {
             transaction.add(R.id.fragmentContainerView, fragment, tag)
         } else {
             transaction.add(R.id.fragmentContainerView, fragment)
         }
         transaction
+                .setTransition(transit)
                 .addToBackStack(geFragmentBackStackName(fragment))
                 .commit()
     }

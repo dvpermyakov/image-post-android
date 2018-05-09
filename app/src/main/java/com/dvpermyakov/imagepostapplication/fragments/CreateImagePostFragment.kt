@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -136,7 +137,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         baseActivity.invokeOrHideKeyboardWithInvokable {
             baseActivity.addFragment(StickerListFragment.newInstance().apply {
                 setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
-            })
+            }, transit = FragmentTransaction.TRANSIT_NONE)
         }
     }
 

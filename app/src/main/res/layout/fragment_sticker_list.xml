@@ -6,10 +6,10 @@
 
     <FrameLayout
         android:id="@+id/emptyContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorSemiTransparentBackground"
-        app:layout_constraintBottom_toTopOf="@+id/mainContainerView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -17,8 +17,9 @@
     <include
         android:id="@+id/mainContainerView"
         layout="@layout/layout_sticker_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/app_sticker_list_height_portrait"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

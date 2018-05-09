@@ -1,7 +1,10 @@
 package com.dvpermyakov.imagepostapplication.fragments
 
+import android.animation.Animator
+import android.animation.AnimatorSet
 import android.app.Activity
 import android.content.Intent
+import android.graphics.PointF
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -11,6 +14,7 @@ import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.StickerAdapter
 import com.dvpermyakov.imagepostapplication.models.StickerModel
 import com.dvpermyakov.imagepostapplication.presenters.StickerListPresenter
+import com.dvpermyakov.imagepostapplication.utils.AnimatorFactory
 import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 import com.dvpermyakov.imagepostapplication.views.StickerListView
 import com.google.android.flexbox.FlexDirection
@@ -27,6 +31,7 @@ import kotlin.math.min
  */
 
 class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresenter>(), StickerListView {
+    private var animation: AnimatorSet? = null
     private val adapter by lazy {
         StickerAdapter().apply {
             clickListener = { presenter.onStickerClick(it) }
@@ -42,6 +47,10 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         super.onViewCreated(view, savedInstanceState)
         emptyContainer.setOnClickListener {
             presenter.onEmptyClick()
+        }
+
+        // to prevent clicking on empty container
+        titleView.setOnClickListener {
         }
 
         val layoutManager = FlexboxLayoutManager(context).apply {
@@ -60,6 +69,20 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         savedInstanceState?.let {
             dividerView.alpha = it.getFloat(KEY_DIVIDER_VIEW_ALPHA)
         }
+
+        mainContainerView.post {
+            if (savedInstanceState == null) {
+                animation = createAnimator()
+                animation?.start()
+            } else {
+                mainContainerView.setVisible(true)
+            }
+        }
+    }
+
+    override fun onStop() {
+        animation?.cancel()
+        super.onStop()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -103,9 +126,36 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         dividerView?.alpha = max(0f, min(1f, dividerView.alpha + offset / DIVIDER_ALPHA_HEIGHT))
     }
 
+    private fun createAnimator(): AnimatorSet {
+        return AnimatorSet().apply {
+            play(AnimatorFactory.createMovementAnimator(mainContainerView, PointF(0f, mainContainerView.height.toFloat()), PointF(0f, 0f), ANIMATION_DURATION_MS))
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(animation: Animator) = Unit
+
+                override fun onAnimationStart(animation: Animator) {
+                    mainContainerView.setVisible(true)
+                    mainContainerView.translationX = 0f
+                    mainContainerView.translationY = mainContainerView.height.toFloat()
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    mainContainerView.translationX = 0f
+                    mainContainerView.translationY = 0f
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                    mainContainerView.translationX = 0f
+                    mainContainerView.translationY = 0f
+                }
+            })
+        }
+    }
+
     companion object {
         private const val KEY_DIVIDER_VIEW_ALPHA = "dividerAlpha"
         private const val DIVIDER_ALPHA_HEIGHT = 300f
+
+        private const val ANIMATION_DURATION_MS = 400L
 
         fun newInstance() = StickerListFragment()
     }
