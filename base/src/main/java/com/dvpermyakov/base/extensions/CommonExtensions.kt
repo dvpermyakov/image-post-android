@@ -2,6 +2,7 @@ package com.dvpermyakov.base.extensions
 
 import android.content.res.AssetManager
 import android.graphics.Point
+import android.graphics.Rect
 import android.util.Log
 import android.view.MotionEvent
 import java.io.IOException
@@ -37,4 +38,11 @@ fun MotionEvent.getPointersCenter(): Point {
         y += getY(index)
     }
     return Point((x / pointerCount.toFloat()).toInt(), (y / pointerCount.toFloat()).toInt())
+}
+
+fun Rect.setOffset(offset: Int) = apply {
+    left -= offset
+    top -= offset
+    right += offset
+    bottom += offset
 }

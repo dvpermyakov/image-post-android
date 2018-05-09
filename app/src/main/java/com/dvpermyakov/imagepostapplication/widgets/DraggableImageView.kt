@@ -7,10 +7,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
-import com.dvpermyakov.base.extensions.getLocationPoint
-import com.dvpermyakov.base.extensions.getLocationRect
-import com.dvpermyakov.base.extensions.getPointersCenter
-import com.dvpermyakov.base.extensions.getViewRect
+import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
 import com.dvpermyakov.imagepostapplication.models.DraggableModel
@@ -21,6 +18,7 @@ import com.dvpermyakov.imagepostapplication.models.getRect
  */
 
 class DraggableImageView : ImageView, IDisposableView {
+    private val imageIntersectOffset = resources.getDimensionPixelOffset(R.dimen.size_medium)
     private val boundaryOffset = resources.getDimensionPixelOffset(R.dimen.size_xlarge)
     private val draggableGestureDetector by lazy {
         DraggableGestureDetector(context, width, height, draggableModel).apply {
@@ -105,7 +103,7 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     fun isIntersectedBy(other: View): Boolean {
-        val imageRect = draggableModel.getRect(width, height)
+        val imageRect = draggableModel.getRect(width, height).setOffset(-imageIntersectOffset)
         val locationPoint = getLocationPoint()
         val locationRect = Rect(
                 locationPoint.x + imageRect.left,
@@ -116,13 +114,6 @@ class DraggableImageView : ImageView, IDisposableView {
     }
 
     private fun checkBoundaries(eventX: Int, eventY: Int) {
-        isInsideParent = getViewRectWithOffset().contains(eventX, eventY)
-    }
-
-    private fun getViewRectWithOffset() = getViewRect().apply {
-        left -= boundaryOffset
-        top -= boundaryOffset
-        right += boundaryOffset
-        bottom += boundaryOffset
+        isInsideParent = getViewRect().setOffset(boundaryOffset).contains(eventX, eventY)
     }
 }
