@@ -119,6 +119,10 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         adapter.items = items
     }
 
+    override fun scrollToCoverItem(index: Int) {
+        recyclerView.smoothScrollToPosition(index)
+    }
+
     override fun notifyCoverItemChanged(position: Int) {
         adapter.notifyItemChanged(position)
     }

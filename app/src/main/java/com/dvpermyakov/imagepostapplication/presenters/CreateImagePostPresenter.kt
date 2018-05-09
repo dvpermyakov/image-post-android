@@ -80,19 +80,7 @@ class CreateImagePostPresenter @Inject constructor(
     }
 
     fun onCoverItemClick(selectedItem: SelectableCoverModel) {
-        if (!selectedItem.selected) {
-            covers.forEachIndexed { index, item ->
-                if (item.selected) {
-                    item.selected = false
-                    view?.notifyCoverItemChanged(index)
-                } else if (item.cover == selectedItem.cover) {
-                    item.selected = true
-                    view?.notifyCoverItemChanged(index)
-                    view?.updateTextPostAppearance(item.cover, textAppearance)
-                    view?.updateImagePostAppearance(item.cover)
-                }
-            }
-        }
+        setSelectedCover(selectedItem)
     }
 
     fun onAddCoverClick() {
@@ -121,7 +109,7 @@ class CreateImagePostPresenter @Inject constructor(
             if (bitmap != null) {
                 compositeDisposable.add(galleryImageInteractor.saveImage(bitmap, resources.getString(R.string.app_image_post_default_image_title), resources.getString(R.string.app_image_post_default_image_description))
                         .subscribeOn(Schedulers.io())
-                        .delay(400, TimeUnit.MILLISECONDS, Schedulers.computation())
+                        .delay(DIALOGS_DELAY_MS, TimeUnit.MILLISECONDS, Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe {
                             view?.showSaveImageLoadingDialog()
@@ -146,7 +134,7 @@ class CreateImagePostPresenter @Inject constructor(
     fun onImagePick(uri: Uri) {
         compositeDisposable.add(galleryImageInteractor.getImagePath(uri)
                 .subscribeOn(Schedulers.io())
-                .delay(400, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .delay(DIALOGS_DELAY_MS, TimeUnit.MILLISECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
                     view?.showImageLoadingDialog()
@@ -156,10 +144,14 @@ class CreateImagePostPresenter @Inject constructor(
                 }
                 .subscribe({ imagePath ->
                     val imageCover = SelectableCoverModel(FileCoverModel(imagePath), false)
-                    if (covers.indexOfFirst { it.cover == imageCover.cover } == -1 && covers.add(imageCover)) {
+                    val imageCoverIndex = covers.indexOfFirst { it.cover == imageCover.cover }
+                    if (imageCoverIndex == -1 && covers.add(imageCover)) {
                         view?.notifyCoverItemAdded(covers.lastIndex)
+                        setSelectedCover(imageCover)
                     } else {
                         view?.showImageIsAddedError()
+                        view?.scrollToCoverItem(imageCoverIndex)
+                        setSelectedCover(covers[imageCoverIndex])
                     }
                 }, {
                     view?.showImageLoadingError()
@@ -182,9 +174,27 @@ class CreateImagePostPresenter @Inject constructor(
 
     private fun getSelectedCover() = covers.first { it.selected }.cover
 
+    private fun setSelectedCover(selectedCover: SelectableCoverModel) {
+        if (!selectedCover.selected) {
+            covers.forEachIndexed { index, item ->
+                if (item.selected) {
+                    item.selected = false
+                    view?.notifyCoverItemChanged(index)
+                } else if (item.cover == selectedCover.cover) {
+                    item.selected = true
+                    view?.notifyCoverItemChanged(index)
+                    view?.updateTextPostAppearance(item.cover, textAppearance)
+                    view?.updateImagePostAppearance(item.cover)
+                }
+            }
+        }
+    }
+
     companion object {
         private const val KEY_COVERS = "covers"
         private const val KEY_TEXT_APPEARANCE = "textAppearance"
         private const val KEY_STICKERS = "stickers"
+
+        private const val DIALOGS_DELAY_MS = 400L
     }
 }

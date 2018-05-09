@@ -8,6 +8,7 @@ import com.dvpermyakov.imagepostapplication.models.*
 
 interface CreateImagePostView {
     fun setCoverList(items: List<SelectableCoverModel>)
+    fun scrollToCoverItem(index: Int)
     fun notifyCoverItemChanged(position: Int)
     fun notifyCoverItemAdded(position: Int)
     fun showStickerList()
