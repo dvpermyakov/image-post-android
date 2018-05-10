@@ -18,7 +18,6 @@ import com.dvpermyakov.imagepostapplication.models.getRect
  */
 
 class DraggableImageView : ImageView, IDisposableView {
-    private val imageDragOffset = resources.getDimensionPixelOffset(R.dimen.size_xxlarge)
     private val imageIntersectOffset = resources.getDimensionPixelOffset(R.dimen.size_medium)
     private val boundaryOffset = resources.getDimensionPixelOffset(R.dimen.size_xlarge)
     private val draggableGestureDetector by lazy {
@@ -70,7 +69,7 @@ class DraggableImageView : ImageView, IDisposableView {
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 if (event.pointerCount == 1 || isDragged) {
-                    if (draggableModel.getRect(width, height).setOffset(imageDragOffset).contains(eventX, eventY)) {
+                    if (draggableModel.getRect(width, height).contains(eventX, eventY)) {
                         isDragged = true
                         isRemovable = true
                     }
