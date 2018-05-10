@@ -24,8 +24,8 @@ allprojects {
 
 ext {
     versionMajor = 1
-    versionMinor = 0
-    versionPatch = 2
+    versionMinor = 1
+    versionPatch = 0
 }
 
 task clean(type: Delete) {
