@@ -13,7 +13,7 @@ import com.dvpermyakov.imagepostapplication.R
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-abstract class CoverModel : KParcelable {
+sealed class CoverModel : KParcelable {
     companion object {
         fun getDefaults(ctx: Context) = listOf(
                 EmptyColorCoverModel.getModelEmpty(ctx),
