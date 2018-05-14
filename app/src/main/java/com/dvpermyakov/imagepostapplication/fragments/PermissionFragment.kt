@@ -23,6 +23,7 @@ import org.jetbrains.anko.bundleOf
 
 class PermissionFragment : BaseMoxyFragment(), PermissionView {
     private val permission by lazy { arguments?.getString(KEY_PERMISSION).orEmpty() }
+    private val message by lazy { arguments?.getInt(KEY_MESSAGE) ?: 0 }
 
     @InjectPresenter
     lateinit var presenter: PermissionPresenter
@@ -34,9 +35,7 @@ class PermissionFragment : BaseMoxyFragment(), PermissionView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let { args ->
-            textView.setText(args.getInt(KEY_MESSAGE))
-        }
+        textView.setText(message)
 
         cancelButtonView.setOnClickListener {
             presenter.onCancelClick()
