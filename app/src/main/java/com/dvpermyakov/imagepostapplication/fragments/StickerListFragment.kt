@@ -7,9 +7,13 @@ import android.content.Intent
 import android.graphics.PointF
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dvpermyakov.base.extensions.setVisible
-import com.dvpermyakov.base.fragments.BaseMvpFragment
+import com.dvpermyakov.base.fragments.BaseMoxyFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.StickerAdapter
 import com.dvpermyakov.imagepostapplication.models.StickerModel
@@ -30,7 +34,7 @@ import kotlin.math.min
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresenter>(), StickerListView {
+class StickerListFragment : BaseMoxyFragment(), StickerListView {
     private var animation: AnimatorSet? = null
     private val adapter by lazy {
         StickerAdapter().apply {
@@ -38,10 +42,17 @@ class StickerListFragment : BaseMvpFragment<StickerListView, StickerListPresente
         }
     }
 
-    override val baseView = this
-    override val contentResId = R.layout.fragment_sticker_list
+    @InjectPresenter
+    lateinit var presenter: StickerListPresenter
 
-    override fun createPresenter(): StickerListPresenter = getApplicationInjector().getInstance()
+    @ProvidePresenter
+    fun providePresenter(): StickerListPresenter {
+        return appInjector.getInstance()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_sticker_list, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -1,6 +1,7 @@
 package com.dvpermyakov.imagepostapplication.presenters
 
-import com.dvpermyakov.base.presenters.BaseFragmentPresenter
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
 import com.dvpermyakov.imagepostapplication.interactors.StickerInteractor
 import com.dvpermyakov.imagepostapplication.models.StickerModel
 import com.dvpermyakov.imagepostapplication.views.StickerListView
@@ -13,50 +14,44 @@ import javax.inject.Inject
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class StickerListPresenter @Inject constructor(
-        private val stickerInteractor: StickerInteractor) : BaseFragmentPresenter<StickerListView>() {
+@InjectViewState
+class StickerListPresenter @Inject constructor(private val stickerInteractor: StickerInteractor) : MvpPresenter<StickerListView>() {
     private val compositeDisposable = CompositeDisposable()
-
     private var items = listOf<StickerModel>()
         set(value) {
             field = value
-            view?.showStickers(value)
+            viewState.showStickers(value)
         }
 
-    override fun onStart() {
-        super.onStart()
+    override fun attachView(view: StickerListView?) {
+        super.attachView(view)
         if (items.isEmpty()) {
             compositeDisposable.add(stickerInteractor.getStickers()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe {
-                        view?.showLoading()
+                        viewState.showLoading()
                     }
                     .subscribe({ stickers ->
                         items = stickers
-                        view?.hideLoading()
+                        viewState.hideLoading()
                     }, {
-                        view?.showError()
+                        viewState.showError()
                     }))
         }
     }
 
-    override fun onStop() {
-        compositeDisposable.clear()
-        super.onStop()
-    }
-
-    override fun detachView() {
+    override fun detachView(view: StickerListView?) {
         compositeDisposable.dispose()
-        super.detachView()
+        super.detachView(view)
     }
 
     fun onEmptyClick() {
-        view?.showPreviousScreen()
+        viewState.showPreviousScreen()
     }
 
     fun onStickerClick(sticker: StickerModel) {
-        view?.sendChosenSticker(sticker)
-        view?.showPreviousScreen()
+        viewState.sendChosenSticker(sticker)
+        viewState.showPreviousScreen()
     }
 }

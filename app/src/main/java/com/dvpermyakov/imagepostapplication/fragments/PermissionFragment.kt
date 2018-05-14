@@ -2,12 +2,15 @@ package com.dvpermyakov.imagepostapplication.fragments
 
 import android.os.Bundle
 import android.support.annotation.StringRes
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import com.arellomobile.mvp.presenter.InjectPresenter
 import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.extensions.openApplicationSettings
 import com.dvpermyakov.base.extensions.requestPermission
 import com.dvpermyakov.base.extensions.shouldShowRequestPermissionDetails
-import com.dvpermyakov.base.fragments.BaseMvpFragment
+import com.dvpermyakov.base.fragments.BaseMoxyFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.presenters.PermissionPresenter
 import com.dvpermyakov.imagepostapplication.views.PermissionView
@@ -18,11 +21,13 @@ import org.jetbrains.anko.bundleOf
  * Created by dmitrypermyakov on 30/04/2018.
  */
 
-class PermissionFragment : BaseMvpFragment<PermissionView, PermissionPresenter>(), PermissionView {
-    override val baseView = this
-    override val contentResId = R.layout.fragment_permission
+class PermissionFragment : BaseMoxyFragment(), PermissionView {
+    @InjectPresenter
+    lateinit var presenter: PermissionPresenter
 
-    override fun createPresenter() = PermissionPresenter()
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_permission, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +66,7 @@ class PermissionFragment : BaseMvpFragment<PermissionView, PermissionPresenter>(
         baseActivity.onBackPressed()
     }
 
-    private fun getPermission() = arguments?.getString(KEY_PERMISSION) ?: ""
+    private fun getPermission() = arguments?.getString(KEY_PERMISSION).orEmpty()
 
     companion object {
         private const val REQUEST_CODE_PERMISSION = 3514
