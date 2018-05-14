@@ -22,6 +22,8 @@ import org.jetbrains.anko.bundleOf
  */
 
 class PermissionFragment : BaseMoxyFragment(), PermissionView {
+    private val permission by lazy { arguments?.getString(KEY_PERMISSION).orEmpty() }
+
     @InjectPresenter
     lateinit var presenter: PermissionPresenter
 
@@ -41,17 +43,17 @@ class PermissionFragment : BaseMoxyFragment(), PermissionView {
         }
 
         okButtonView.setOnClickListener {
-            if (baseActivity.shouldShowRequestPermissionDetails(getPermission())) {
+            if (baseActivity.shouldShowRequestPermissionDetails(permission)) {
                 baseActivity.openApplicationSettings()
             } else {
-                requestPermission(getPermission(), REQUEST_CODE_PERMISSION)
+                requestPermission(permission, REQUEST_CODE_PERMISSION)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (baseActivity.isPermissionGranted(getPermission())) {
+        if (baseActivity.isPermissionGranted(permission)) {
             view?.post { showPreviousScreen() }
         }
     }
@@ -65,8 +67,6 @@ class PermissionFragment : BaseMoxyFragment(), PermissionView {
     override fun showPreviousScreen() {
         baseActivity.onBackPressed()
     }
-
-    private fun getPermission() = arguments?.getString(KEY_PERMISSION).orEmpty()
 
     companion object {
         private const val REQUEST_CODE_PERMISSION = 3514
