@@ -23,7 +23,7 @@ class StickerListPresenter @Inject constructor(private val stickerInteractor: St
             viewState.showStickers(value)
         }
 
-    override fun attachView(view: StickerListView?) {
+    override fun attachView(view: StickerListView) {
         super.attachView(view)
         if (items.isEmpty()) {
             compositeDisposable.add(stickerInteractor.getStickers()
@@ -41,9 +41,9 @@ class StickerListPresenter @Inject constructor(private val stickerInteractor: St
         }
     }
 
-    override fun detachView(view: StickerListView?) {
+    override fun destroyView(view: StickerListView?) {
         compositeDisposable.dispose()
-        super.detachView(view)
+        super.destroyView(view)
     }
 
     fun onEmptyClick() {

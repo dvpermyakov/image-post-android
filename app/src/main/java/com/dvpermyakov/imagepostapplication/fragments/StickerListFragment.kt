@@ -123,14 +123,14 @@ class StickerListFragment : BaseMoxyFragment(), StickerListView {
         adapter.items = list
     }
 
-    override fun showPreviousScreen() {
-        baseActivity.onBackPressed()
-    }
-
     override fun sendChosenSticker(sticker: StickerModel) {
         targetFragment?.onActivityResult(targetRequestCode, Activity.RESULT_OK, Intent().apply {
             putExtra(ImagePostApplicationConstants.INTENT_EXTRA_STICKER_MODEL, sticker)
         })
+    }
+
+    override fun showPreviousScreen() {
+        baseActivity.onBackPressed()
     }
 
     private fun setDividerViewAlpha(offset: Int) {
