@@ -4,14 +4,14 @@ import android.Manifest
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Bundle
+import com.arellomobile.mvp.InjectViewState
+import com.arellomobile.mvp.MvpPresenter
 import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.infrastructure.IApplicationContextHolder
-import com.dvpermyakov.base.presenters.BaseFragmentPresenter
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.interactors.GalleryImageInteractor
 import com.dvpermyakov.imagepostapplication.models.*
-import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
+import com.dvpermyakov.imagepostapplication.views.ImagePostView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -22,61 +22,37 @@ import javax.inject.Inject
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class CreateImagePostPresenter @Inject constructor(
+@InjectViewState
+class ImagePostPresenter @Inject constructor(
         private val resources: Resources,
         private val contextHolder: IApplicationContextHolder,
-        private val galleryImageInteractor: GalleryImageInteractor) : BaseFragmentPresenter<CreateImagePostView>() {
+        private val galleryImageInteractor: GalleryImageInteractor) : MvpPresenter<ImagePostView>() {
     private val compositeDisposable = CompositeDisposable()
 
     private var covers = CoverModel.getDefaults(contextHolder.getContext())
             .map {
                 SelectableCoverModel(it, false)
             }
-            .apply {
-                first().selected = true
+            .also {
+                it.first().selected = true
             }
             .toMutableList()
 
     private var textAppearance = TextAppearanceModel()
     private var stickers = mutableListOf<StickerUiModel>()
 
-    override fun attachView(v: CreateImagePostView, state: Bundle?) {
-        super.attachView(v, state)
-        state?.let {
-            covers = it.getParcelableArrayList(KEY_COVERS)
-            textAppearance = it.getParcelable(KEY_TEXT_APPEARANCE)
-            stickers = it.getParcelableArrayList(KEY_STICKERS)
-        }
-        v.setCoverList(covers)
+
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
         val selectedCover = getSelectedCover()
-        view?.updateTextPostAppearance(selectedCover, textAppearance)
-        view?.updateImagePostAppearance(selectedCover)
-        stickers.forEach {
-            view?.addSticker(it)
-        }
+        viewState.updateTextPostAppearance(selectedCover, textAppearance)
+        viewState.updateImagePostAppearance(selectedCover)
+        viewState.setCoverList(covers)
     }
 
-    override fun onPause() {
-        view?.hideImageLoadingDialog()
-        view?.hideSaveImageLoadingDialog()
-        super.onPause()
-    }
-
-    override fun onStop() {
+    override fun destroyView(view: ImagePostView) {
         compositeDisposable.clear()
-        super.onStop()
-    }
-
-    override fun detachView() {
-        compositeDisposable.dispose()
-        super.detachView()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelableArrayList(KEY_COVERS, ArrayList(covers))
-        outState.putParcelable(KEY_TEXT_APPEARANCE, textAppearance)
-        outState.putParcelableArrayList(KEY_STICKERS, ArrayList(stickers))
-        super.onSaveInstanceState(outState)
+        super.destroyView(view)
     }
 
     fun onCoverItemClick(selectedItem: SelectableCoverModel) {
@@ -85,23 +61,23 @@ class CreateImagePostPresenter @Inject constructor(
 
     fun onAddCoverClick() {
         if (contextHolder.getContext().isPermissionGranted(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            view?.openImageFromGallery()
+            viewState.openImageFromGallery()
         } else {
-            view?.showReadPermissionDialog()
+            viewState.showReadPermissionDialog()
         }
     }
 
     fun onFontClick() {
         textAppearance.nextBackground()
-        view?.updateTextPostAppearance(getSelectedCover(), textAppearance)
+        viewState.updateTextPostAppearance(getSelectedCover(), textAppearance)
     }
 
     fun onStickerButtonClick() {
-        view?.showStickerList()
+        viewState.showStickerList()
     }
 
     fun onPostImageClick() {
-        view?.showKeyboard()
+        viewState.showKeyboard()
     }
 
     fun onSaveClick(bitmap: Bitmap?) {
@@ -112,22 +88,22 @@ class CreateImagePostPresenter @Inject constructor(
                         .delay(DIALOGS_DELAY_MS, TimeUnit.MILLISECONDS, Schedulers.computation())
                         .observeOn(AndroidSchedulers.mainThread())
                         .doOnSubscribe {
-                            view?.showSaveImageLoadingDialog()
+                            viewState.showSaveImageLoadingDialog()
                         }
                         .doFinally {
-                            view?.hideSaveImageLoadingDialog()
                             bitmap.recycle()
+                            viewState.hideSaveImageLoadingDialog()
                         }
                         .subscribe({
-                            view?.showSaveImageSuccess()
+                            viewState.showSaveImageSuccess()
                         }, {
-                            view?.showSaveImageFailure()
+                            viewState.showSaveImageFailure()
                         }))
             } else {
-                view?.showSaveImageFailure()
+                viewState.showSaveImageFailure()
             }
         } else {
-            view?.showWritePermissionDialog()
+            viewState.showWritePermissionDialog()
         }
     }
 
@@ -137,31 +113,31 @@ class CreateImagePostPresenter @Inject constructor(
                 .delay(DIALOGS_DELAY_MS, TimeUnit.MILLISECONDS, Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    view?.showImageLoadingDialog()
+                    viewState.showImageLoadingDialog()
                 }
                 .doFinally {
-                    view?.hideImageLoadingDialog()
+                    viewState.hideImageLoadingDialog()
                 }
                 .subscribe({ imagePath ->
                     val imageCover = SelectableCoverModel(FileCoverModel(imagePath), false)
                     val imageCoverIndex = covers.indexOfFirst { it.cover == imageCover.cover }
                     if (imageCoverIndex == -1 && covers.add(imageCover)) {
-                        view?.notifyCoverItemAdded(covers.lastIndex)
+                        viewState.notifyCoverItemAdded(covers.lastIndex)
                         setSelectedCover(imageCover)
                     } else {
-                        view?.showImageIsAddedError()
-                        view?.scrollToCoverItem(imageCoverIndex)
+                        viewState.showImageIsAddedError()
+                        viewState.scrollToCoverItem(imageCoverIndex)
                         setSelectedCover(covers[imageCoverIndex])
                     }
                 }, {
-                    view?.showImageLoadingError()
+                    viewState.showImageLoadingError()
                 }))
     }
 
     fun onStickerAdd(sticker: StickerModel) {
         val stickerUi = StickerUiModel(resources.getDimensionPixelOffset(R.dimen.app_sticker_size), sticker)
         stickers.add(stickerUi)
-        view?.addSticker(stickerUi)
+        viewState.addSticker(stickerUi)
     }
 
     fun onStickerRemove(stickerUi: StickerUiModel) {
@@ -169,7 +145,7 @@ class CreateImagePostPresenter @Inject constructor(
     }
 
     fun onViewSizeChange() {
-        view?.updateTrashAppearance(getSelectedCover())
+        viewState.updateTrashAppearance(getSelectedCover())
     }
 
     fun onStickerPositionChange(stickerUi: StickerUiModel, isInsideParent: Boolean, isRemovable: Boolean, isIntersectedByTrash: Boolean) {
@@ -178,9 +154,9 @@ class CreateImagePostPresenter @Inject constructor(
 
     fun onStickerStateChange(stickerUi: StickerUiModel, isInMotion: Boolean, isInsideParent: Boolean, isRemovable: Boolean, isIntersectedByTrash: Boolean) {
         when {
-            !isRemovable || !isInMotion -> view?.hideTrash(stickerUi)
-            isInsideParent && !isIntersectedByTrash -> view?.showClosedTrash(stickerUi)
-            else -> view?.showOpenedTrash(stickerUi)
+            !isRemovable || !isInMotion -> viewState.hideTrash(stickerUi)
+            isInsideParent && !isIntersectedByTrash -> viewState.showClosedTrash(stickerUi)
+            else -> viewState.showOpenedTrash(stickerUi)
         }
     }
 
@@ -191,22 +167,18 @@ class CreateImagePostPresenter @Inject constructor(
             covers.forEachIndexed { index, item ->
                 if (item.selected) {
                     item.selected = false
-                    view?.notifyCoverItemChanged(index)
+                    viewState.notifyCoverItemChanged(index)
                 } else if (item.cover == selectedCover.cover) {
                     item.selected = true
-                    view?.notifyCoverItemChanged(index)
-                    view?.updateTextPostAppearance(item.cover, textAppearance)
-                    view?.updateImagePostAppearance(item.cover)
+                    viewState.notifyCoverItemChanged(index)
+                    viewState.updateTextPostAppearance(item.cover, textAppearance)
+                    viewState.updateImagePostAppearance(item.cover)
                 }
             }
         }
     }
 
     companion object {
-        private const val KEY_COVERS = "covers"
-        private const val KEY_TEXT_APPEARANCE = "textAppearance"
-        private const val KEY_STICKERS = "stickers"
-
-        private const val DIALOGS_DELAY_MS = 400L
+        private const val DIALOGS_DELAY_MS = 4000L
     }
 }

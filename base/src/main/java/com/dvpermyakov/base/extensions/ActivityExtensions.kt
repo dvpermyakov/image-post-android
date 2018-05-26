@@ -2,6 +2,7 @@ package com.dvpermyakov.base.extensions
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Handler
 import android.provider.Settings
 import android.support.annotation.StringRes
 import android.support.v4.app.ActivityCompat
@@ -47,8 +48,12 @@ fun FragmentActivity.showLoadingDialog(@StringRes messageId: Int, tag: String) {
     }
 }
 
-fun FragmentActivity.hideLoadingDialog(tag: String) {
-    (supportFragmentManager.findFragmentByTag(tag) as? ProgressDialogFragment)?.dismiss()
+fun FragmentActivity.hideLoadingDialog(tag: String, attemptCount: Int = 3) {
+    (supportFragmentManager.findFragmentByTag(tag) as? ProgressDialogFragment)?.dismiss() ?: run {
+        Handler().postDelayed({
+            hideLoadingDialog(tag, attemptCount - 1)
+        }, 100)
+    }
 }
 
 inline fun BaseActivity.hideKeyboardWithInvokable(crossinline invokable: () -> Unit) {

@@ -7,19 +7,22 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.toBitmap
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dvpermyakov.base.extensions.*
-import com.dvpermyakov.base.fragments.BaseMvpFragment
+import com.dvpermyakov.base.fragments.BaseMoxyFragment
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.adapters.CoverAdapter
 import com.dvpermyakov.imagepostapplication.models.*
-import com.dvpermyakov.imagepostapplication.presenters.CreateImagePostPresenter
+import com.dvpermyakov.imagepostapplication.presenters.ImagePostPresenter
 import com.dvpermyakov.imagepostapplication.transformations.CircleTransformation
 import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
-import com.dvpermyakov.imagepostapplication.views.CreateImagePostView
+import com.dvpermyakov.imagepostapplication.views.ImagePostView
 import com.dvpermyakov.imagepostapplication.widgets.DraggableImageView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import com.squareup.picasso.Picasso
@@ -35,7 +38,7 @@ import java.io.File
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImagePostPresenter>(), CreateImagePostView {
+class ImagePostFragment : BaseMoxyFragment(), ImagePostView {
     private val stickerViewMap = hashMapOf<StickerUiModel, DraggableImageView>()
     private val compositeDisposable = CompositeDisposable()
     private val adapter by lazy {
@@ -48,10 +51,17 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         CircleTransformation(baseActivity.getCompatColor(R.color.colorPrimary), baseActivity.getCompatColor(R.color.colorBackground))
     }
 
-    override val baseView = this
-    override val contentResId = R.layout.fragment_image_post
+    @InjectPresenter
+    lateinit var presenter: ImagePostPresenter
 
-    override fun createPresenter(): CreateImagePostPresenter = getApplicationInjector().getInstance()
+    @ProvidePresenter
+    fun providePresenter(): ImagePostPresenter {
+        return appInjector.getInstance()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_image_post, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -138,7 +148,7 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         editTextView.clearFocus()
         baseActivity.invokeOrHideKeyboardWithInvokable {
             baseActivity.addFragment(StickerListFragment.newInstance().apply {
-                setTargetFragment(this@CreateImagePostFragment, REQUEST_CODE_STICKERS)
+                setTargetFragment(this@ImagePostFragment, REQUEST_CODE_STICKERS)
             }, transit = FragmentTransaction.TRANSIT_NONE)
         }
     }
@@ -324,6 +334,6 @@ class CreateImagePostFragment : BaseMvpFragment<CreateImagePostView, CreateImage
         private const val REQUEST_CODE_IMAGE_FROM_GALLERY = 4121
         private const val REQUEST_CODE_STICKERS = 9523
 
-        fun newInstance() = CreateImagePostFragment()
+        fun newInstance() = ImagePostFragment()
     }
 }
