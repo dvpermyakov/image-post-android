@@ -2,8 +2,8 @@ package com.dvpermyakov.imagepostapplication.models
 
 import android.content.Context
 import android.os.Parcel
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import com.dvpermyakov.base.extensions.getCompatColor
 import com.dvpermyakov.base.models.KParcelable
 import com.dvpermyakov.base.models.parcelableCreator

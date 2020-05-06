@@ -3,7 +3,7 @@ package com.dvpermyakov.base.dialogs
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.afollestad.materialdialogs.MaterialDialog
 import org.jetbrains.anko.bundleOf
 

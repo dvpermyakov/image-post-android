@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.ThumbnailUtils
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import androidx.core.util.lruCache
 import io.reactivex.Single
 import io.reactivex.SingleEmitter

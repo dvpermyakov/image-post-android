@@ -7,6 +7,15 @@ android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildTools
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     defaultConfig {
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
@@ -44,5 +53,6 @@ dependencies {
     implementation(libraries.materialDialog) { transitive = true }
 
     implementation libraries.moxy
+    implementation libraries.moxyx
     kapt libraries.moxyCompiler
 }

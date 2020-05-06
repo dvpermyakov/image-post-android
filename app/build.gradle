@@ -18,6 +18,16 @@ android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildTools
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+
     defaultConfig {
         applicationId "com.dvpermyakov.imagepostapplication"
         minSdkVersion versions.minSdk
@@ -29,12 +39,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    applicationVariants.all { variant ->
-        variant.outputs.all {
-            outputFileName = "Post Image Application (${variant.versionName}).apk"
         }
     }
 }
@@ -64,5 +68,6 @@ dependencies {
     implementation libraries.gestureDetectors
 
     implementation libraries.moxy
+    implementation libraries.moxyx
     kapt libraries.moxyCompiler
 }

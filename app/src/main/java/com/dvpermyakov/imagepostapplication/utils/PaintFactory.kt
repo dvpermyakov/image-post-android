@@ -1,7 +1,7 @@
 package com.dvpermyakov.imagepostapplication.utils
 
 import android.graphics.*
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.

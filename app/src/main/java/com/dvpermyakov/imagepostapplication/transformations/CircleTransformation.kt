@@ -3,7 +3,7 @@ package com.dvpermyakov.imagepostapplication.transformations
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.RectF
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 import androidx.core.graphics.withScale
 import com.dvpermyakov.imagepostapplication.utils.PaintFactory
 import com.squareup.picasso.Transformation
@@ -49,19 +49,19 @@ class CircleTransformation(
 
     private fun drawSource(canvas: Canvas, source: Bitmap, rect: RectF) {
         val paint = PaintFactory.createBitmapPaint(source)
-        canvas.withScale(SCALE_SOURCE, SCALE_SOURCE, rect.centerX(), rect.centerY(), {
+        canvas.withScale(SCALE_SOURCE, SCALE_SOURCE, rect.centerX(), rect.centerY()) {
             drawRect(rect, paint)
-        })
+        }
     }
 
     private fun drawCircleBackground(canvas: Canvas, rect: RectF) {
-        val radius = Math.min(rect.centerX(), rect.centerY())
-        canvas.withScale(SCALE_CIRCLE, SCALE_CIRCLE, rect.centerX(), rect.centerY(), {
+        val radius = rect.centerX().coerceAtMost(rect.centerY())
+        canvas.withScale(SCALE_CIRCLE, SCALE_CIRCLE, rect.centerX(), rect.centerY()) {
             if (withStroke) {
                 drawCircle(rect.centerX(), rect.centerY(), radius, strokePaint)
             }
             drawCircle(rect.centerX(), rect.centerY(), radius, fillPaint)
-        })
+        }
     }
 
     companion object {
