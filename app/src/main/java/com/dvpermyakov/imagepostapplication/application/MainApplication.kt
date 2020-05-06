@@ -4,9 +4,9 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
 import com.dvpermyakov.imagepostapplication.BuildConfig
@@ -56,11 +56,11 @@ class ActivityEnrichingImplementation(private val injectorHolder: IInjectorHolde
 }
 
 class FragmentEnrichingImplementation(private val injectorHolder: IInjectorHolder) : FragmentManager.FragmentLifecycleCallbacks() {
-    override fun onFragmentAttached(fm: FragmentManager?, fragment: Fragment?, context: Context?) {
+    override fun onFragmentAttached(fm: FragmentManager, fragment: Fragment, context: Context) {
         (fragment as? IEnrichableItem)?.bindInjector(injectorHolder)
     }
 
-    override fun onFragmentDetached(fm: FragmentManager?, fragment: Fragment?) {
+    override fun onFragmentDetached(fm: FragmentManager, fragment: Fragment) {
         (fragment as? IEnrichableItem)?.unbindInjector()
     }
 }

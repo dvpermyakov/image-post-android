@@ -1,6 +1,6 @@
 package com.dvpermyakov.imagepostapplication.interactors
 
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import com.dvpermyakov.imagepostapplication.repositories.BitmapRepository
 import javax.inject.Inject
 

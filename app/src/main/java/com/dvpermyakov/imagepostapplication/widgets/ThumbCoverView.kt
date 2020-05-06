@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.support.annotation.DrawableRes
+import androidx.annotation.DrawableRes
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withScale
@@ -54,12 +54,12 @@ class ThumbCoverView : View {
             selectableCover?.let { selectableCover ->
                 fillPaint?.let { paint ->
                     if (selectableCover.selected) {
-                        canvas.withScale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY(), {
+                        canvas.withScale(SELECTED_SCALE_STROKE, SELECTED_SCALE_STROKE, rect.centerX(), rect.centerY()) {
                             drawRoundRect(rect, radius, radius, strokePaint)
-                            withScale(SELECTED_SCALE_FILL, SELECTED_SCALE_FILL, rect.centerX(), rect.centerY(), {
+                            withScale(SELECTED_SCALE_FILL, SELECTED_SCALE_FILL, rect.centerX(), rect.centerY()) {
                                 canvas.drawRect(rect, paint)
-                            })
-                        })
+                            }
+                        }
                     } else {
                         canvas.drawRoundRect(rect, radius, radius, paint)
                     }
