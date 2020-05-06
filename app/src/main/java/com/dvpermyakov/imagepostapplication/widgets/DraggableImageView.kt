@@ -6,7 +6,7 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import com.dvpermyakov.base.extensions.*
 import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.gestures.DraggableGestureDetector
@@ -17,7 +17,7 @@ import com.dvpermyakov.imagepostapplication.models.getRect
  * Created by dmitrypermyakov on 01/05/2018.
  */
 
-class DraggableImageView : ImageView, IDisposableView {
+class DraggableImageView : AppCompatImageView, IDisposableView {
     private val imageIntersectOffset = resources.getDimensionPixelOffset(R.dimen.size_medium)
     private val boundaryOffset = resources.getDimensionPixelOffset(R.dimen.size_xlarge)
     private val draggableGestureDetector by lazy {

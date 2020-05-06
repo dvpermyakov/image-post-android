@@ -4,10 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import androidx.annotation.ColorInt
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.widget.EditText
+import androidx.annotation.ColorInt
+import androidx.appcompat.widget.AppCompatEditText
 import com.dvpermyakov.base.extensions.getPointersCenter
 import com.dvpermyakov.base.extensions.getViewRect
 import com.dvpermyakov.imagepostapplication.R
@@ -17,7 +17,7 @@ import com.dvpermyakov.imagepostapplication.utils.PaintFactory
  * Created by dmitrypermyakov on 29/04/2018.
  */
 
-class ColoredEditTextView : EditText {
+class ColoredEditTextView : AppCompatEditText {
     private val radius = resources.getDimension(R.dimen.size_xsmall)
     private val offset = resources.getDimension(R.dimen.size_small)
 
@@ -39,7 +39,7 @@ class ColoredEditTextView : EditText {
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (text.isEmpty()) {
+        if (text?.isEmpty() == true) {
             return super.onTouchEvent(event)
         }
         val centerPoint = event.getPointersCenter()
@@ -56,7 +56,7 @@ class ColoredEditTextView : EditText {
     }
 
     override fun onDraw(canvas: Canvas) {
-        if (paint != null && text.isNotEmpty()) {
+        if (paint != null && text?.isNotEmpty() == true) {
             rectList.forEach { rect ->
                 canvas.drawRoundRect(rect, radius, radius, paint)
             }
