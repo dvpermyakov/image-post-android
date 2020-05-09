@@ -145,7 +145,6 @@ class ImagePostFragment : BaseMoxyFragment(), ImagePostView {
     }
 
     override fun showStickerList() {
-        editTextView.clearFocus()
         baseActivity.invokeOrHideKeyboardWithInvokable {
             baseActivity.addFragment(StickerListFragment.newInstance().apply {
                 setTargetFragment(this@ImagePostFragment, REQUEST_CODE_STICKERS)
@@ -282,14 +281,12 @@ class ImagePostFragment : BaseMoxyFragment(), ImagePostView {
     }
 
     override fun showReadPermissionDialog() {
-        editTextView.clearFocus()
         baseActivity.invokeOrHideKeyboardWithInvokable {
             baseActivity.addFragment(PermissionFragment.newInstance(R.string.app_read_permissions_message, Manifest.permission.READ_EXTERNAL_STORAGE))
         }
     }
 
     override fun showWritePermissionDialog() {
-        editTextView.clearFocus()
         baseActivity.invokeOrHideKeyboardWithInvokable {
             baseActivity.addFragment(PermissionFragment.newInstance(R.string.app_write_permissions_message, Manifest.permission.WRITE_EXTERNAL_STORAGE))
         }

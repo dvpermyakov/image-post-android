@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Handler
 import android.provider.Settings
-import androidx.annotation.StringRes
-import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import android.view.ViewTreeObserver
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentActivity
 import com.dvpermyakov.base.activities.BaseActivity
 import com.dvpermyakov.base.dialogs.ProgressDialogFragment
 

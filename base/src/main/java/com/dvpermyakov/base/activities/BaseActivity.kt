@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.appcompat.app.AppCompatActivity
 import android.util.TypedValue
+import android.view.ViewTreeObserver
 import com.dvpermyakov.base.R
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
@@ -45,7 +46,7 @@ abstract class BaseActivity : AppCompatActivity(), IEnrichableItem {
         injector = null
     }
 
-    fun getContainerViewTreeObserver() = fragmentContainerView.viewTreeObserver
+    fun getContainerViewTreeObserver(): ViewTreeObserver = fragmentContainerView.viewTreeObserver
 
     fun replaceFragment(fragment: Fragment, withBackStack: Boolean) {
         supportFragmentManager.beginTransaction().apply {
