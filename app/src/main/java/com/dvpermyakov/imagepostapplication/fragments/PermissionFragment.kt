@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.dvpermyakov.base.extensions.isPermissionGranted
 import com.dvpermyakov.base.extensions.openApplicationSettings
@@ -15,7 +16,6 @@ import com.dvpermyakov.imagepostapplication.R
 import com.dvpermyakov.imagepostapplication.presenters.PermissionPresenter
 import com.dvpermyakov.imagepostapplication.views.PermissionView
 import kotlinx.android.synthetic.main.fragment_permission.*
-import org.jetbrains.anko.bundleOf
 
 /**
  * Created by dmitrypermyakov on 30/04/2018.

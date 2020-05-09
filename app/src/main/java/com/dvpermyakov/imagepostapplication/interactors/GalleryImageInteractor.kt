@@ -14,14 +14,12 @@ import javax.inject.Inject
 class GalleryImageInteractor @Inject constructor(private val contentResolver: ContentResolver) {
     fun getImagePath(uri: Uri) = Single.create<String> { emitter ->
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-        with(contentResolver.query(uri, filePathColumn, null, null, null)) {
+        contentResolver.query(uri, filePathColumn, null, null, null)?.use { cursor ->
             try {
-                moveToFirst()
-                emitter.onSuccess(getString(getColumnIndex(filePathColumn[0])))
+                cursor.moveToFirst()
+                emitter.onSuccess(cursor.getString(cursor.getColumnIndex(filePathColumn[0])))
             } catch (ex: Exception) {
                 emitter.onError(ex)
-            } finally {
-                close()
             }
         }
     }

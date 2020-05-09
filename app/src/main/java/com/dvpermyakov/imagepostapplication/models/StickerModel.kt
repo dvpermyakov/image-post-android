@@ -9,7 +9,7 @@ import com.dvpermyakov.base.models.parcelableCreator
  */
 
 data class StickerModel(val image: String) : KParcelable {
-    constructor(parcel: Parcel) : this(parcel.readString())
+    constructor(parcel: Parcel) : this(parcel.readString()!!)
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(image)

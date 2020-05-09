@@ -4,14 +4,14 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.FragmentTransaction
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.view.drawToBitmap
+import androidx.fragment.app.FragmentTransaction
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.arellomobile.mvp.presenter.ProvidePresenter
 import com.dvpermyakov.base.extensions.*
@@ -31,7 +31,6 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_image_post.*
 import kotlinx.android.synthetic.main.layout_image_post_header.*
 import kotlinx.android.synthetic.main.layout_post.*
-import org.jetbrains.anko.toast
 import java.io.File
 
 /**
@@ -118,11 +117,12 @@ class ImagePostFragment : BaseMoxyFragment(), ImagePostView {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
-                REQUEST_CODE_IMAGE_FROM_GALLERY -> data?.let {
-                    presenter.onImagePick(it.data)
+                REQUEST_CODE_IMAGE_FROM_GALLERY -> data?.data?.let { uri ->
+                    presenter.onImagePick(uri)
                 }
-                REQUEST_CODE_STICKERS -> data?.let {
-                    presenter.onStickerAdd(it.extras.getParcelable(ImagePostApplicationConstants.INTENT_EXTRA_STICKER_MODEL))
+                REQUEST_CODE_STICKERS -> data?.extras?.let { extras ->
+                    val parcelable = extras.getParcelable<StickerModel>(ImagePostApplicationConstants.INTENT_EXTRA_STICKER_MODEL)
+                    parcelable?.let(presenter::onStickerAdd)
                 }
             }
         }

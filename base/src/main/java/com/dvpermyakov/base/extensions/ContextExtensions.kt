@@ -8,6 +8,8 @@ import android.os.Vibrator
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.annotation.StringRes
 
 /**
  * Created by dmitrypermyakov on 29/04/2018.
@@ -31,4 +33,8 @@ fun Context.vibrate(duration: Long) {
             it.vibrate(duration)
         }
     }
+}
+
+fun Context.toast(@StringRes res: Int) {
+    Toast.makeText(this, res, Toast.LENGTH_SHORT).show()
 }

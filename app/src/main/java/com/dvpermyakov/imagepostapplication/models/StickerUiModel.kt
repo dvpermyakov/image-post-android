@@ -12,7 +12,7 @@ import com.dvpermyakov.imagepostapplication.utils.ImagePostApplicationConstants
 data class StickerUiModel(private val size: Int, val sticker: StickerModel, private val id: Int = ImagePostApplicationConstants.getNextId())
     : DraggableModel(size, size), KParcelable {
 
-    constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readParcelable<StickerModel>(StickerModel::class.java.classLoader), parcel.readInt()) {
+    constructor(parcel: Parcel) : this(parcel.readInt(), parcel.readParcelable<StickerModel>(StickerModel::class.java.classLoader)!!, parcel.readInt()) {
         translationX = parcel.readFloat()
         translationY = parcel.readFloat()
         scaleFactor = parcel.readFloat()

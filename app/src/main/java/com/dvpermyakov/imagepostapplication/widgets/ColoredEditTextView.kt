@@ -56,9 +56,11 @@ class ColoredEditTextView : AppCompatEditText {
     }
 
     override fun onDraw(canvas: Canvas) {
-        if (paint != null && text?.isNotEmpty() == true) {
-            rectList.forEach { rect ->
-                canvas.drawRoundRect(rect, radius, radius, paint)
+        paint?.let { paint ->
+            if (text?.isNotEmpty() == true) {
+                rectList.forEach { rect ->
+                    canvas.drawRoundRect(rect, radius, radius, paint)
+                }
             }
         }
         super.onDraw(canvas)

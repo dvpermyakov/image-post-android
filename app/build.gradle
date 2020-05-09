@@ -27,7 +27,6 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
-
     defaultConfig {
         applicationId "com.dvpermyakov.imagepostapplication"
         minSdkVersion versions.minSdk
@@ -47,12 +46,9 @@ dependencies {
     implementation project(':base')
 
     implementation libraries.kotlinStdLib
-    implementation libraries.supportV4
-    implementation libraries.supportV13
-    implementation libraries.supportDesign
-    implementation libraries.supportAppCompatV7
-    implementation libraries.supportRecyclerView
-    implementation libraries.supportCardView
+    implementation libraries.androidDesign
+    implementation libraries.androidRecyclerView
+    implementation libraries.androidCardView
     implementation libraries.constraintLayout
     implementation libraries.flexboxLayout
 
@@ -61,7 +57,6 @@ dependencies {
     implementation libraries.rxBinding
 
     implementation libraries.timber
-    implementation libraries.anko
     implementation libraries.androidKtx
     implementation libraries.lightsaber
     implementation libraries.picasso

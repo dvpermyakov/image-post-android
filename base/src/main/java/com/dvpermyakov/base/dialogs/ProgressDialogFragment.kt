@@ -4,8 +4,8 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import com.afollestad.materialdialogs.MaterialDialog
-import org.jetbrains.anko.bundleOf
 
 /**
  * Created by dmitrypermyakov on 30/04/2018.

@@ -98,7 +98,7 @@ data class ImageCoverModel(@DrawableRes val imageThumb: Int, @DrawableRes val im
 }
 
 data class FileCoverModel(val path: String) : CoverModel() {
-    constructor(parcel: Parcel) : this(parcel.readString())
+    constructor(parcel: Parcel) : this(parcel.readString()!!)
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeString(path)

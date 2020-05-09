@@ -1,22 +1,25 @@
 ext.versions = [
-        buildTools      : "28.0.0",
-        compileSdk      : 28,
+        buildTools      : "29.0.2",
+        compileSdk      : 29,
         minSdk          : 19,
-        targetSdk       : 28,
+        targetSdk       : 29,
 
         kotlin          : "1.3.70",
         gradle          : "3.6.3",
-        androidX        : "1.0.0",
 
-        constraintLayout: "1.0.2",
-        flexboxLayout   : "0.3.2",
+        androidX        : "1.2.0",
+        androidXCard    : "1.0.0",
+        androidXRV      : "1.1.0",
+        androidXMaterial: "1.1.0",
 
-        rxKotlin        : "2.0.2",
-        rxAndroid       : "2.0.2",
-        rxBinding       : "2.1.1",
+        constraintLayout: "1.1.3",
+        flexboxLayout   : "2.0.1",
+
+        rxKotlin        : "2.4.0",
+        rxAndroid       : "2.1.1",
+        rxBinding       : "2.2.0",
 
         timber          : "4.7.0",
-        anko            : "0.10.5",
         androidKtx      : "1.2.0",
         lightsaber      : "0.8.3-beta",
         picasso         : "2.71828",
@@ -34,14 +37,11 @@ ext.gradlePlugins = [
 ext.libraries = [
         kotlinStdLib       : "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin",
 
-        supportAnnotations : "androidx.annotation:annotation:$versions.androidX",
-        supportAppCompat   : "androidx.core:core:$versions.androidX",
-        supportDesign      : "com.google.android.material:material:$versions.androidX",
-        supportV4          : "androidx.legacy:legacy-support-v4:$versions.androidX",
-        supportV13         : "androidx.legacy:legacy-support-v13:$versions.androidX",
-        supportAppCompatV7 : "androidx.appcompat:appcompat:$versions.androidX",
-        supportRecyclerView: "androidx.recyclerview:recyclerview:$versions.androidX",
-        supportCardView    : "androidx.cardview:cardview:$versions.androidX",
+        androidCore        : "androidx.core:core:$versions.androidX",
+        androidAnnotation  : "androidx.annotation:annotation:$versions.androidX",
+        androidRecyclerView: "androidx.recyclerview:recyclerview:$versions.androidXRV",
+        androidCardView    : "androidx.cardview:cardview:$versions.androidXCard",
+        androidDesign      : "com.google.android.material:material:$versions.androidXMaterial",
 
         constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.3",
         flexboxLayout      : "com.google.android:flexbox:$versions.flexboxLayout",
@@ -51,7 +51,6 @@ ext.libraries = [
         rxBinding          : "com.jakewharton.rxbinding2:rxbinding:$versions.rxBinding",
 
         timber             : "com.jakewharton.timber:timber:$versions.timber",
-        anko               : "org.jetbrains.anko:anko-commons:$versions.anko",
         androidKtx         : "androidx.core:core-ktx:$versions.androidKtx",
         lightsaber         : "io.michaelrocks:lightsaber-core-kotlin:$versions.lightsaber",
         picasso            : "com.squareup.picasso:picasso:$versions.picasso",

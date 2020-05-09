@@ -9,7 +9,7 @@ import com.dvpermyakov.base.models.parcelableCreator
  */
 
 data class SelectableCoverModel(val cover: CoverModel, var selected: Boolean) : KParcelable {
-    constructor(parcel: Parcel) : this(parcel.readParcelable<CoverModel>(CoverModel::class.java.classLoader), parcel.readByte() != 0.toByte())
+    constructor(parcel: Parcel) : this(parcel.readParcelable<CoverModel>(CoverModel::class.java.classLoader)!!, parcel.readByte() != 0.toByte())
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
         writeParcelable(cover, flags)
