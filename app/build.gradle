@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.michaelrocks.lightsaber.android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.appdistribution'
+apply plugin: 'com.google.gms.google-services'
 
 buildscript {
     repositories {
@@ -11,6 +13,8 @@ buildscript {
     }
     dependencies {
         classpath gradlePlugins.lightsaber
+        classpath gradlePlugins.firebaseDistribution
+        classpath gradlePlugins.googleServices
     }
 }
 
@@ -37,6 +41,7 @@ android {
         targetSdkVersion versions.targetSdk
         versionCode rootProject.genVersionCode()
         versionName rootProject.genVersionName()
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +49,15 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def version = variant.versionName
+            def date = new Date()
+            def formattedDate = date.format('ddMMyy')
+            outputFileName = "ImagePostApplication_${version}_${formattedDate}.apk"
         }
     }
 }
@@ -71,6 +85,10 @@ dependencies {
     implementation libraries.moxy
     implementation libraries.moxyx
     kapt libraries.moxyCompiler
+
+    implementation libraries.firebaseAnalytics
+
+    implementation libraries.multidex
 
     testImplementation libraries.junit
     testImplementation libraries.mockk

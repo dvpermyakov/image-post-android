@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
+import androidx.multidex.MultiDexApplication
 import com.dvpermyakov.base.ioc.IEnrichableItem
 import com.dvpermyakov.base.ioc.IInjectorHolder
 import com.dvpermyakov.imagepostapplication.BuildConfig
@@ -18,7 +19,7 @@ import timber.log.Timber
  * Created by dmitrypermyakov on 28/04/2018.
  */
 
-class MainApplication : Application(), IInjectorHolder {
+class MainApplication : MultiDexApplication(), IInjectorHolder {
     private val appInjector by lazy { Lightsaber.get().createInjector(ApplicationComponent(applicationContext)) }
 
     override fun onCreate() {

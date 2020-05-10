@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "674019587734",
+    "firebase_url": "https://android-imagepost.firebaseio.com",
+    "project_id": "android-imagepost",
+    "storage_bucket": "android-imagepost.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:674019587734:android:febb3e92dc370aa60074b7",
+        "android_client_info": {
+          "package_name": "com.dvpermyakov.imagepostapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "674019587734-v3amhsc3p5qb0t23q8niod3q3c9sk66s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-GsHLA5sINCEh4JgMX1B2Y67EavOoPys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "674019587734-v3amhsc3p5qb0t23q8niod3q3c9sk66s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

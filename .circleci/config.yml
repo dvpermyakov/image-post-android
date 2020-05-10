@@ -26,6 +26,9 @@ jobs:
       - run:
           name: Assemble build
           command: ./gradlew assembleDebug
+      - run:
+          name: Distribute build
+          command: ./gradlew assembleDebug appDistributionUploadDebug
       - store_artifacts:
           path: app/build/outputs/apk
           destination: apk
