@@ -26,6 +26,10 @@ ext.versions = [
         materialDialog  : "0.9.6.0",
         gestureDetectors: "v1.0",
         moxy            : "1.7.0",
+
+        espresso        : "3.2.0",
+        testRunner      : "1.2.0",
+        testExt         : "1.1.1",
 ]
 
 ext.gradlePlugins = [
@@ -43,7 +47,7 @@ ext.libraries = [
         androidCardView    : "androidx.cardview:cardview:$versions.androidXCard",
         androidDesign      : "com.google.android.material:material:$versions.androidXMaterial",
 
-        constraintLayout   : "androidx.constraintlayout:constraintlayout:1.1.3",
+        constraintLayout   : "androidx.constraintlayout:constraintlayout:$versions.constraintLayout",
         flexboxLayout      : "com.google.android:flexbox:$versions.flexboxLayout",
 
         rxKotlin           : "io.reactivex.rxjava2:rxkotlin:$versions.rxKotlin",
@@ -60,4 +64,10 @@ ext.libraries = [
         moxy               : "tech.schoolhelper:moxy-x:$versions.moxy",
         moxyx              : "tech.schoolhelper:moxy-x-androidx:$versions.moxy",
         moxyCompiler       : "tech.schoolhelper:moxy-x-compiler:$versions.moxy",
+
+        espressoCore       : "androidx.test.espresso:espresso-core:$versions.espresso",
+        espressoContrib    : "androidx.test.espresso:espresso-contrib:$versions.espresso",
+        testRunner         : "androidx.test:runner:$versions.testRunner",
+        testRules          : "androidx.test:rules:$versions.testRunner",
+        testExt            : "androidx.test.ext:junit:$versions.testExt"
 ]

@@ -69,9 +69,9 @@ class StickerListFragment : BaseMoxyFragment(), StickerListView {
             justifyContent = JustifyContent.SPACE_AROUND
         }
 
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        stickerRecyclerView.layoutManager = layoutManager
+        stickerRecyclerView.adapter = adapter
+        stickerRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 setDividerViewAlpha(dy)
             }
@@ -103,19 +103,19 @@ class StickerListFragment : BaseMoxyFragment(), StickerListView {
 
     override fun showLoading() {
         progressBarView.setVisible(true)
-        recyclerView.setVisible(false)
+        stickerRecyclerView.setVisible(false)
         errorTextView.setVisible(false)
     }
 
     override fun hideLoading() {
         progressBarView.setVisible(false)
-        recyclerView.setVisible(true)
+        stickerRecyclerView.setVisible(true)
         errorTextView.setVisible(false)
     }
 
     override fun showError() {
         progressBarView.setVisible(false)
-        recyclerView.setVisible(false)
+        stickerRecyclerView.setVisible(false)
         errorTextView.setVisible(true)
     }
 
