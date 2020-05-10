@@ -72,6 +72,9 @@ dependencies {
     implementation libraries.moxyx
     kapt libraries.moxyCompiler
 
+    testImplementation libraries.junit
+    testImplementation libraries.mockk
+
     androidTestImplementation libraries.espressoCore
     androidTestImplementation libraries.espressoContrib
     androidTestImplementation libraries.testRunner

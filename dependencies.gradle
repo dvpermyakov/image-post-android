@@ -27,6 +27,9 @@ ext.versions = [
         gestureDetectors: "v1.0",
         moxy            : "1.7.0",
 
+        junit           : "4.13",
+        mockk           : "1.10.0",
+
         espresso        : "3.2.0",
         testRunner      : "1.2.0",
         testExt         : "1.1.1",
@@ -64,6 +67,9 @@ ext.libraries = [
         moxy               : "tech.schoolhelper:moxy-x:$versions.moxy",
         moxyx              : "tech.schoolhelper:moxy-x-androidx:$versions.moxy",
         moxyCompiler       : "tech.schoolhelper:moxy-x-compiler:$versions.moxy",
+
+        junit              : "junit:junit:$versions.junit",
+        mockk              : "io.mockk:mockk:$versions.mockk",
 
         espressoCore       : "androidx.test.espresso:espresso-core:$versions.espresso",
         espressoContrib    : "androidx.test.espresso:espresso-contrib:$versions.espresso",
