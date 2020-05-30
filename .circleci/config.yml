@@ -4,6 +4,8 @@ jobs:
     working_directory: ~/code
     docker:
       - image: circleci/android:api-29
+        environment:
+          GRADLE_OPTS: -Xmx1536m -XX:+HeapDumpOnOutOfMemoryError -Dorg.gradle.caching=true -Dorg.gradle.configureondemand=true -Dkotlin.compiler.execution.strategy=in-process -Dkotlin.incremental=false
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -21,8 +23,36 @@ jobs:
           name: Run Unit tests
           command: ./gradlew testDebug
       - run:
-          name: Compile Instrumentation test
+          name: Compile Instrumentation tests
           command: ./gradlew assembleDebugAndroidTest
+#      - run:
+#          name: Load system-image
+#          command: sdkmanager "system-images;android-24;default;armeabi-v7a"
+#      - run:
+#          name: Create test emulator
+#          command: echo "no" | avdmanager create avd -n test -k "system-images;android-24;default;armeabi-v7a"
+#      - run:
+#          name: Export LD_LIBRARY_PATH
+#          command: export LD_LIBRARY_PATH=${ANDROID_HOME}/emulator/lib64:${ANDROID_HOME}/emulator/lib64/qt/lib
+#      - run:
+#          name: Move to android home folder
+#          command: cd ${ANDROID_HOME};ls
+#      - run:
+#          name: Move to emulator folder
+#          command: cd ${ANDROID_HOME}/emulator;ls
+#      - run:
+#          name: Show list of avds
+#          command: emulator -list-avds
+#      - run:
+#          name: Launch emulator
+#          command: emulator -avd test -no-window -noaudio -no-boot-anim -no-window -accel on
+#          background: true
+#      - run:
+#          name: Run Instrumentation tests
+#          command: ./gradlew --no-daemon connectedAndroidTest
+#      - run:
+#          name: Launch ui tests
+#          command: adb shell am instrument -w -r  --no-window-animation  -e debug false -e class 'com.dvpermyakov.imagepostapplication.CreateAndSavePostTest' com.dvpermyakov.imagepostapplication.test/androidx.test.runner.AndroidJUnitRunner
       - run:
           name: Assemble build
           command: ./gradlew assembleDebug
